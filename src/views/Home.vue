@@ -1,18 +1,30 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+<template lang="pug">
+.home
+  ServerStatusComp(v-for="serverStatus in serverStatuses" :serverStatus="serverStatus")
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { getStatus } from '../services/serversApi'
+import { defineComponent, Ref, ref } from 'vue'
+import {ServerStatus} from '@/model/ServerStatus'
+import ServerStatusComp from '@/components/ServerStatus.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    HelloWorld,
+    ServerStatusComp
   },
+  setup() {
+    const serverStatuses: Ref<ServerStatus[]> = ref([])
+    const update = () => getStatus().then(servers => {
+      serverStatuses.value = servers
+    })
+    setInterval(update, 5000)
+    update()
+    
+    return {
+      serverStatuses
+    }
+  }
 });
 </script>

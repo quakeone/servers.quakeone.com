@@ -1,4 +1,4 @@
-# servers-app
+# quake-servers-app
 
 ## Project setup
 ```
