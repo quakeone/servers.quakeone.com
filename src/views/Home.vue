@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import { getStatus } from '../services/serversApi'
-import { defineComponent, Ref, ref } from 'vue'
+import { defineComponent, Ref, ref, onBeforeUnmount } from 'vue'
 import {ServerStatus} from '@/model/ServerStatus'
 import ServerStatusComp from '@/components/ServerStatus.vue'
 
@@ -19,9 +19,11 @@ export default defineComponent({
     const update = () => getStatus().then(servers => {
       serverStatuses.value = servers
     })
-    setInterval(update, 5000)
-    update()
     
+    var id = setInterval(update, 5000)
+    onBeforeUnmount(() => clearInterval(id))
+    update()
+
     return {
       serverStatuses
     }

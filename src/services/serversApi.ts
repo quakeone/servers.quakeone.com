@@ -8,8 +8,8 @@ export const getStatus = (): Promise<ServerStatus[]> => {
     .get(`${apiHost}/status`)
     .then(response => response.data.map((serverData: any) => ({
         ...serverData,
-        ServerSettings: JSON.parse(serverData.ServerSettings),
-        PlayerData: JSON.parse(serverData.PlayerData)
+        serverSettings: JSON.parse(serverData.serverSettings),
+        playerData: JSON.parse(serverData.playerData)
       }))
     )
 }

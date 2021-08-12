@@ -1,10 +1,10 @@
 <template lang="pug">
 .card.server-card
-  h4.server-name {{ serverStatus.ServerName }} - {{playerCount}}
+  h4.server-name {{ serverStatus.serverName }} - {{playerCount}}
   .player-list
     .player-list__player(v-for="player in players")
-      .player__name {{player.Name}}
-      .player__frags {{player.CurrentFrags}}
+      .player__name {{player.name}}
+      .player__frags {{player.currentFrags}}
 </template>
 
 <script lang="ts">
@@ -20,8 +20,8 @@ export default defineComponent({
   },
   setup(props) {
     return {
-      playerCount: computed(() => `${props.serverStatus.PlayerData.length}/${props.serverStatus.MaxPlayers}`),
-      players: computed(() => [...props.serverStatus.PlayerData].sort((a, b) => b.CurrentFrags - a.CurrentFrags))
+      playerCount: computed(() => `${props.serverStatus.playerData.length}/${props.serverStatus.maxPlayers}`),
+      players: computed(() => [...props.serverStatus.playerData].sort((a, b) => b.currentFrags - a.currentFrags))
     }
   }
 })

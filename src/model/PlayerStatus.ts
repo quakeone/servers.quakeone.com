@@ -1,14 +1,14 @@
 export interface PlayerStatus {
-  Name: string
-  NameBase64: string
-  CurrentFrags: number
-  FragsPerMinute: number
-  JoinTime: number
-  Model: string
-  Pant: number
-  PlayerId: number
-  Shirt: number
-  Skin: string
-  TotalFrags: number
-  UpTime: number
+  name: string
+  nameBase64: string
+  currentFrags: number
+  fragsPerMinute: number
+  joinTime: number
+  model: string
+  pant: number
+  playerId: number
+  shirt: number
+  skin: string
+  totalFrags: number
+  upTime: number
 }
