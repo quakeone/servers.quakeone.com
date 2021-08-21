@@ -1,16 +1,5 @@
 @import "variables";
-// Required
-@import "~bootstrap/scss/functions";
-
-// Default variable overrides
-$body-bg: $dark-grey;
-$body-color:  $grey-3;
-
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/root";
-@import "~bootstrap/scss/grid";
-@import "~bootstrap/scss/tables";
+@import "bootstrap";
 
 body {
   color: $grey-3;

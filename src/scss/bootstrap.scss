@@ -1,0 +1,21 @@
+
+@import "~bootstrap/scss/functions";
+@import "variables";
+
+// Default variable overrides
+$body-bg: $dark-grey;
+$body-color:  $grey-3;
+
+$table-bg: #2d2b29;
+$table-striped-color:         $grey-3;
+$table-striped-bg-factor:     .05;
+$table-striped-bg:            #363330;
+
+$table-border-factor:         .1;
+$table-border-width:         1;
+$table-border-color:          $tan;
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";

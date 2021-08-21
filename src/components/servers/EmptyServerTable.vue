@@ -32,6 +32,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+table {
+  border-collapse: collapse;
+}
+td {
+  border-left: 1px $grey-2 solid;
+}
+th {
+  color: $whiteish;
+}
 .text-end {
   text-align: right;
 }

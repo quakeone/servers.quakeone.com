@@ -60,7 +60,7 @@ export default defineComponent({
     width: 100%;
   }
   h2 {
-    padding: 1rem;
+    padding: .5rem 0;
   }
   .active-row {
     padding: 1rem 0;
