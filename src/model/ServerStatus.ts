@@ -27,5 +27,8 @@ export interface ServerStatus {
   timestamp: string;
   maxPlayers: number;
   ipAddress: string;
-  recentActivity: string;
+  recentMatchEnd: string;
+  recentMatchMap: string;
+  recentMatchPlayers: string;
+  recentMatchStart: string;
 }

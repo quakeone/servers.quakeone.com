@@ -1,18 +1,31 @@
 <template lang="pug">
 .home
-  ServerStatusComp(v-for="serverStatus in serverStatuses" :serverStatus="serverStatus")
+  .container
+    .row
+      .col.active-list
+        h2.border-divider ACTIVE QUAKE SERVERS
+        .active-row.border-divider(v-for="activeServer in servers.active" :key="activeServer.serverId")
+          Active(:serverStatus="activeServer")
+      .col.empty-list
+        h2.border-divider All Quake Servers
+        EmptyServerTable(:serverStatuses="servers.empty")
 </template>
 
 <script lang="ts">
 import { getStatus } from '../services/serversApi'
-import { defineComponent, Ref, ref, onBeforeUnmount } from 'vue'
+import { defineComponent, Ref, ref, onBeforeUnmount, computed } from 'vue'
 import {ServerStatus} from '@/model/ServerStatus'
-import ServerStatusComp from '@/components/ServerStatus.vue'
+import {partition, sort} from 'ramda'
+import Active from '@/components/servers/Active.vue'
+import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 
+const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
+const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => lastActiveTime(b) -lastActiveTime(a))
+const sortActive = sort((a: ServerStatus, b: ServerStatus) => b.playerData.length - a.playerData.length)
 export default defineComponent({
   name: 'Home',
   components: {
-    ServerStatusComp
+    Active, EmptyServerTable
   },
   setup() {
     const serverStatuses: Ref<ServerStatus[]> = ref([])
@@ -20,13 +33,40 @@ export default defineComponent({
       serverStatuses.value = servers
     })
     
+    const servers = computed(() => {
+      const [active, empty] = partition((server: ServerStatus) => server.playerData.length > 0, serverStatuses.value)
+      return {
+        active: sortActive(active), 
+        empty: sortEmpty(empty)
+      }
+    })
+
     var id = setInterval(update, 5000)
     onBeforeUnmount(() => clearInterval(id))
     update()
 
     return {
-      serverStatuses
+      servers
     }
   }
 });
 </script>
+
+<style lang="scss">
+.home {
+  margin: 1rem;
+  .servers-list {
+    display: flex;
+    width: 100%;
+  }
+  h2 {
+    padding: 1rem;
+  }
+  .active-row {
+    padding: 1rem 0;
+  }
+  .border-divider {
+    border-bottom: 1px solid $grey-2;
+  }
+}
+</style>

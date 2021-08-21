@@ -1,0 +1,40 @@
+@import "variables";
+// Required
+@import "~bootstrap/scss/functions";
+
+// Default variable overrides
+$body-bg: $dark-grey;
+$body-color:  $grey-3;
+
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+
+body {
+  color: $grey-3;
+  background-color: $dark-grey;
+  margin: 0;
+  padding: 0;
+}
+h4 {
+  color: $whiteish;
+  margin: .5rem 0;
+}
+h2 {
+  font-family: 'Courier New', Courier, monospace;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.bright {
+  color: $tan;
+  font-weight: bold;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
