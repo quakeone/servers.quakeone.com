@@ -1,28 +1,27 @@
 <template lang="pug">
 .active-server
-  .server-title.bright 
-    h4 {{serverStatus.serverName}}
-    h4 {{gameType}}
-  .server-body
-    .thumbnail
-      MapImage(:map="serverStatus.map")
+  .thumbnail
+    MapImage(:map="serverStatus.map")
 
-    .details
-      .left-part
-        h4 {{serverStatus.dNS}}:{{serverStatus.port}}
-        div 
-          span Location 
-          span.bright  {{serverStatus.location}}
-        div
-          span map: 
-          span.bright {{serverStatus.map}}
-          span.vert-divide |
-          span.bright(v-tippy="{allowHTML: true,showOnCreate: true}"
-            :content="playerTooltipHtml") {{playerCount}} 
-          span  players
-        div match in progress - {{matchTime}}
-      .right-part
-        h4 {{serverStatus.modificationCode}}
+  .details
+    .left-part
+      .server-title
+        h4 {{serverStatus.serverName}}
+      h5.bright {{serverStatus.dNS}}:{{serverStatus.port}}
+      div 
+        span Location 
+        span.bright  {{serverStatus.location}}
+      div
+        span map: 
+        span.bright {{serverStatus.map}}
+        span.vert-divide |
+        span.bright(v-tippy="{allowHTML: true,showOnCreate: true}"
+          :content="playerTooltipHtml") {{playerCount}} 
+        span  players
+      div match in progress - {{matchTime}}
+    .right-part
+      h4 {{gameType}}
+      h5 {{serverStatus.modificationCode}}
 </template>
 
 <script lang="ts">
@@ -94,32 +93,24 @@ export default defineComponent({
     margin: 0 0 .5rem 0;
   }
   display: flex;
-  flex-direction: column;
-  .server-title {
+  .thumbnail {
+    img {
+      width: 200px;
+    }
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+  .details {
     display: flex;
     justify-content: space-between;
-  }
-  .server-body {
-    display: flex;
-    .thumbnail {
-      img {
-        width: 200px;
-      }
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 120px;
-      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    .vert-divide {
+      margin: 0.5rem;
     }
-    .details {
-      display: flex;
-      justify-content: space-between;
-      .vert-divide {
-        margin: 0.5rem;
-      }
-      padding-left: 1.5rem;
-    }
+    padding-left: 1.5rem;
   }
 }
 .active-server-card {

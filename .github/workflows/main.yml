@@ -34,7 +34,7 @@ jobs:
           npm --unsafe-perm install
           npm run build
           mkdir artifacts
-          cd dist; zip -r ${{ env.DEPLOYMENT_ZIP }} *; cp ${{ env.DEPLOYMENT_ZIP }} ../../artifacts; cd ../../
+          cd dist; zip -r ${{ env.DEPLOYMENT_ZIP }} *; cp ${{ env.DEPLOYMENT_ZIP }} ../artifacts; cd ../
 
       - name: Store artifacts
         uses: actions/upload-artifact@v2
