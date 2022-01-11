@@ -21,7 +21,8 @@ import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 
 const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
 const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => lastActiveTime(b) -lastActiveTime(a))
-const sortActive = sort((a: ServerStatus, b: ServerStatus) => b.playerData.length - a.playerData.length)
+const sortActive = sort((a: ServerStatus, b: ServerStatus) => b.players.length - a.players.length)
+
 export default defineComponent({
   name: 'Home',
   components: {
@@ -34,7 +35,7 @@ export default defineComponent({
     })
     
     const servers = computed(() => {
-      const [active, empty] = partition((server: ServerStatus) => server.playerData.length > 0, serverStatuses.value)
+      const [active, empty] = partition((server: ServerStatus) => server.players.length > 0, serverStatuses.value)
       return {
         active: sortActive(active), 
         empty: sortEmpty(empty)

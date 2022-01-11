@@ -23,7 +23,7 @@ export interface ServerStatus {
   map: string;
   serverSettings: ServerSetting[];
   modification?: string;
-  playerData: PlayerStatus[];
+  players: PlayerStatus[];
   timestamp: string;
   maxPlayers: number;
   ipAddress: string;

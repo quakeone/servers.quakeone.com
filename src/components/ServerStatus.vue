@@ -20,8 +20,8 @@ export default defineComponent({
   },
   setup(props) {
     return {
-      playerCount: computed(() => `${props.serverStatus.playerData.length}/${props.serverStatus.maxPlayers}`),
-      players: computed(() => [...props.serverStatus.playerData].sort((a, b) => b.currentFrags - a.currentFrags))
+      playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
+      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags))
     }
   }
 })

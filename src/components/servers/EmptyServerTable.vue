@@ -4,16 +4,17 @@ table.table.table-striped
     th(scope="col") Server Name
     th(scope="col") Map
     th(scope="col") Mod
-    th(scope="col") Max Players
+    th(scope="col") Players
+  
   tbody
-    tr(v-for="server in serverStatuses" :key="server.serverId")
+    tr(v-for="server in sortedServers" :key="server.serverId")
       td
         div.bright {{server.dNS}}:{{server.port}}
         div.text-ellipsis {{server.serverName}}
       td.text-end {{server.map}}
       td.text-end {{server.modificationCode}}
-      td.text-end {{server.maxPlayers}}
-    
+      td.text-end {{server.players.length}}/{{server.maxPlayers}}
+
 </template>
 <script lang="ts">
 import { ServerStatus } from '@/model/ServerStatus'
@@ -23,6 +24,14 @@ export default defineComponent({
     serverStatuses: {
       type: Array as PropType<ServerStatus[]>,
       default:() => []
+    }
+  },
+  computed: {
+    sortedServers(): ServerStatus[] {
+      return [...this.serverStatuses].sort((a:ServerStatus, b: ServerStatus) => 
+        a.recentMatchStart === b.recentMatchStart 
+          ? 0 
+          :  a.recentMatchStart > b.recentMatchStart ? -1 : 1)
     }
   },
   setup() {
