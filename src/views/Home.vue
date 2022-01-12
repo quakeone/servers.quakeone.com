@@ -35,7 +35,7 @@ export default defineComponent({
     })
     
     const servers = computed(() => {
-      const [active, empty] = partition((server: ServerStatus) => server.players.length > 0, serverStatuses.value)
+      const [active, empty] = partition((server: ServerStatus) => server.currentStatus === 0 && server.players.length > 0, serverStatuses.value)
       return {
         active: sortActive(active), 
         empty: sortEmpty(empty)

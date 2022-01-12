@@ -4,24 +4,27 @@
     MapImage(:map="serverStatus.map")
 
   .details
-    .left-part
-      .server-title
-        h4 {{serverStatus.serverName}}
-      h5.bright {{serverStatus.dNS}}:{{serverStatus.port}}
-      div 
-        span Location 
-        span.bright  {{serverStatus.location}}
-      div
-        span map: 
-        span.bright {{serverStatus.map}}
-        span.vert-divide |
-        span.bright(v-tippy="{allowHTML: true,showOnCreate: true}"
-          :content="playerTooltipHtml") {{playerCount}} 
-        span  players
-      div match in progress - {{matchTime}}
-    .right-part
+    .space-between-row
+      h4 {{serverStatus.serverName}}
       h4 {{gameType}}
-      h5 {{serverStatus.modificationCode}}
+    .space-between-row.hostname
+      
+      .bright {{serverStatus.dNS}}:{{serverStatus.port}}
+      
+      .bright {{serverStatus.modificationCode}}
+    div 
+      span Location 
+      span.bright  {{serverStatus.location || 'unknown'}}
+    div(v-if="serverStatus.currentStatus === 0")
+      span map: 
+      span.bright {{serverStatus.map}}
+      span.vert-divide |
+
+      span.bright(v-tippy="{allowHTML: true,showOnCreate: true}"
+        :content="playerTooltipHtml") {{playerCount}} 
+      span  players
+    div(v-else) {{serverStatusString}}
+    div {{matchStatus}} {{matchTime}}
 </template>
 
 <script lang="ts">
@@ -40,6 +43,13 @@ const gameTypeMap: Record<number, string> = {
   4: "Quake IV",
   5: "Quake Enhanced"
 }
+const serverStatusMap: Record<number, string> = {
+  0: 'Running',
+  1: 'Not Responding',
+  2: 'Server not found',
+  3: 'Query Error'
+}
+
 export default defineComponent({
   components: {MapImage},
   props: {
@@ -49,14 +59,35 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const matchTime = computed(() => duration(dateToUtc(new Date()).getTime() - new Date(props.serverStatus.recentMatchStart).getTime()))
+    const matchStatus = computed(() => {
+      if (!props.serverStatus.recentMatchStart) {
+        return 'No previous match recorded'
+      } else if (!props.serverStatus.recentMatchEnd) {
+        return "Match in progress - "
+      } else if (props.serverStatus.recentMatchStart < props.serverStatus.recentMatchEnd) {
+        return "Last match " + duration(dateToUtc(new Date()).getTime() - new Date(props.serverStatus.recentMatchEnd).getTime()) + " ago"
+      }
+      return  ''
+    })
+    const matchTime = computed(() => {
+      if (!props.serverStatus.recentMatchStart || props.serverStatus.recentMatchStart < props.serverStatus.recentMatchEnd) {
+        return ""
+      }
+      return duration(dateToUtc(new Date()).getTime() - new Date(props.serverStatus.recentMatchStart).getTime())
+    })
+    const serverStatusString = computed(() => {
+      return serverStatusMap[props.serverStatus.currentStatus] || 'Unknown'
+    })
     const playerTooltipHtml = ref('')
     const gameType = computed(() => gameTypeMap[props.serverStatus.gameId] || 'Unknown Game')
-    // https://quakedemos.blob.core.windows.net/maps/thumbnails/_generic.png
+
     watch(props, (newValue) => {
       createWriter()
         .then((writer: Writer) => {
           const server = newValue.serverStatus
+          if (server.currentStatus !== 0) {
+            return ''
+          }
           const body = [...server.players]
             .sort((a, b) => b.currentFrags - a.currentFrags)
             .map((player: PlayerStatus) => {
@@ -77,7 +108,9 @@ export default defineComponent({
 
     return {
       matchTime,
+      matchStatus,
       gameType,
+      serverStatusString,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
       players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags)),
       playerTooltipHtml
@@ -95,22 +128,34 @@ export default defineComponent({
   display: flex;
   .thumbnail {
     img {
-      width: 200px;
+      max-width:100%;
+      max-height:100%;
     }
+    max-width: 180px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 120px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   }
   .details {
     display: flex;
     justify-content: space-between;
+    min-width: 400px;;
     .vert-divide {
       margin: 0.5rem;
     }
     padding-left: 1.5rem;
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-start;
+    .space-between-row {
+      display: flex;
+      justify-content: space-between;
+      &.hostname {
+        margin-bottom: .4rem;
+      }
+    }
   }
 }
 .active-server-card {

@@ -1,7 +1,6 @@
 
 <template lang="pug">
-.image-container 
-  img.map-image(ref="image")
+img.map-image(ref="image")
 </template>
 
 <script lang="ts">
