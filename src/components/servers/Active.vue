@@ -21,6 +21,7 @@
         :content="playerTooltipHtml") {{playerCount}} 
       span  players
     div(v-else) {{serverStatusString}}
+    div {{matchStatus}} {{matchTime}}
   .players
     h4 {{gameType}}
     .players
@@ -167,19 +168,6 @@ export default defineComponent({
     }
     overflow: hidden;
     min-width: 260px;
-  }
-}
-.active-server-card {
-  border: 1px solid grey;
-
-  padding: 2rem;
-  margin: 1rem;
-  width: 10rem;
-  .player-list {
-    .player-list__player {
-      display: flex;
-      justify-content: space-between;
-    }
   }
 }
 </style>
