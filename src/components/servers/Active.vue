@@ -2,17 +2,13 @@
 .active-server
   .thumbnail
     MapImage(:map="serverStatus.map")
-
   .details
-    .space-between-row
-      h4 {{serverStatus.serverName}}
-      h4 {{gameType}}
-    .space-between-row.hostname
-      
-      .bright 
-        ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
-      
-      .bright {{serverStatus.modificationCode}}
+    h4 {{serverStatus.serverName}}
+    .bright 
+      ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
+    div 
+      span mod: 
+      span.bright {{serverStatus.modificationCode}}
     div 
       span Location 
       span.bright  {{serverStatus.location || 'unknown'}}
@@ -25,17 +21,22 @@
         :content="playerTooltipHtml") {{playerCount}} 
       span  players
     div(v-else) {{serverStatusString}}
-    div {{matchStatus}} {{matchTime}}
+  .players
+    h4 {{gameType}}
+    .players
+      PlayerScoreList(:players="playerSummary")
+
 </template>
 
 <script lang="ts">
 import { ServerStatus } from '@/model/ServerStatus'
-import { defineComponent, PropType, computed, watch, ref } from 'vue'
+import { defineComponent, PropType, computed, watch, ref, inject } from 'vue'
 import {dateToUtc, duration} from '@/helpers/date'
 import MapImage from '../MapImage.vue'
 import ServerAddress from '../ServerAddress.vue'
-import { createWriter, Writer } from '@/helpers/charmap'
 import { PlayerStatus } from '@/model/PlayerStatus'
+import { Writer } from '@/helpers/charmap'
+import PlayerScoreList from '../PlayerScoreList.vue'
 
 const gameTypeMap: Record<number, string> = {
   0: "Net Quake",
@@ -53,7 +54,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: {MapImage, ServerAddress},
+  components: { MapImage, ServerAddress, PlayerScoreList },
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
@@ -61,6 +62,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const charWriter = inject<Writer>('charWriter')
     const matchStatus = computed(() => {
       if (!props.serverStatus.recentMatchStart) {
         return 'No previous match recorded'
@@ -82,30 +84,30 @@ export default defineComponent({
     })
     const playerTooltipHtml = ref('')
     const gameType = computed(() => gameTypeMap[props.serverStatus.gameId] || 'Unknown Game')
-
+    const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags))
+    const playerSummary = sortedPlayers.value.slice(0, 4)
     watch(props, (newValue) => {
-      createWriter()
-        .then((writer: Writer) => {
-          const server = newValue.serverStatus
-          if (server.currentStatus !== 0) {
-            return ''
-          }
-          const body = [...server.players]
-            .sort((a, b) => b.currentFrags - a.currentFrags)
-            .map((player: PlayerStatus) => {
-              return `<tr style="line-height: 1;">
-              <td style="text-align:right;">
-                <img src="${writer.writeScore(14, player.currentFrags, player.shirt, player.pant)}" style="display:inline;">
-              </td>
-              <td style="padding-left: 1rem; text-align: left">
-                <img src="${writer.write(12, btoa(player.name))}" style="display:inline;">
-              </td>
-              </tr>`;
-            })
-            .join('');
-
-          playerTooltipHtml.value = `<table><tbody>${body}</tbody></table>`;
+      if (!charWriter) {
+        return
+      }
+      const server = newValue.serverStatus
+      if (server.currentStatus !== 0) {
+        return ''
+      }
+      const body = sortedPlayers.value.map((player: PlayerStatus) => {
+          return `<tr style="line-height: 1;">
+          <td style="text-align:right;">
+            <img src="${charWriter.writeScore(14, player.currentFrags, player.shirt, player.pant)}" style="display:inline;">
+          </td>
+          <td style="padding-left: 1rem; text-align: left">
+            <img src="${charWriter.write(12, btoa(player.name))}" style="display:inline;">
+          </td>
+          </tr>`;
         })
+        .join('');
+
+      playerTooltipHtml.value = `<table><tbody>${body}</tbody></table>`;
+
     }, {immediate: true})
 
     return {
@@ -113,6 +115,7 @@ export default defineComponent({
       matchStatus,
       gameType,
       serverStatusString,
+      playerSummary,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
       players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags)),
       playerTooltipHtml
@@ -128,12 +131,10 @@ export default defineComponent({
     margin: 0 0 .5rem 0;
   }
   display: flex;
+  justify-content: space-between;
+  align-items:flex-start;
   .thumbnail {
-    img {
-      max-width:100%;
-      max-height:100%;
-    }
-    max-width: 180px;
+    min-width: 160px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -141,9 +142,9 @@ export default defineComponent({
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   }
   .details {
+    flex-grow: 4; /* default 0 */
     display: flex;
     justify-content: space-between;
-    min-width: 400px;;
     .vert-divide {
       margin: 0.5rem;
     }
@@ -152,12 +153,20 @@ export default defineComponent({
     flex-direction: column;
     justify-content: flex-start;
     .space-between-row {
+    width: 100%;
       display: flex;
       justify-content: space-between;
       &.hostname {
         margin-bottom: .4rem;
       }
     }
+  }
+  .players{
+    h4 {
+      text-align: right;
+    }
+    overflow: hidden;
+    min-width: 260px;
   }
 }
 .active-server-card {

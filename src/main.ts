@@ -8,14 +8,18 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClone } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faSync } from '@fortawesome/free-solid-svg-icons';
+import { createWriter, Writer } from '@/helpers/charmap'
 
-
-
+library.add(faSync)
 library.add(faClone)
 
-createApp(App)
-  .component('FontAwesome', FontAwesomeIcon)
-  .use(store)
-  .use(router)
-  .use(VueTippy)
-  .mount('#app')
+createWriter().then((charWriter:Writer) => {
+  createApp(App)
+    .provide('charWriter', charWriter)
+    .component('FontAwesome', FontAwesomeIcon)
+    .use(store)
+    .use(router)
+    .use(VueTippy)
+    .mount('#app')
+})

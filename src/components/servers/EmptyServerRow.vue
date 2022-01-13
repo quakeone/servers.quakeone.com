@@ -9,8 +9,6 @@ tr
       div {{serverStatus.location || 'Unknown'}}
   td.text-end {{serverStatus.map}}
   td.text-end {{serverStatus.modificationCode}}
-  td.text-end {{serverStatus.players.length}}/{{serverStatus.maxPlayers}}
-  td.text-end {{serverStatus.currentStatus}}
 </template>
 
 <script lang="ts">

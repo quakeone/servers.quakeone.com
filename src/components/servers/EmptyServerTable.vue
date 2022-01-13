@@ -4,7 +4,6 @@ table.table.table-striped
     th(scope="col") Server
     th(scope="col") Map
     th(scope="col") Mod
-    th(scope="col") Players
   
   tbody
     EmptyServerRow(
@@ -51,6 +50,7 @@ td {
   border-left: 1px $grey-2 solid;
 }
 th {
+  text-align: left;
   color: $whiteish;
 }
 .cell-row {
