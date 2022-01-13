@@ -9,7 +9,8 @@
       h4 {{gameType}}
     .space-between-row.hostname
       
-      .bright {{serverStatus.dNS}}:{{serverStatus.port}}
+      .bright 
+        ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
       
       .bright {{serverStatus.modificationCode}}
     div 
@@ -20,7 +21,7 @@
       span.bright {{serverStatus.map}}
       span.vert-divide |
 
-      span.bright(v-tippy="{allowHTML: true,showOnCreate: true}"
+      span.bright(v-tippy="{allowHTML: true}"
         :content="playerTooltipHtml") {{playerCount}} 
       span  players
     div(v-else) {{serverStatusString}}
@@ -32,6 +33,7 @@ import { ServerStatus } from '@/model/ServerStatus'
 import { defineComponent, PropType, computed, watch, ref } from 'vue'
 import {dateToUtc, duration} from '@/helpers/date'
 import MapImage from '../MapImage.vue'
+import ServerAddress from '../ServerAddress.vue'
 import { createWriter, Writer } from '@/helpers/charmap'
 import { PlayerStatus } from '@/model/PlayerStatus'
 
@@ -51,7 +53,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: {MapImage},
+  components: {MapImage, ServerAddress},
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,

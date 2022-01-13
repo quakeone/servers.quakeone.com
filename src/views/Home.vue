@@ -7,7 +7,7 @@
         .active-row.border-divider(v-for="activeServer in servers.active" :key="activeServer.serverId")
           Active(:serverStatus="activeServer")
       .col.empty-list
-        h2.border-divider All Quake Servers
+        h2.border-divider EMPTY Quake Servers
         EmptyServerTable(:serverStatuses="servers.empty")
 </template>
 

@@ -11,6 +11,15 @@
 import { ServerStatus } from '@/model/ServerStatus'
 import { defineComponent, PropType, computed } from 'vue'
 
+const gameTypeMap: Record<number, string> = {
+  0: "Net Quake",
+  1: "QuakeWorld",
+  2: "Quake II",
+  3: "Quake 3",
+  4: "Quake IV",
+  5: "Quake Enhanced"
+}
+
 export default defineComponent({
   props: {
     serverStatus: {
