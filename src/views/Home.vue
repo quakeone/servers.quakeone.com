@@ -1,14 +1,17 @@
 <template lang="pug">
 .home
-  .container
-    .row
-      .col.active-list
-        h2.border-divider ACTIVE QUAKE SERVERS
-        .active-row.border-divider(v-for="activeServer in servers.active" :key="activeServer.serverId")
-          Active(:serverStatus="activeServer")
-      .col.empty-list
-        h2.border-divider EMPTY Quake Servers
-        EmptyServerTable(:serverStatuses="servers.empty")
+  .active-list.grid-area-active
+    h2.border-divider ACTIVE QUAKE SERVERS
+    .active-row.border-divider(v-for="activeServer in servers.active" :key="activeServer.serverId")
+      Active(:serverStatus="activeServer")
+  .empty-list.grid-area-empty
+    h2.border-divider EMPTY Quake Servers
+    EmptyServerTable(:serverStatuses="servers.empty")
+  .footer.grid-area-footer
+    .divider
+    p.text-small Made by Joe 
+      a(href="mailto:efessel@gmail.com") efessel@gmail.com
+
 </template>
 
 <script lang="ts">
@@ -55,6 +58,37 @@ export default defineComponent({
 
 <style lang="scss">
 .home {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-areas:
+    "active"
+    "empty"
+    "footer";
+    
+  @media only screen {
+    grid-template-areas:
+    "header"
+    "active"
+    "empty"
+    "footer";
+  }
+  @media only screen and (min-width: 1240px)  {
+
+    grid-template-columns: 50% auto;
+    grid-template-areas:
+    "header   header"
+    "active  empty"
+    "footer   footer";
+  }
+  .grid-area-active {
+    grid-area: active;
+  }
+  .grid-area-empty {
+    grid-area: empty;
+  }
+  .grid-area-footer {
+    grid-area: footer;
+  }
   margin: 1rem;
   .servers-list {
     display: flex;

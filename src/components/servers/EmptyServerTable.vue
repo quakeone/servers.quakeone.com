@@ -30,6 +30,7 @@ export default defineComponent({
     }
   },
   computed: {
+    
     sortedServers(): ServerStatus[] {
       return [...this.serverStatuses].sort((a:ServerStatus, b: ServerStatus) => 
         a.currentStatus === b.currentStatus

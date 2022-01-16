@@ -14,6 +14,12 @@ h4 {
   color: $whiteish;
   margin: .5rem 0;
 }
+
+h3 {
+  color: $whiteish;
+  margin: 0 0 .5rem 0;
+}
+
 h2 {
   font-family: roboto, sans-serif;
   font-style: normal;
@@ -31,4 +37,9 @@ h2 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+a {
+  text-decoration: underline;
+  color: $whiteish;
 }

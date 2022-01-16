@@ -5,8 +5,9 @@
       :map="serverStatus.map", 
       :playerList="serverStatus.players")
   .details
-    h3 {{serverStatus.serverName}}
-    .d {{gameType}}
+    .title
+      h3 {{serverStatus.serverName}}
+      div {{gameType}}
     .bright 
       ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
     div 
@@ -84,7 +85,7 @@ export default defineComponent({
     const playerTooltipHtml = ref('')
     const gameType = computed(() => gameTypeMap[props.serverStatus.gameId] || 'Unknown Game')
     const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags))
-    const playerSummary = sortedPlayers.value
+
     watch(props, (newValue) => {
       if (!charWriter) {
         return
@@ -114,7 +115,6 @@ export default defineComponent({
       matchStatus,
       gameType,
       serverStatusString,
-      playerSummary,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
       players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags)),
       playerTooltipHtml
@@ -125,54 +125,32 @@ export default defineComponent({
 
 <style lang="scss">
 .active-server {
-  .d { 
-    margin-bottom: 2rem;
+  display: grid;
+  grid-gap: 1em;
+  @media only screen {
+    grid-template-areas:
+    "map"
+    "details";
   }
-  width: 100%;
-  h3 {
-    color: #a19c97;
-    margin: 0 0 .5rem 0;
+  @media only screen and (min-width: 500px)  {
+    grid-template-columns: 400px auto;
+    grid-template-areas:
+    "map   details";
   }
-  display: flex;
-  justify-content: space-between;
-  align-items:flex-start;
   .game-image {
-    .map-image {
-      height: 230px;
-      width: 360px;
-    }
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-
+    grid-area: map;
   }
   .details {
-    flex-grow: 4; /* default 0 */
-    display: flex;
-    justify-content: space-between;
+    grid-area: details;
+    .title {
+      margin-bottom: 1.5rem;
+    }
     .vert-divide {
       margin: 0.5rem;
-    }
-    padding-left: 1.5rem;
-    display: flex; 
-    flex-direction: column;
-    justify-content: flex-start;
-    .space-between-row {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      &.hostname {
-        margin-bottom: .4rem;
-      }
     }
     .match-status {
       margin-top: .4rem;
     }
-  }
-  .players{
-    h4 {
-      text-align: right;
-    }
-    overflow: hidden;
-    min-width: 260px;
   }
 }
 </style>
