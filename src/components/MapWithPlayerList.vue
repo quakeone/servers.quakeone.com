@@ -1,18 +1,26 @@
 
 <template lang="pug">
-.map-image(ref="image") .
+.map-image(ref="image")
+  PlayerScoreList.player-list(:players="playerList")
 </template>
 
 <script lang="ts">
-import { defineComponent , onMounted, ref} from 'vue'
-import axios from 'axios'
+import { defineComponent , onMounted, ref, PropType} from 'vue'
+import { PlayerStatus } from '@/model/PlayerStatus'
+import PlayerScoreList from './PlayerScoreList.vue'
+
 export default defineComponent({
   props: {
     map: {
       type: String,
       required: true
+    },
+    playerList: {
+      type: Array as PropType<PlayerStatus[]>,
+      required: true
     }
   },
+  components: {PlayerScoreList},
   setup (props) {
     const imageExists = ref(true)
     const image = ref<HTMLImageElement|null>(null)
@@ -36,6 +44,6 @@ export default defineComponent({
 .map-image {
   background-repeat: no-repeat;
   background-size: 100%;
-
+  padding: 1rem;
 }
 </style>

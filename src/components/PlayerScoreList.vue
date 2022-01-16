@@ -1,18 +1,20 @@
 <template lang="pug">
 template(v-if="!loading && charWriter")
-  table
-    tbody
-      tr(style="line-height: 1;" v-for="player in players")
-        td(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, player.currentFrags, player.shirt, player.pant)" style="display:inline;")
-        td(style="padding-left: 1rem; text-align: left")
-          img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
+  .table-backdrop
+    table
+      tbody
+        tr(style="line-height: 1;" v-for="player in sortedByScore")
+          td(style="text-align:right;")
+            img(:src="charWriter.writeScore(14, player.currentFrags, player.shirt, player.pant)" style="display:inline;")
+          td(style="padding-left: 1rem; text-align: left")
+            img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
+
 </template>
 
 <script lang="ts">
 import { Writer } from '@/helpers/charmap'
 import { PlayerStatus } from '@/model/PlayerStatus'
-import { defineComponent, PropType, inject, onMounted, ref } from 'vue'
+import { defineComponent, PropType, inject, onMounted, ref, computed } from 'vue'
 
 export default defineComponent({
   props: {
@@ -21,7 +23,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
+    const sortedByScore = computed(() => [...props.players].sort((a, b) => b.currentFrags - a.currentFrags))
     const charWriter = inject<Writer>('charWriter')
     const loading= ref(true)
     onMounted(() => {
@@ -29,11 +32,30 @@ export default defineComponent({
     })
     const btoa = (str: string) => window.btoa(str)
     return {
-      
       charWriter,
       loading,
-      btoa
+      btoa,
+      sortedByScore
     }
   },
 })
 </script>
+<style lang="scss">
+
+.table-backdrop {
+  background-color: rgba(0,0,0,.3);
+  height: 230px;
+  width: 360px;
+  overflow:hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom,  black 80%, transparent 98%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 98%);
+  table {
+    margin: 1rem;
+    table-layout:fixed
+    td {
+      white-space: nowrap
+    }
+  }
+}
+</style>
