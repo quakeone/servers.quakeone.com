@@ -8,3 +8,9 @@ export const getStatus = (): Promise<ServerStatus[]> => {
     .get(`${apiHost}/status`)
     .then(response => response.data)
 }
+
+export const getRecentMatches = (): Promise<ServerStatus[]> => {
+  return axios
+    .get(`${apiHost}/status`)
+    .then(response => response.data)
+}

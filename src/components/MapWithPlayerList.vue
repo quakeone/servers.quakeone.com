@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent , onMounted, ref, PropType} from 'vue'
+import { defineComponent , onMounted, ref, PropType, computed, watch} from 'vue'
 import { PlayerStatus } from '@/model/PlayerStatus'
 import PlayerScoreList from './PlayerScoreList.vue'
 
@@ -22,15 +22,20 @@ export default defineComponent({
   },
   components: {PlayerScoreList},
   setup (props) {
-    const imageExists = ref(true)
     const image = ref<HTMLImageElement|null>(null)
     const base = 'https://quakedemos.blob.core.windows.net/maps/thumbnails/'
     const generic = base + '_generic.png'
-    const map = base + props.map + '.jpg'
+    const map = computed(() => base + props.map + '.jpg')
 
     onMounted(() => {
       if (image.value) {
-        image.value.style.backgroundImage = `url(${map}), url(${generic})`
+        image.value.style.backgroundImage = `url(${map.value}), url(${generic})`
+      }
+    })
+
+    watch(map, () => {
+      if (image.value) {
+        image.value.style.backgroundImage = `url(${map.value}), url(${generic})`
       }
     })
 
