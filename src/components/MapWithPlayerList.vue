@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { defineComponent , onMounted, ref, PropType, computed, watch} from 'vue'
-import { PlayerStatus } from '@/model/PlayerStatus'
 import PlayerScoreList from './PlayerScoreList.vue'
+import { Player } from '@/model/Player'
 
 export default defineComponent({
   props: {
@@ -16,7 +16,7 @@ export default defineComponent({
       required: true
     },
     playerList: {
-      type: Array as PropType<PlayerStatus[]>,
+      type: Array as PropType<Player[]>,
       required: true
     }
   },

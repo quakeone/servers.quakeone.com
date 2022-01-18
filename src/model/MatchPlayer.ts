@@ -1,12 +1,11 @@
-export type MatchPLayer = {
-  aliasBytes64 : string,
-  playerId: number,
+import { Player } from "./Player";
+
+export interface MatchPlayer extends Player {
+  name : string,
   playerStayDuration: number,
   playerMatchStart: number,
   playerMatchEnd: number,
-  skin: string,
-  model: string,
-  pantColor: string,
-  shirtColor: string,
+  pant: number,
+  shirt: number,
   frags: number
 }

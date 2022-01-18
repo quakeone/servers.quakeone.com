@@ -1,7 +1,8 @@
-export interface PlayerStatus {
+import { Player } from "./Player";
+
+export interface PlayerStatus extends Player {
   name: string
-  nameBase64: string
-  currentFrags: number
+  frags: number
   fragsPerMinute: number
   joinTime: number
   model: string

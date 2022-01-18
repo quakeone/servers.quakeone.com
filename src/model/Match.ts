@@ -1,12 +1,16 @@
-export type Match = {
+import type {MatchPlayer} from './MatchPlayer'
+
+export interface Match {
   gameId: number,
   matchId: number,
   serverId: number,
-  hostName: string,
-  serverName: string,
+  dns: string,
+  port: number,
+  name: string,
   map: string,
-  mod: string,
+  modification: string,
   matchStart: string,
   matchEnd: string,
-  matchDuration: string
+  duration: number,
+  players: MatchPlayer[]
 }

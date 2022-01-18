@@ -1,3 +1,5 @@
+import { Match } from "@/model/Match"
+import { PagedResult } from "@/model/PagedResult"
 import { ServerStatus } from "@/model/ServerStatus"
 import axios from "axios"
 
@@ -9,8 +11,14 @@ export const getStatus = (): Promise<ServerStatus[]> => {
     .then(response => response.data)
 }
 
-export const getRecentMatches = (): Promise<ServerStatus[]> => {
+export const getRecentMatches = (): Promise<Match[]> => {
   return axios
-    .get(`${apiHost}/status`)
+    .get(`${apiHost}/match`)
+    .then(response => response.data)
+}
+
+export const getServerMatches = (serverId: number): Promise<PagedResult<Match>> => {
+  return axios
+    .get(`${apiHost}/server/${serverId}/match`)
     .then(response => response.data)
 }

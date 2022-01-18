@@ -84,7 +84,7 @@ export default defineComponent({
     })
     const playerTooltipHtml = ref('')
     const gameType = computed(() => gameTypeMap[props.serverStatus.gameId] || 'Unknown Game')
-    const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags))
+    const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
 
     watch(props, (newValue) => {
       if (!charWriter) {
@@ -97,7 +97,7 @@ export default defineComponent({
       const body = sortedPlayers.value.map((player: PlayerStatus) => {
           return `<tr style="line-height: 1;">
           <td style="text-align:right;">
-            <img src="${charWriter.writeScore(14, player.currentFrags, player.shirt, player.pant)}" style="display:inline;">
+            <img src="${charWriter.writeScore(14, player.frags, player.shirt, player.pant)}" style="display:inline;">
           </td>
           <td style="padding-left: 1rem; text-align: left">
             <img src="${charWriter.write(12, btoa(player.name))}" style="display:inline;">
@@ -116,7 +116,7 @@ export default defineComponent({
       gameType,
       serverStatusString,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
-      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags)),
+      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags)),
       playerTooltipHtml
     }
   }

@@ -4,7 +4,7 @@
   .player-list
     .player-list__player(v-for="player in players")
       .player__name {{player.name}}
-      .player__frags {{player.currentFrags}}
+      .player__frags {{player.frags}}
 </template>
 
 <script lang="ts">
@@ -21,7 +21,7 @@ export default defineComponent({
   setup(props) {
     return {
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
-      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.currentFrags - a.currentFrags))
+      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
     }
   }
 })
