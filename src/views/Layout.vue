@@ -7,9 +7,6 @@
 import { defineComponent } from 'vue'
 import Footer from './Footer.vue'
 export default defineComponent({
-  components: {Footer},
-  setup() {
-    
-  },
+  components: {Footer}
 })
 </script>
