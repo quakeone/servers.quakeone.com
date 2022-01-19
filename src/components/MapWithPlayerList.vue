@@ -23,9 +23,8 @@ export default defineComponent({
   components: {PlayerScoreList},
   setup (props) {
     const image = ref<HTMLImageElement|null>(null)
-    const base = 'https://quakedemos.blob.core.windows.net/maps/thumbnails/'
-    const generic = base + '_generic.png'
-    const map = computed(() => base + props.map + '.jpg')
+    const generic = 'https://quakedemos.blob.core.windows.net/maps/thumbnails/_generic.png'
+    const map = computed(() => process.env.VUE_APP_THUMBNAILS_PATH + props.map + '.jpg')
 
     onMounted(() => {
       if (image.value) {
