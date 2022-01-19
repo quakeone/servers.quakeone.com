@@ -11,13 +11,13 @@
     .bright 
       ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
     div 
-      span mod: 
+      span Game type: 
       span.bright {{serverStatus.modificationCode}}
     div 
-      span Location 
+      span Location: 
       span.bright  {{serverStatus.location || 'unknown'}}
     div(v-if="serverStatus.currentStatus === 0")
-      span map: 
+      span Map: 
       span.bright {{serverStatus.map}}
       span.vert-divide |
 
@@ -123,7 +123,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .active-server {
   display: grid;
   grid-gap: 1em;
@@ -132,7 +132,7 @@ export default defineComponent({
     "map"
     "details";
   }
-  @media only screen and (min-width: 500px)  {
+  @media only screen and (min-width: $phone-breakpoint)  {
     grid-template-columns: 400px auto;
     grid-template-areas:
     "map   details";

@@ -1,15 +1,10 @@
 <template lang="pug">
-table.table.table-striped
-  thead
-    th(scope="col") Server
-    th(scope="col") Map
-    th(scope="col") Mod
-  
-  tbody
+.empty-server-table
+  .row-container(
+    :class="{'is-down': server.currentStatus !== 0}"
+    v-for="(server, index) in sortedServers")
     EmptyServerRow(
-      v-for="server in sortedServers" 
       :key="server.serverId" 
-      :class="{'is-down': server.currentStatus !== 0}"
       :serverStatus="server")
 
 </template>
@@ -30,7 +25,7 @@ export default defineComponent({
     }
   },
   computed: {
-    
+
     sortedServers(): ServerStatus[] {
       return [...this.serverStatuses].sort((a:ServerStatus, b: ServerStatus) => 
         a.currentStatus === b.currentStatus
@@ -44,6 +39,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.empty-server-table {
+  border: 1px solid #363330;
+  .row-container {
+    &.is-down {
+      &:nth-child(even) {
+        background-color: rgba(104, 24, 24, .4);
+      }
+      &:nth-child(odd) {
+        background-color: rgba(104, 24, 24, .2);
+      }
+    }
+    &:nth-child(even) {
+      background-color: #2d2b29;
+    }
+    &:nth-child(odd) {
+      background-color: #363330;
+    }
+  }
+}
 table {
   border-collapse: collapse;
 }

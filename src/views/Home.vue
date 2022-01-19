@@ -73,7 +73,6 @@ export default defineComponent({
     "footer";
   }
   @media only screen and (min-width: 1240px)  {
-
     grid-template-columns: 50% auto;
     grid-template-areas:
     "header   header"
@@ -90,10 +89,10 @@ export default defineComponent({
     grid-area: footer;
   }
   margin: 1rem;
-  .servers-list {
-    display: flex;
-    width: 100%;
-  }
+  // .servers-list {
+  //   display: flex;
+  //   width: 100%;
+  // }
   h2 {
     padding: .5rem 0;
   }
