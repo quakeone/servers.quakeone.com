@@ -7,10 +7,6 @@
   .empty-list.grid-area-empty
     h2.border-divider EMPTY Quake Servers
     EmptyServerTable(:serverStatuses="servers.empty")
-  .footer.grid-area-footer
-    .divider
-    p.text-small Made by Joe 
-      a(href="mailto:efessel@gmail.com") efessel@gmail.com
 
 </template>
 
