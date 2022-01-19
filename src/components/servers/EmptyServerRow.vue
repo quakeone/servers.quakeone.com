@@ -51,6 +51,25 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .empty-row {
+  .map-image {
+    background-position: right;
+    background-size: 50%;
+    position: relative;
+
+    .map-text {
+      padding: 4px;
+      text-shadow: 2px 2px rgba(0,0,0,.9);
+      //background-color: rgba(0,0,0,.4);
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
+  @media only screen and (min-width: $phone-breakpoint)  {
+    .map-image {
+      background-size: 150px;
+    }
+  }
   .grid {
     display: grid;
     @media only screen {
@@ -79,25 +98,6 @@ export default defineComponent({
     @media only screen and (min-width: $phone-breakpoint)  {
       grid-template-areas: "detail secondary map";
       grid-template-columns: auto 250px 150px;
-      .map-image {
-        height: 100px;
-        background-position: center;
-      }
-    }
-  }
-  .map-image {
-    background-position: right;
-    background-size: 150px;
-    position: relative;
-// -webkit-mask-image: linear-gradient(to left,  black 80%, transparent 98%);
-// mask-image: linear-gradient(to left, black 80%, transparent 98%);
-    .map-text {
-      padding: 4px;
-      text-shadow: 2px 2px rgba(0,0,0,.9);
-      //background-color: rgba(0,0,0,.4);
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
     }
   }
 }
