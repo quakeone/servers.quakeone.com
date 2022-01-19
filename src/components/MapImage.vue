@@ -15,7 +15,7 @@ export default defineComponent({
   },
   setup (props) {
     const image = ref<HTMLImageElement|null>(null)
-    const generic = 'https://quakedemos.blob.core.windows.net/maps/thumbnails/_generic.png'
+    const generic = `${process.env.VUE_APP_THUMBNAILS_PATH}/generic.png`
     const map = computed(() => process.env.VUE_APP_THUMBNAILS_PATH + '/' + props.map + '.jpg')
 
     onMounted(() => {
