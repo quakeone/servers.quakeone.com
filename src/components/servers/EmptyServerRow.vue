@@ -1,7 +1,8 @@
 <template lang="pug">
 .empty-row
   .game-type 
-    .game-type-text {{gameType}}
+    .game-type-text
+      GameType(:gameId="serverStatus.gameId")
   .details
     h3(:class="{'is-down': serverStatus.currentStatus !== 0}") {{serverStatus.serverName}}
       FontAwesome(
@@ -34,16 +35,8 @@ import MapImage from '../MapImage.vue'
 import { ServerStatus } from '@/model/ServerStatus'
 import ServerAddressInline from '../ServerAddressInline.vue'
 import {PropType, defineComponent, computed} from 'vue'
+import GameType from '../GameType.vue'
 import * as match from '@/helpers/match'
-
-const gameTypeMap: Record<number, string> = {
-  0: "NQ",
-  1: "QW",
-  2: "Q2",
-  3: "Q3",
-  4: "Q4",
-  5: "QE"
-}
 
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
@@ -53,7 +46,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: {ServerAddressInline, MapImage },
+  components: {GameType,ServerAddressInline, MapImage },
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
@@ -64,7 +57,6 @@ export default defineComponent({
     return {
       serverStatusMap,
       matchStatus: computed(() => match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
-      gameType: computed(() => gameTypeMap[props.serverStatus.gameId] || 'unknown')
     }
   }
 })
@@ -123,7 +115,7 @@ export default defineComponent({
     "details gametype";
   grid-template-columns: auto 2rem;
   
-  @media only screen and (min-width: $small-breakpoint)  {
+  @media only screen and (min-width: $phone-breakpoint)  {
     .map-image {
       display: block;
     }

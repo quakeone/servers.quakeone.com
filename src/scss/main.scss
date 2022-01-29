@@ -9,13 +9,13 @@ body {
   margin: auto;
   padding: 0;
   
-  @media only screen and (max-width: $medium-breakpoint) {
+  @media only screen and (max-width: $tablet-breakpoint) {
     margin: 1rem;
   }
-  @media screen and (min-width: $medium-breakpoint) {
+  @media screen and (min-width: $tablet-breakpoint) {
     max-width: 980px;
   }
-  @media screen and (min-width: $large-breakpoint) {
+  @media screen and (min-width: $desktop-breakpoint) {
     max-width: 1200px;
   }
 }

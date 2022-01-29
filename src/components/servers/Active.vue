@@ -2,7 +2,8 @@
 .active-server
   .title
     h3 {{serverStatus.serverName}}
-    h3.game-type {{gameType}}
+    h3 
+      GameType(:gameId="serverStatus.gameId")
   .game-image
     MapWithPlayerList(
       :map="serverStatus.map", 
@@ -38,15 +39,7 @@ import ServerAddress from '../ServerAddress.vue'
 import { PlayerStatus } from '@/model/PlayerStatus'
 import { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
-
-const gameTypeMap: Record<number, string> = {
-  0: "NQ",
-  1: "QW",
-  2: "Q2",
-  3: "Q3",
-  4: "Q4",
-  5: "QE"
-}
+import GameType from '../GameType.vue'
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
   1: 'Not Responding',
@@ -55,7 +48,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: { ServerAddress, MapWithPlayerList },
+  components: {GameType,  ServerAddress, MapWithPlayerList },
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
@@ -74,7 +67,6 @@ export default defineComponent({
       return serverStatusMap[props.serverStatus.currentStatus] || 'Unknown'
     })
     const playerTooltipHtml = ref('')
-    const gameType = computed(() => gameTypeMap[props.serverStatus.gameId] || 'Unknown Game')
     const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
 
     watch(props, (newValue) => {
@@ -104,7 +96,6 @@ export default defineComponent({
     return {
       matchTime,
       matchStatus,
-      gameType,
       serverStatusString,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
       players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags)),
@@ -153,10 +144,17 @@ export default defineComponent({
     right: 10px;
   }
   grid-template-areas:
-    "title  title"
-    "image  details";
+    "title"
+    "image"
+    "details";
   grid-gap: 1em;
-  grid-template-columns: 60% auto;
+
+  @media screen and (min-width: $phone-breakpoint) {
+    grid-template-areas:
+      "title title"
+      "image details";
+    grid-template-columns: 60% auto;
+  }
 
   .details {
     .divider {

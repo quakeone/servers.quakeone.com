@@ -38,7 +38,7 @@ export default defineComponent({
   grid-gap: 1em;
   grid-template-columns: 1fr; 
 
-  @media only screen and (min-width: $medium-breakpoint)  {
+  @media only screen and (min-width: $tablet-breakpoint)  {
     grid-template-columns: 1fr 1fr;
   }
     // @media only screen and (min-width: $large-breakpoint)  {
