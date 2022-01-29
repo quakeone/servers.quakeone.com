@@ -8,7 +8,7 @@ template(v-if="!loading && charWriter")
             img(:src="charWriter.writeScore(14, player.frags, player.shirt, player.pant)" style="display:inline;")
           td(style="padding-left: 1rem; text-align: left")
             img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
-
+  
 </template>
 
 <script lang="ts">
@@ -43,13 +43,13 @@ export default defineComponent({
 <style lang="scss">
 
 .table-backdrop {
-  background-color: rgba(0,0,0,.3);
+  // background-color: rgba(0,0,0,.2);
   overflow: hidden;
   position: relative;
   -webkit-mask-image: linear-gradient(to bottom,  black 80%, transparent 98%);
   mask-image: linear-gradient(to bottom, black 80%, transparent 98%);
   padding-top: 68%;
-  width: 100%;
+  //width: 100%;
   table {
     position: absolute;
     top: 0;

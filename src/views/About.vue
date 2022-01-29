@@ -1,6 +1,6 @@
 <template lang="pug">
 .credit-where-credit-is-due 
-  H3 The Quake Server Browser 
+  h3 The Quake Server Browser 
   p Is a site created, maintained, and paid for by the quake community.
    | We want to encourage online play, competition, and fun. Contact us for suggestions or 
    | if you have a server you want added to the list
@@ -14,7 +14,7 @@
   p
     span.bright efess  
     span site programming and hosting
-    
+
   h4 Find us on Discord
   p Net Quake Community
     a(href="https://discord.quakeone.com/")  https://discord.quakeone.com/
@@ -24,9 +24,9 @@
   p efess (joe) at 
     a(href="mailto:efessel@gmail.com") efessel@gmail.com
 </template>
+
 <style lang="scss" >
 .credit-where-credit-is-due {
-
   margin: 1rem;
   h4 {
     margin-top: 2rem;

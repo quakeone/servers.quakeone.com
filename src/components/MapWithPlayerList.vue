@@ -2,6 +2,7 @@
 <template lang="pug">
 MapImage(:map="map")
   PlayerScoreList.player-list(:players="playerList")
+  slot
 </template>
 
 <script lang="ts">
@@ -26,6 +27,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .map-image {
+  position: relative;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }

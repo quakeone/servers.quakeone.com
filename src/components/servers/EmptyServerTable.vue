@@ -2,7 +2,7 @@
 .empty-server-table
   .row-container(
     :class="{'is-down': server.currentStatus !== 0}"
-    v-for="(server, index) in sortedServers")
+    v-for="(server, index) in servers")
     EmptyServerRow(
       :key="server.serverId" 
       :serverStatus="server")
@@ -19,7 +19,7 @@ export default defineComponent({
     EmptyServerRow
   },
   props: {
-    serverStatuses: {
+    servers: {
       type: Array as PropType<ServerStatus[]>,
       default:() => []
     }
@@ -27,7 +27,7 @@ export default defineComponent({
   computed: {
 
     sortedServers(): ServerStatus[] {
-      return [...this.serverStatuses].sort((a:ServerStatus, b: ServerStatus) => 
+      return [...this.servers].sort((a:ServerStatus, b: ServerStatus) => 
         a.currentStatus === b.currentStatus
           ? a.recentMatchStart === b.recentMatchStart 
             ? 0 
@@ -40,22 +40,23 @@ export default defineComponent({
 
 <style lang="scss">
 .empty-server-table {
-  border: 1px solid #363330;
   .row-container {
-    &.is-down {
-      &:nth-child(even) {
-        background-color: rgba(104, 24, 24, .4);
-      }
-      &:nth-child(odd) {
-        background-color: rgba(104, 24, 24, .2);
-      }
-    }
-    &:nth-child(even) {
-      background-color: #2d2b29;
-    }
-    &:nth-child(odd) {
-      background-color: #363330;
-    }
+    border-top: 1px solid $grey-2;
+    padding: .5rem 0;
+    // &.is-down {
+    //   &:nth-child(even) {
+    //     background-color: rgba(104, 24, 24, .4);
+    //   }
+    //   &:nth-child(odd) {
+    //     background-color: rgba(104, 24, 24, .2);
+    //   }
+    // }
+    // &:nth-child(even) {
+    //   background-color: #2d2b29;
+    // }
+    // &:nth-child(odd) {
+    //   background-color: #363330;
+    // }
   }
 }
 table {
@@ -66,7 +67,7 @@ td {
 }
 th {
   text-align: left;
-  color: $whiteish;
+  color: $whitish;
 }
 .cell-row {
   display: flex;

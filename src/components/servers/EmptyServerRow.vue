@@ -1,40 +1,59 @@
 <template lang="pug">
 .empty-row
-  MapImage(:map="serverStatus.map")
-    .grid
-      .detail
-        H3 {{serverStatus.serverName}}
-        ServerAddress.bright(:address="serverStatus.dNS" :port="serverStatus.port")
-        div  {{gameType}}
-
-
-      .secondary
-        .mod(v-if="serverStatus.modificationCode")
-          span Game Type:  
-          span.bright {{serverStatus.modificationCode}}
-        .location
-          span Location:  
-          span.bright {{serverStatus.location || 'Unknown'}}
-    .map-text {{serverStatus.map}}
+  .game-type 
+    .game-type-text {{gameType}}
+  .details
+    h3(:class="{'is-down': serverStatus.currentStatus !== 0}") {{serverStatus.serverName}}
+      FontAwesome(
+        v-if="serverStatus.currentStatus !== 0" 
+        :icon="['fas', 'exclamation-circle']"
+        v-tippy :content="serverStatusMap[serverStatus.currentStatus]")
+    ServerAddressInline.bright(:address="serverStatus.dNS" :port="serverStatus.port")
+    div  
+    .mod(v-if="serverStatus.modificationCode")
+      span.bright {{serverStatus.modificationCode}}
+      span.vert-divide |
+      span
+        FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
+      span.bright {{serverStatus.location || 'Unknown'}}
+    .bottom
+      span map  
+      span.bright {{serverStatus.map}}
+      span.vert-divide |
+      span players 
+      span.bright 0/{{serverStatus.maxPlayers}}
+      span.vert-divide | 
+      span {{matchStatus}}
+  .map-image
+    MapImage(:map="serverStatus.map")
+      .map-text {{serverStatus.map}}
 </template>
 
 <script lang="ts">
 import MapImage from '../MapImage.vue'
 import { ServerStatus } from '@/model/ServerStatus'
-import ServerAddress from '../ServerAddress.vue'
+import ServerAddressInline from '../ServerAddressInline.vue'
 import {PropType, defineComponent, computed} from 'vue'
+import * as match from '@/helpers/match'
 
 const gameTypeMap: Record<number, string> = {
-  0: "Net Quake",
-  1: "QuakeWorld",
-  2: "Quake II",
-  3: "Quake 3",
-  4: "Quake IV",
-  5: "Quake Enhanced"
+  0: "NQ",
+  1: "QW",
+  2: "Q2",
+  3: "Q3",
+  4: "Q4",
+  5: "QE"
+}
+
+const serverStatusMap: Record<number, string> = {
+  0: 'Running',
+  1: 'Not Responding',
+  2: 'Server not found',
+  3: 'Query Error'
 }
 
 export default defineComponent({
-  components: {ServerAddress, MapImage },
+  components: {ServerAddressInline, MapImage },
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
@@ -43,6 +62,8 @@ export default defineComponent({
   },
   setup(props) {
     return {
+      serverStatusMap,
+      matchStatus: computed(() => match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
       gameType: computed(() => gameTypeMap[props.serverStatus.gameId] || 'unknown')
     }
   }
@@ -51,10 +72,42 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .empty-row {
+  display: grid;
+  .vert-divide {
+    margin: 0.5rem;
+  }
+
+  .game-type {
+    padding: .5rem 0;
+    grid-area: gametype;
+    font-weight: bold;
+    .game-type-text {
+      text-align: right;
+      border-left: solid 1px $grey-2;
+      width: 100%;
+    }
+  }
+  .details {
+    padding: .5rem 0;
+    grid-area: details;
+    .map-icon {
+      margin-right: .5rem;
+    }
+    .is-down {
+      color: $light-brown;
+      .fa-exclamation-circle {
+        color: $error;
+        margin-left: 1rem;
+      }
+    }
+  }
+
   .map-image {
+    grid-area: map;
+    display: none;
     background-position: right;
-    background-size: 50%;
     position: relative;
+    height: 100%;
 
     .map-text {
       padding: 4px;
@@ -65,40 +118,29 @@ export default defineComponent({
       right: 10px;
     }
   }
-  @media only screen and (min-width: $phone-breakpoint)  {
+
+  grid-template-areas: 
+    "details gametype";
+  grid-template-columns: auto 2rem;
+  
+  @media only screen and (min-width: $small-breakpoint)  {
     .map-image {
-      background-size: 150px;
+      display: block;
     }
-  }
-  .grid {
-    display: grid;
-    @media only screen {
-      grid-template-areas: 
-        "detail"
-        "secondary";
-      grid-template-columns: auto;
-      .map-image {
-        height: 140px;
-      }
-      .secondary{
-        padding-top: 0;
-      }
-      .detail{
-        padding-bottom: 0;
+    .details {
+      margin-left: 1rem;
+    }
+    
+    .game-type {
+      border-right: 1px $grey-2 solid;
+      .game-type-text {
+        text-align: left;
+        border: 0;
       }
     }
-    .detail {
-      padding: .5rem;
-      grid-area: detail
-    }
-    .secondary {
-      padding: .5rem;
-      grid-area: secondary;
-    }
-    @media only screen and (min-width: $phone-breakpoint)  {
-      grid-template-areas: "detail secondary map";
-      grid-template-columns: auto 250px 150px;
-    }
+    grid-template-columns: 2rem auto 150px;
+    grid-template-areas: 
+      "gametype details map";
   }
 }
 </style>

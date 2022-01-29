@@ -1,15 +1,8 @@
 <template lang="pug">
-.server-address
-  .top
-    .container
-      .address.bright {{address}}
-      .port 
-        span port:
-        span.bright {{port}}
-    .icon
-      FontAwesome.copy-icon(@click="onCopy" :icon="['far', 'clone']"
-        v-tippy='{ trigger : "click"}' content="Copied to clipboard")
-  .copy-text(@click="onCopy" v-tippy='{ trigger : "click"}' content="Copied to clipboard") copy to clipboard
+.connection {{connectionString}}
+  FontAwesome.copy-icon(@click="onCopy" :icon="['far', 'clone']"
+  v-tippy='{ trigger : "click"}' content="Copied to clipboard")
+  
 </template>
 
 <script lang="ts">
@@ -93,20 +86,10 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
-.top {
-  display: flex;
-  justify-content: space-between;
-}
+<style lang="scss">
 .copy-icon {
   font-size: .7rem;
   margin-left: .4rem;
-  cursor: pointer;
-}
-.copy-text{
-  text-align: center;
-  font-size: .8rem;
-  font-style: italic;
   cursor: pointer;
 }
 </style>

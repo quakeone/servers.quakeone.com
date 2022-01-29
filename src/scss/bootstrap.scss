@@ -1,5 +1,3 @@
-
-@import "~bootstrap/scss/functions";
 @import "variables";
 
 // Default variable overrides
@@ -14,10 +12,3 @@ $table-striped-bg:            #363330;
 $table-border-factor:         .1;
 $table-border-width:         1;
 $table-border-color:          $tan;
-
-
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/root";
-@import "~bootstrap/scss/grid";
-@import "~bootstrap/scss/tables";

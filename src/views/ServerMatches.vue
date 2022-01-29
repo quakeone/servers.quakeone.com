@@ -29,6 +29,7 @@ export default defineComponent({
   setup(props) {
     const totalRecords = ref(0);
     const matches = ref<Match[]>([])
+    
     const update = () => getServerMatches(props.serverId).then(_matches => {
       matches.value = _matches.results
       totalRecords.value = _matches.totalResults

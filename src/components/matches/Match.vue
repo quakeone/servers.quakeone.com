@@ -90,8 +90,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-.active-server {
+<style lang="scss" scoped>
+.match {
   display: grid;
   grid-gap: 1em;
   @media only screen {

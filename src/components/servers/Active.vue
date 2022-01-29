@@ -1,29 +1,30 @@
 <template lang="pug">
 .active-server
+  .title
+    h3 {{serverStatus.serverName}}
+    h3.game-type {{gameType}}
   .game-image
     MapWithPlayerList(
       :map="serverStatus.map", 
       :playerList="serverStatus.players")
+      .map-lower-right
+        .map-players {{playerCount}}
+        .map-text {{serverStatus.map}}
   .details
-    .title
-      h3 {{serverStatus.serverName}}
-      div {{gameType}}
-    .bright 
-      ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
-    div 
-      span Game type: 
+    div  
       span.bright {{serverStatus.modificationCode}}
-    div 
-      span Location: 
-      span.bright  {{serverStatus.location || 'unknown'}}
+    .divider  
+    ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
+    .divider
+    FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
+    span.bright  {{serverStatus.location || 'unknown'}}
     div(v-if="serverStatus.currentStatus === 0")
       span Map: 
       span.bright {{serverStatus.map}}
-      span.vert-divide |
-
+    div.players(v-if="serverStatus.currentStatus === 0")
+      span Players: 
       span.bright(v-tippy="{allowHTML: true}"
         :content="playerTooltipHtml") {{playerCount}} 
-      span  players
     div(v-else) {{serverStatusString}}
     div.match-status {{matchStatus}} {{matchTime}}
 
@@ -32,19 +33,19 @@
 <script lang="ts">
 import { ServerStatus } from '@/model/ServerStatus'
 import { defineComponent, PropType, computed, watch, ref, inject } from 'vue'
-import {dateToUtc, duration} from '@/helpers/date'
+import * as match from '@/helpers/match'
 import ServerAddress from '../ServerAddress.vue'
 import { PlayerStatus } from '@/model/PlayerStatus'
 import { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
 
 const gameTypeMap: Record<number, string> = {
-  0: "Net Quake",
-  1: "QuakeWorld",
-  2: "Quake II",
-  3: "Quake 3",
-  4: "Quake IV",
-  5: "Quake Enhanced"
+  0: "NQ",
+  1: "QW",
+  2: "Q2",
+  3: "Q3",
+  4: "Q4",
+  5: "QE"
 }
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
@@ -64,20 +65,10 @@ export default defineComponent({
   setup(props) {
     const charWriter = inject<Writer>('charWriter')
     const matchStatus = computed(() => {
-      if (!props.serverStatus.recentMatchStart) {
-        return 'No previous match recorded'
-      } else if (!props.serverStatus.recentMatchEnd) {
-        return "Match in progress - "
-      } else if (props.serverStatus.recentMatchStart < props.serverStatus.recentMatchEnd) {
-        return "Last match " + duration(dateToUtc(new Date()).getTime() - new Date(props.serverStatus.recentMatchEnd).getTime()) + " ago"
-      }
-      return  ''
+      return match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)
     })
     const matchTime = computed(() => {
-      if (!props.serverStatus.recentMatchStart || props.serverStatus.recentMatchStart < props.serverStatus.recentMatchEnd) {
-        return ""
-      }
-      return duration(dateToUtc(new Date()).getTime() - new Date(props.serverStatus.recentMatchStart).getTime())
+      return match.time(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)
     })
     const serverStatusString = computed(() => {
       return serverStatusMap[props.serverStatus.currentStatus] || 'Unknown'
@@ -125,25 +116,58 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .active-server {
+  border-top: 1px solid $grey-2;
   display: grid;
-  grid-gap: 1em;
-  @media only screen {
-    grid-template-areas:
-    "map"
-    "details";
-  }
-  @media only screen and (min-width: $phone-breakpoint)  {
-    grid-template-columns: 400px auto;
-    grid-template-areas:
-    "map   details";
-  }
-  .game-image {
-    grid-area: map;
+  
+  .title {
+    margin-top: 1rem;
+    grid-area: title;
+    display: flex; 
+    justify-content: space-between;
+    h3, h2 {
+      // padding-top: rem;
+      padding: 0;
+      margin: 0;
+    }
+    .game-type {
+      padding-left: 1rem;
+      // padding-bottom: .5rem;
+      border-left: 1px solid $grey-2;
+    }
   }
   .details {
     grid-area: details;
+  }
+  .game-image {
+    grid-area: image;
+  }
+  .map-lower-right {
+    text-align: right;
+    padding: 4px;
+    color: $grey-3;
+    font-weight:  700;
+    text-shadow: 2px 2px rgba(0,0,0,.9);
+    //background-color: rgba(0,0,0,.4);
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  grid-template-areas:
+    "title  title"
+    "image  details";
+  grid-gap: 1em;
+  grid-template-columns: 60% auto;
+
+  .details {
+    .divider {
+      margin: 1rem 0;
+      border-top: 1px solid $grey-2;
+    }
     .title {
       margin-bottom: 1.5rem;
+    }
+    .map-icon {
+      margin-right: .5rem;
     }
     .vert-divide {
       margin: 0.5rem;

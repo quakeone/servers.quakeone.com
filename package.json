@@ -13,7 +13,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "axios": "^0.21.1",
-    "bootstrap": "^5.1.0",
     "core-js": "^3.6.5",
     "pug": "^3.0.2",
     "pug-loader": "^2.4.0",
