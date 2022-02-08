@@ -1,11 +1,15 @@
 <template lang="pug">
-.servers
-  ActiveServerGrid.section(:servers="servers.active")
+.servers(v-if="loading === 'IDLE'")
+  template(v-if="servers.active.length === 0")
+    h2 There are currently no active servers
+  template(v-else)
+    ActiveServerGrid.section(:servers="servers.active")
   EmptyServerTable.section(:servers="servers.empty")
 
 </template>
 
 <script lang="ts">
+import {LoadingState} from '@/model/LoadingState'
 import { getStatus } from '../services/serversApi'
 import { defineComponent, Ref, ref, onBeforeUnmount, computed } from 'vue'
 import {ServerStatus} from '@/model/ServerStatus'
@@ -24,9 +28,11 @@ export default defineComponent({
     EmptyServerTable
   },
   setup() {
+    const loading = ref<LoadingState>('LOADING')
     const serverStatuses: Ref<ServerStatus[]> = ref([])
     const update = () => getStatus().then(servers => {
       serverStatuses.value = servers
+      loading.value = 'IDLE'
     })
     
     const servers = computed(() => {
@@ -42,7 +48,8 @@ export default defineComponent({
     update()
 
     return {
-      servers
+      servers,
+      loading
     }
   }
 });

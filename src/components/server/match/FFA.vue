@@ -29,7 +29,7 @@ MatchShell(:match="props.match")
             img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
           .col.play-time
             span.bright {{Math.floor(player.playerStayDuration / 60)}} 
-            span mins
+            span  mins
     .remaining(v-if="props.match.players.length > 3")
       PlayersTooltip(:players="props.match.players") {{props.match.players.length - 3}} more
 </template>

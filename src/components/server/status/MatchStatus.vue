@@ -8,12 +8,13 @@
       .time {{matchTime.time}}
       .suffix {{matchTime.duration}}
   .content
-    FFA(:server="props.server")
-      
+    component(:is="subStatus" :server="props.server")
+    
 </template>
 
 <script lang="ts" setup>
 import FFA from './FFA.vue'
+import Down from './Down.vue'
 import {defineProps, computed} from 'vue'
 import {ServerDetail} from '@/model/ServerDetail'
 import * as matchHelper from '@/helpers/match'
@@ -25,6 +26,13 @@ const matchStatus = computed(() => {
 const matchTime = computed(() => {
   const [time, duration] = matchHelper.time(props.server.recentMatchStart, props.server.recentMatchEnd).split(' ')
   return {time, duration}
+})
+const subStatus = computed(() => {
+  if (props.server.currentStatus === 0) {
+    return FFA
+  } else {
+    return Down
+  }
 })
 </script>
 

@@ -9,3 +9,8 @@ const props = defineProps<{
   location: string
 }>()
 </script>
+<style lang="scss" scoped>
+span {
+  margin-left: .3rem;
+}
+</style>

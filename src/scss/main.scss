@@ -28,6 +28,12 @@ h4 {
 h3 {
   color: $whitish;
   margin: 0 0 .5rem 0;
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 h2 {
@@ -52,6 +58,7 @@ h2 {
 a {
   text-decoration: underline;
   color: $whitish;
+  cursor: pointer;
 }
 
 span {

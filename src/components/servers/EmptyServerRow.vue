@@ -57,7 +57,8 @@ export default defineComponent({
   setup(props) {
     return {
       serverStatusMap,
-      matchStatus: computed(() => match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
+      matchStatus: computed(() => 
+        match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
     }
   }
 })
@@ -87,7 +88,9 @@ export default defineComponent({
       margin-right: .5rem;
     }
     .is-down {
-      color: $light-brown;
+      a {
+        color: $light-brown;
+      }
       .fa-exclamation-circle {
         color: $error;
         margin-left: 1rem;

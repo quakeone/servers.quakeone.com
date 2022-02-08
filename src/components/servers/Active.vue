@@ -131,7 +131,7 @@ export default defineComponent({
 
   .details {
     .divider {
-      margin: 1rem 0;
+      margin: .5rem 0;
       border-top: 1px solid $grey-2;
     }
     .title {

@@ -1,9 +1,9 @@
 <template lang="pug">
 .players
   PlayersTooltip(:players="props.server.players")
-    .participating
+    .participating(v-if="players.active.length > 0")
       span.bright {{players.active.length}}  
-      span  Active Players
+      span  Active Player(s)
     .observers(v-if="players.observer.length > 0")
       span.bright {{players.observer.length}}  
       span  Observers
