@@ -1,7 +1,8 @@
 <template lang="pug">
 .active-server
   .title
-    h3 {{serverStatus.serverName}}
+    h3
+      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.serverName}}
     h3 
       GameType(:gameId="serverStatus.gameId")
   .game-image
@@ -12,7 +13,7 @@
         .map-players {{playerCount}}
         .map-text {{serverStatus.map}}
   .details
-    div  
+    div
       span.bright {{serverStatus.modificationCode}}
     .divider  
     ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
@@ -24,8 +25,7 @@
       span.bright {{serverStatus.map}}
     div.players(v-if="serverStatus.currentStatus === 0")
       span Players: 
-      span.bright(v-tippy="{allowHTML: true}"
-        :content="playerTooltipHtml") {{playerCount}} 
+      PlayersTooltip.bright(:players="serverStatus.players") {{playerCount}} 
     div(v-else) {{serverStatusString}}
     div.match-status {{matchStatus}} {{matchTime}}
 
@@ -33,13 +33,15 @@
 
 <script lang="ts">
 import { ServerStatus } from '@/model/ServerStatus'
-import { defineComponent, PropType, computed, watch, ref, inject } from 'vue'
+import { defineComponent, PropType, computed, inject } from 'vue'
 import * as match from '@/helpers/match'
 import ServerAddress from '../ServerAddress.vue'
 import { PlayerStatus } from '@/model/PlayerStatus'
 import { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
-import GameType from '../GameType.vue'
+import GameType from '@/components/GameType.vue'
+import PlayersTooltip from '@/components/PlayersTooltip.vue'
+
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
   1: 'Not Responding',
@@ -48,7 +50,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: {GameType,  ServerAddress, MapWithPlayerList },
+  components: {GameType,  ServerAddress, MapWithPlayerList, PlayersTooltip},
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
@@ -56,7 +58,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const charWriter = inject<Writer>('charWriter')
     const matchStatus = computed(() => {
       return match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)
     })
@@ -66,40 +67,12 @@ export default defineComponent({
     const serverStatusString = computed(() => {
       return serverStatusMap[props.serverStatus.currentStatus] || 'Unknown'
     })
-    const playerTooltipHtml = ref('')
-    const sortedPlayers = computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
-
-    watch(props, (newValue) => {
-      if (!charWriter) {
-        return
-      }
-      const server = newValue.serverStatus
-      if (server.currentStatus !== 0) {
-        return ''
-      }
-      const body = sortedPlayers.value.map((player: PlayerStatus) => {
-          return `<tr style="line-height: 1;">
-          <td style="text-align:right;">
-            <img src="${charWriter.writeScore(14, player.frags, player.shirt, player.pant)}" style="display:inline;">
-          </td>
-          <td style="padding-left: 1rem; text-align: left">
-            <img src="${charWriter.write(12, btoa(player.name))}" style="display:inline;">
-          </td>
-          </tr>`;
-        })
-        .join('');
-
-      playerTooltipHtml.value = `<table><tbody>${body}</tbody></table>`;
-
-    }, {immediate: true})
-
     return {
       matchTime,
       matchStatus,
       serverStatusString,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
-      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags)),
-      playerTooltipHtml
+      players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
     }
   }
 })
@@ -166,9 +139,6 @@ export default defineComponent({
     }
     .map-icon {
       margin-right: .5rem;
-    }
-    .vert-divide {
-      margin: 0.5rem;
     }
     .match-status {
       margin-top: .4rem;

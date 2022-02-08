@@ -1,0 +1,55 @@
+<template lang="pug">
+.match-status
+  .header
+    h3 Server Status
+  .current-status
+    .status-string {{matchStatus}}
+    .status-time 
+      .time {{matchTime.time}}
+      .suffix {{matchTime.duration}}
+  .content
+    FFA(:server="props.server")
+      
+</template>
+
+<script lang="ts" setup>
+import FFA from './FFA.vue'
+import {defineProps, computed} from 'vue'
+import {ServerDetail} from '@/model/ServerDetail'
+import * as matchHelper from '@/helpers/match'
+
+const props = defineProps<{server: ServerDetail}>()
+const matchStatus = computed(() => {
+  return matchHelper.status(props.server.recentMatchStart, props.server.recentMatchEnd)
+})
+const matchTime = computed(() => {
+  const [time, duration] = matchHelper.time(props.server.recentMatchStart, props.server.recentMatchEnd).split(' ')
+  return {time, duration}
+})
+</script>
+
+<style lang="scss" scoped>
+.header h3 {
+  border-bottom: 1px solid $grey-2;
+  padding-bottom: 1rem;
+}
+
+.current-status {
+  display: flex;
+  justify-content: space-between;
+  .status-string {
+    font-size: 1.2rem;
+  }
+  .status-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .time {
+      font-size: 1.5rem;
+    }
+    .suffix {
+
+    }
+  }
+}
+</style>

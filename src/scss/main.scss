@@ -53,3 +53,9 @@ a {
   text-decoration: underline;
   color: $whitish;
 }
+
+span {
+  .vert-divide {
+    margin: 0.5rem;
+  }
+}
