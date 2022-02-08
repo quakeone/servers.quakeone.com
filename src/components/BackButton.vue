@@ -1,7 +1,8 @@
 <template lang="pug">
-.back-button(@click="$emit('back')")
-  FontAwesome(:icon="['fas', 'chevron-left']") 
-  |  Back
+.back-button
+  span(@click="$emit('back')")
+    FontAwesome(:icon="['fas', 'chevron-left']") 
+    slot
 </template>
 
 <script lang="ts" setup>
@@ -9,6 +10,10 @@
 
 <style scoped lang="scss">
 .back-button {
-  cursor: pointer;
+  span {
+    cursor: pointer;
+    padding: .3rem;
+    background-color: $grey-2;
+  }
 }
 </style>

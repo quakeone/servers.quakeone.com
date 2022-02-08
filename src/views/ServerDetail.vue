@@ -1,8 +1,9 @@
 <template lang="pug">
 .server-detail
+  BackButton(@back="router.go(-1)") 
+    | Back to Servers List
   template(v-if="details.status")
     .header
-      BackButton(@back="router.go(-1)")
       .summary
         h2 {{details.status.serverName}}
         .details
