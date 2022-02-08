@@ -38,7 +38,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .empty-server-table {
   .row-container {
     border-top: 1px solid $grey-2;

@@ -1,4 +1,4 @@
 export interface ServerSetting {
-  Setting: string
-  Value: string
+  setting: string
+  value: string
 }
