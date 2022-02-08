@@ -4,7 +4,8 @@
     .game-type-text
       GameType(:gameId="serverStatus.gameId")
   .details
-    h3(:class="{'is-down': serverStatus.currentStatus !== 0}") {{serverStatus.serverName}}
+    h3(:class="{'is-down': serverStatus.currentStatus !== 0}")
+      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.serverName}}
       FontAwesome(
         v-if="serverStatus.currentStatus !== 0" 
         :icon="['fas', 'exclamation-circle']"

@@ -25,12 +25,12 @@
             .map-text {{details.status.map}}
       .matches
         h2 Recent Matches
-        .match-container(v-for="match in matches.results")
+        .match-container(v-for="match in sortedMatches")
           FFA(:match="match")
 </template>
 
 <script lang="ts" setup>
-import {onBeforeUnmount, ref, defineProps} from 'vue'
+import {onBeforeUnmount, ref, defineProps, computed} from 'vue'
 import {ServerDetail} from '@/model/ServerDetail'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'
@@ -50,7 +50,8 @@ const router = useRouter()
 const props = defineProps<{serverId: number}>()
 const details = ref<ServerDetail>({})
 const matches = ref<PagedResult<MatchModel>>({})
-
+const sortedMatches = computed(() => [...matches.value.results].sort((b, a) => 
+  new Date(a.matchStart).getTime() - new Date(b.matchStart).getTime()))
 const update = () => 
   Promise.all([
     getServerDetails(props.serverId),
@@ -64,6 +65,7 @@ const update = () =>
 var id = setInterval(update, 5000)
 onBeforeUnmount(() => clearInterval(id))
 update()
+
 </script>
 
 <style lang="scss" scoped>
