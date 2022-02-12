@@ -15,14 +15,15 @@ const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "dd"))
 const match = computed(() => parseMatch(props.match))
+const isTeam = computed(() => 'matchType' in match.value)
 const detail = computed(() => {
-  if ('matchType' in match.value) {
+  if (isTeam.value) {
     return match.value.matchType === 'CTF' ? CTF : TDM
   }
   return FFA
 })
-const teamSize = computed(() => 'matchType' in match.value ? match.value.teams.size : '')
-const matchType = computed(() => 'matchType' in match.value ? match.value.matchType : 'FFA')
+const teamSize = computed(() => isTeam.value ? match.value.teams.size : '')
+const matchType = computed(() => isTeam.value ? match.value.matchType : '')
 </script>
 
 <template lang="pug">
@@ -30,8 +31,8 @@ const matchType = computed(() => 'matchType' in match.value ? match.value.matchT
   .date
     .date-day {{matchDay}}
     .date-month {{matchMonth}}
-    .match-type {{matchType}}
-    .match-size {{teamSize}}x{{teamSize}}
+    .match-type(v-if="isTeam") {{matchType}}
+    .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
     
   .title
     h3 {{props.match.name}}

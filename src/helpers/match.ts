@@ -25,34 +25,36 @@ export const time = (lastStart: string, lastEnd: string) => {
 }
 
 export const parseMatch = (match: Match) : (Match | TeamMatch) => {
+  const teams = parseTeams(match.players)
   if (match.mod === 'CRMod' && match.mode === 'match') {
     return {
       ...match,
       matchType: 'TDM',
-      teams: parseTeams(match.players)
+      teams
     } 
   } else if (match.mod === 'CRMod' && match.mode !== 'practice') {
     return {
       ...match,
       matchType: 'CTF',
-      teams: parseTeams(match.players)
+      teams
     } 
-  }
+  } 
   return match
 }
 
 export const parseServerStatus = (match: ServerStatus) : (ServerStatus | TeamServerStatus) => {
+  const teams = parseTeams(match.players)
   if (match.modification === 'CRMod' && match.mode === 'match') {
     return {
       ...match,
       matchType: 'TDM',
-      teams: parseTeams(match.players)
+      teams
     } 
   } else if (match.modification === 'CRMod' && match.mode !== 'practice') {
     return {
       ...match,
       matchType: 'CTF',
-      teams: parseTeams(match.players)
+      teams
     } 
   }
   return match
