@@ -8,7 +8,8 @@ export interface Match {
   port: number,
   name: string,
   map: string,
-  modification: string,
+  mode: string
+  mod: string,
   matchStart: string,
   matchEnd: string,
   duration: number,

@@ -18,15 +18,22 @@
       .server-rules
         Rules(:rules="details.status.serverSettings")
       .map-image
-        MapWithPlayerList(
-          :map="details.status.map", 
-          :playerList="details.status.players")
-          .map-lower-right
-            .map-text {{details.status.map}}
+        template(v-if="'teams' in details.status")
+          MapWithTeamsList(
+            :map="details.status.map",
+            :teams="details.status.teams")
+            .map-lower-right
+              .map-text {{details.status.map}}
+        template(v-else)
+          MapWithPlayerList(
+            :map="details.status.map",
+            :playerList="details.status.players")
+            .map-lower-right
+              .map-text {{details.status.map}}
       .matches
         h2 Recent Matches
         .match-container(v-for="match in sortedMatches")
-          FFA(:match="match")
+          MatchInstance(:match="match")
 </template>
 
 <script lang="ts" setup>
@@ -43,8 +50,10 @@ import Rules from '@/components/server/Rules.vue'
 import {getServerDetails, getServerMatches} from '@/services/serversApi'
 import {useRouter} from 'vue-router'
 import {Match as MatchModel} from '@/model/Match'
-import FFA from '@/components/server/match/FFA.vue'
+import MatchInstance from '@/components/server/match/MatchInstance.vue'
 import {PagedResult} from '@/model/PagedResult'
+import MapWithTeamsList from '@/components/MapWithTeamList.vue'
+import {parseServerStatus} from '@/helpers/match'
 
 const router = useRouter()
 const props = defineProps<{serverId: number}>()
@@ -54,7 +63,11 @@ const sortedMatches = computed(() => [...matches.value.results].sort((b, a) =>
   new Date(a.matchStart).getTime() - new Date(b.matchStart).getTime()))
 const update = () => 
   Promise.all([
-    getServerDetails(props.serverId),
+    getServerDetails(props.serverId)
+      .then(({mapStats, status} )=> ({
+        mapStats,
+        status: parseServerStatus(status)
+      })),
     getServerMatches(props.serverId)
   ])
   .then(([_details, _matches]: [_details: ServerDetail, _matches: PagedResult<MatchModel>]) => {

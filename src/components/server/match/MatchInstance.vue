@@ -3,6 +3,10 @@ import { format } from 'date-fns'
 import {defineProps, computed} from 'vue'
 import Match from '@/model/Match'
 import MapImage from '../../MapImage.vue'
+import TDM from './TDM.vue'
+import CTF from './CTF.vue'
+import FFA from './FFA.vue'
+import {parseMatch} from '@/helpers/match'
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
 const props = defineProps<{match: Match}>()
 
@@ -10,7 +14,15 @@ const startDate =  computed(() => new Date(props.match.matchStart))
 const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "dd"))
-
+const match = computed(() => parseMatch(props.match))
+const detail = computed(() => {
+  if ('matchType' in match.value) {
+    return match.value.matchType === 'CTF' ? CTF : TDM
+  }
+  return FFA
+})
+const teamSize = computed(() => 'matchType' in match.value ? match.value.teams.size : '')
+const matchType = computed(() => 'matchType' in match.value ? match.value.matchType : 'FFA')
 </script>
 
 <template lang="pug">
@@ -18,6 +30,9 @@ const matchDay = computed(() => format(startDate.value, "dd"))
   .date
     .date-day {{matchDay}}
     .date-month {{matchMonth}}
+    .match-type {{matchType}}
+    .match-size {{teamSize}}x{{teamSize}}
+    
   .title
     h3 {{props.match.name}}
     .subtitle
@@ -29,15 +44,21 @@ const matchDay = computed(() => format(startDate.value, "dd"))
       span map: 
       span.bright  {{props.match.map}}
   .detail
-    slot(name="standing")
+    component(:is="detail" :match="match")
   .map-image
     MapImage(:map="props.match.map")
       .map-text {{props.match.map}}
 </template>
 
 <style lang="scss" scoped>
+.match-type, .match-size {
+  display: none;
+}
 .date {
   grid-area: big-date;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .title {
   gird-area: title;
@@ -69,11 +90,17 @@ const matchDay = computed(() => format(startDate.value, "dd"))
     "detail detail";
   grid-template-columns: 3rem auto;
   @media only screen and (min-width: $tablet-breakpoint)  {
+    .match-type {
+      margin-top: .5rem;
+    }
     .map-image {
       display: block;
     }
     .detail {
       padding: 0 1rem;
+    }
+    .match-type, .match-size {
+      display: block;
     }
   
     grid-template-areas: 

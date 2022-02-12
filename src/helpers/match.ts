@@ -1,4 +1,9 @@
 import {dateToUtc, duration} from '@/helpers/date'
+import { Match } from '@/model/Match'
+import { ServerStatus } from '@/model/ServerStatus'
+import { TeamMatch } from '@/model/TeamMatch'
+import { TeamServerStatus } from '@/model/TeamServerStatus'
+import { parseTeams } from './teams'
 
 export const status = (lastStart: string, lastEnd: string) => {
   if (!lastStart) {
@@ -17,4 +22,38 @@ export const time = (lastStart: string, lastEnd: string) => {
     return ""
   }
   return duration(dateToUtc(new Date()).getTime() - new Date(lastStart).getTime())
+}
+
+export const parseMatch = (match: Match) : (Match | TeamMatch) => {
+  if (match.mod === 'CRMod' && match.mode === 'match') {
+    return {
+      ...match,
+      matchType: 'TDM',
+      teams: parseTeams(match.players)
+    } 
+  } else if (match.mod === 'CRMod' && match.mode !== 'practice') {
+    return {
+      ...match,
+      matchType: 'CTF',
+      teams: parseTeams(match.players)
+    } 
+  }
+  return match
+}
+
+export const parseServerStatus = (match: ServerStatus) : (ServerStatus | TeamServerStatus) => {
+  if (match.modification === 'CRMod' && match.mode === 'match') {
+    return {
+      ...match,
+      matchType: 'TDM',
+      teams: parseTeams(match.players)
+    } 
+  } else if (match.modification === 'CRMod' && match.mode !== 'practice') {
+    return {
+      ...match,
+      matchType: 'CTF',
+      teams: parseTeams(match.players)
+    } 
+  }
+  return match
 }

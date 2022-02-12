@@ -21,6 +21,7 @@ export interface ServerStatus {
   customModificationName?: string;
   serverName: string;
   map: string;
+  mode: string,
   serverSettings: ServerSetting[];
   modification?: string;
   players: PlayerStatus[];
