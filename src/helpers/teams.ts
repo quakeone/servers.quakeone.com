@@ -9,7 +9,7 @@ export const parseTeams = (players: MatchPlayer[] | PlayerStatus[]): Teams => {
   const teams = Object.keys(playerGroups)
     .filter(c => c !== '0')
     .map(t => {
-      const players = [...playerGroups[t]].sort((a,b) => a.frags - b.frags)
+      const players = [...playerGroups[t]].sort((a,b) => b.frags - a.frags)
       if (players.length > maxTeamSize) {
         maxTeamSize = players.length;
       }
