@@ -64,7 +64,8 @@ const sortedMatches = computed(() => [...matches.value.results].sort((b, a) =>
 const update = () => 
   Promise.all([
     getServerDetails(props.serverId)
-      .then(({mapStats, status} )=> ({
+      .then(({hourlyStats, mapStats, status} )=> ({
+        hourlyStats,
         mapStats,
         status: parseServerStatus(status)
       })),

@@ -32,7 +32,7 @@ export const parseMatch = (match: Match) : (Match | TeamMatch) => {
       matchType: 'TDM',
       teams
     } 
-  } else if (match.mod === 'CRMod' && match.mode !== 'practice') {
+  } else if (match.mod === 'CRCTF' && match.mode !== 'practice') {
     return {
       ...match,
       matchType: 'CTF',
@@ -50,7 +50,7 @@ export const parseServerStatus = (match: ServerStatus) : (ServerStatus | TeamSer
       matchType: 'TDM',
       teams
     } 
-  } else if (match.modification === 'CRMod' && match.mode !== 'practice') {
+  } else if (match.modification === 'CRCTF' && match.mode !== 'practice') {
     return {
       ...match,
       matchType: 'CTF',
