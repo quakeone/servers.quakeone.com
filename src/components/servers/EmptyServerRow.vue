@@ -24,7 +24,7 @@
       span.vert-divide |
       span players 
       span.bright 0/{{serverStatus.maxPlayers}}
-      span.vert-divide | 
+      span.vert-divide |
       span {{matchStatus}}
   .map-image
     MapImage(:map="serverStatus.map")
@@ -41,7 +41,7 @@ import * as match from '@/helpers/match'
 
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
-  1: 'Not Responding',
+  1: 'Server is down',
   2: 'Server not found',
   3: 'Query Error'
 }
@@ -58,7 +58,9 @@ export default defineComponent({
     return {
       serverStatusMap,
       matchStatus: computed(() => 
-        match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
+        props.serverStatus.currentStatus !== 0 
+        ? serverStatusMap[props.serverStatus.currentStatus]
+        : match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
     }
   }
 })
