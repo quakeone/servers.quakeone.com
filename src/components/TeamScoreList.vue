@@ -7,8 +7,8 @@ template(v-if="!loading && charWriter")
           img(:src="charWriter.writeScore(14, player.frags, player.shirt, player.pant)" style="display:inline;")
         td(style="padding-left: 1rem; text-align: left")
           img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
-    tbody(v-if="teams.observers.length > 0")
-      tr(style="line-height: 1;" v-for="player in props.observers")
+    tbody(v-if="teams.observers && teams.observers.length > 0")
+      tr(style="line-height: 1;" v-for="player in teams.observers")
         td(style="text-align:right;")
           img(:src="charWriter.writeScore(14, player.frags, player.shirt, player.pant)" style="display:inline;")
         td(style="padding-left: 1rem; text-align: left")
@@ -40,11 +40,25 @@ export default defineComponent({
       loading,
       btoa
     }
-  },
+  }
 })
 </script>
 <style lang="scss" scoped>
-tbody {
-  margin-bottom: 1rem;
+table {
+  border-collapse: collapse;
+}
+.team-summary {
+
+  td {
+
+   background-color: rgba(0,0,0,.4);
+  }
+}
+tbody::before
+{
+  content: '';
+  display: block;
+  height: .5rem;
+
 }
 </style>

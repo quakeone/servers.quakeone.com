@@ -84,6 +84,9 @@ update()
 
 <style lang="scss" scoped>
 .server-detail {
+  .back-button {
+    margin: 1rem 0;
+  }
   .header {
     display: grid;
     .summary {

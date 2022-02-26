@@ -1,19 +1,24 @@
 <template lang="pug">
-.servers(v-if="loading === 'IDLE'")
-  template(v-if="servers.active.length === 0")
-    h2 There are currently no active servers
-  template(v-else)
-    ActiveServerGrid.section(:servers="servers.active")
-  EmptyServerTable.section(:servers="servers.empty")
+.servers
+  .tabs 
+    GameFilter(:gameId="gameId")
+  .active(v-if="loading === 'IDLE'")
+    template(v-if="servers.active.length === 0")
+      h2 There are currently no active servers
+    template(v-else)
+      ActiveServerGrid.section(:servers="servers.active")
+  .empty(v-if="loading === 'IDLE'")
+    EmptyServerTable.section(:servers="servers.empty")
 
 </template>
 
 <script lang="ts">
+import GameFilter from '@/components/GameFilter.vue'
 import {LoadingState} from '@/model/LoadingState'
 import { getStatus } from '../services/serversApi'
 import { defineComponent, Ref, ref, onBeforeUnmount, computed } from 'vue'
 import {ServerStatus} from '@/model/ServerStatus'
-import {partition, sort} from 'ramda'
+import {partition, sort, filter, pipe} from 'ramda'
 import ActiveServerGrid from '@/components/servers/ActiveServerGrid.vue'
 import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 
@@ -25,9 +30,16 @@ export default defineComponent({
   name: 'Servers',
   components: {
     ActiveServerGrid,
-    EmptyServerTable
+    EmptyServerTable,
+    GameFilter
   },
-  setup() {
+  props: {
+    gameId: {
+      type: String,
+      default: () => ''
+    }
+  },
+  setup(props) {
     const loading = ref<LoadingState>('LOADING')
     const serverStatuses: Ref<ServerStatus[]> = ref([])
     const update = () => getStatus().then(servers => {
@@ -36,7 +48,8 @@ export default defineComponent({
     })
     
     const servers = computed(() => {
-      const [active, empty] = partition((server: ServerStatus) => server.currentStatus === 0 && server.players.length > 0, serverStatuses.value)
+      const filtered = filter((s:ServerStatus) => props.gameId === '' || s.gameId.toString() === props.gameId)(serverStatuses.value)
+      const [active, empty] = partition((server: ServerStatus) => server.currentStatus === 0 && server.players.length > 0, filtered)
       return {
         active: sortActive(active), 
         empty: sortEmpty(empty)

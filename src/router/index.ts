@@ -11,6 +11,7 @@ const routes: Array<RouteRecordRaw> = [{
   children: [{
     path: '/',
     name: 'Servers',
+    props: (r) => ({ gameId: r.query.gameId}),
     component: Servers
   }, {
     path: '/about',

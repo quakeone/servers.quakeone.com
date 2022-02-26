@@ -1,0 +1,72 @@
+[
+  {
+    "PlayerId": 91,
+    "Name": "SOmeOther dude",
+    "NameBase64": "RnJhZ1N0YXRpb24gLSBxdWFrZXFlLmNvbSA=",
+    "UpTime": 5482,
+    "JoinTime": 1642900137,
+    "CurrentFrags": 0,
+    "TotalFrags": 0,
+    "FragsPerMinute": 0.0,
+    "Shirt": 6,
+    "Pant": 13,
+    "Model": null,
+    "Skin": null
+  },
+  {
+    "PlayerId": 132,
+    "Name": "Red Raider87784 ",
+    "NameBase64": "UmVkIFJhaWRlcjg3Nzg0IA==",
+    "UpTime": 168,
+    "JoinTime": 1642905451,
+    "CurrentFrags": 2,
+    "TotalFrags": 2,
+    "FragsPerMinute": 0.71,
+    "Shirt": 2,
+    "Pant": 13,
+    "Model": null,
+    "Skin": null
+  },
+  {
+    "PlayerId": 221,
+    "Name": "Uncle Peen ",
+    "NameBase64": "VW5jbGUgUGVlbiA=",
+    "UpTime": 156,
+    "JoinTime": 1642905463,
+    "CurrentFrags": 9,
+    "TotalFrags": 9,
+    "FragsPerMinute": 3.45,
+    "Shirt": 4,
+    "Pant": 4,
+    "Model": null,
+    "Skin": null
+  },
+  {
+    "PlayerId": 473,
+    "Name": "oneeighty7ER",
+    "NameBase64": "b25lZWlnaHR5N0VS",
+    "UpTime": 122,
+    "JoinTime": 1642905497,
+    "CurrentFrags": 0,
+    "TotalFrags": 0,
+    "FragsPerMinute": 0.0,
+    "Shirt": 4,
+    "Pant": 4,
+    "Model": null,
+    "Skin": null
+  },
+  {
+    "PlayerId": 473,
+    "Name": "efess",
+    "NameBase64": "b25lZWlnaHR5N0VS",
+    "UpTime": 122,
+    "JoinTime": 1642905497,
+    "CurrentFrags": 0,
+    "TotalFrags": 0,
+    "FragsPerMinute": 0.0,
+    "Shirt": 0,
+    "Pant": 0,
+    "Model": null,
+    "Skin": null
+  }
+]
