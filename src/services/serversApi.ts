@@ -18,9 +18,9 @@ export const getRecentMatches = (): Promise<Match[]> => {
     .then(response => response.data)
 }
 
-export const getServerMatches = (serverId: number): Promise<PagedResult<Match>> => {
+export const getServerMatches = (serverId: number, pageNum: number): Promise<PagedResult<Match>> => {
   return axios
-    .get(`${apiHost}/server/${serverId}/match`)
+    .get(`${apiHost}/server/${serverId}/match?page=${pageNum}`)
     .then(response => response.data)
 }
 

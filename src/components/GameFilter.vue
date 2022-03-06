@@ -17,7 +17,7 @@ const games = {
 const showIndex = ['', '0', '5']
 </script>
 
-<template lang="pug">
+<template lang="pug" scoped>
 .tab-container
   ul.tab-list 
     li(v-for="idx in showIndex" :class="{'active': idx===gameId }")
@@ -25,7 +25,7 @@ const showIndex = ['', '0', '5']
       router-link(v-else :to="{ name: 'Servers', query: { gameId: idx }}" replace) {{ games[idx] }}
   
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 ul {
   padding: 0;
 }

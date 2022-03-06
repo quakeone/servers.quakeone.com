@@ -34,6 +34,8 @@
         h2 Recent Matches
         .match-container(v-for="match in sortedMatches")
           MatchInstance(:match="match")
+        .match-pager
+          Pager(:currentPage="matchPage" :pageCount="matchPages" @newPage="newMatchPage")
 </template>
 
 <script lang="ts" setup>
@@ -54,13 +56,36 @@ import MatchInstance from '@/components/server/match/MatchInstance.vue'
 import {PagedResult} from '@/model/PagedResult'
 import MapWithTeamsList from '@/components/MapWithTeamList.vue'
 import {parseServerStatus} from '@/helpers/match'
+import {useRoute} from 'vue-router'
+import Pager from '../components/Pager.vue'
+
+const route = useRoute()
 
 const router = useRouter()
-const props = defineProps<{serverId: number}>()
+
+const props = defineProps<{
+  serverId: number,
+  matchPage: number
+}>()
+
 const details = ref<ServerDetail>({})
 const matches = ref<PagedResult<MatchModel>>({})
+
+const matchPages = computed(() => Math.ceil(matches.value.totalResults / 10))
 const sortedMatches = computed(() => [...matches.value.results].sort((b, a) => 
   new Date(a.matchStart).getTime() - new Date(b.matchStart).getTime()))
+
+const newMatchPage = (pageNum: number) => {
+  getServerMatches(props.serverId, pageNum).then(_matches=> matches.value = _matches)
+  router.push({
+    ...route,
+    query: {
+      ...route.query,
+      matchPage: pageNum
+    }
+  })
+}
+
 const update = () => 
   Promise.all([
     getServerDetails(props.serverId)
@@ -69,7 +94,7 @@ const update = () =>
         mapStats,
         status: parseServerStatus(status)
       })),
-    getServerMatches(props.serverId)
+    getServerMatches(props.serverId, props.matchPage)
   ])
   .then(([_details, _matches]: [_details: ServerDetail, _matches: PagedResult<MatchModel>]) => {
     details.value = _details
