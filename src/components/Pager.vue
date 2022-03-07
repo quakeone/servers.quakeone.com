@@ -2,6 +2,8 @@
 import {range} from 'ramda'
 import {computed, defineProps, defineEmits} from 'vue'
 
+const PAGE_BETWEEN = 2
+
 const props = defineProps<{
   currentPage: number,
   pageCount: number
@@ -15,21 +17,20 @@ const pages = computed<number[]>(() => {
   if (props.pageCount < 10) {
     return range(1, props.pageCount + 1)
   }
-  if (props.currentPage < 4) {
+  if (props.currentPage <= PAGE_BETWEEN + 2) {
     return [
-      ...range(1, 8),
+      ...range(1, (PAGE_BETWEEN * 2) +3),
       props.pageCount
     ]
-  } else if (props.currentPage > (props.pageCount - 4)) {
+  } else if (props.currentPage >= (props.pageCount -( PAGE_BETWEEN + 1))) {
     return [
       1,
-      range(props.pageCount - 4, props.pageCount)
-      
+      ...range(props.pageCount - (PAGE_BETWEEN * 2 + 1), props.pageCount + 1) 
     ]
   } else {
     return [
       1, 
-      range(props.currentPage - 3, props.currentPage + 3),
+      ...range(props.currentPage - PAGE_BETWEEN, props.currentPage + PAGE_BETWEEN + 1),
       props.pageCount
     ]
   }
