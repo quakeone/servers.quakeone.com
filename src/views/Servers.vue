@@ -54,7 +54,7 @@ export default defineComponent({
     const servers = computed(() => {
       const filtered = filter((s:ServerStatus) => props.gameId === '' || s.gameId.toString() === props.gameId)(serverStatuses.value)
       const [active, empty] = partition((server: ServerStatus) => 
-        server.currentStatus === 0 && server.players.map(p => !isIdlePlayer(p)).length > 0, 
+        server.currentStatus === 0 && server.players.filter(p => !isIdlePlayer(p)).length > 0, 
         filtered)
       return {
         active: sortActive(active), 
