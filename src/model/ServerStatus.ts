@@ -20,6 +20,7 @@ export interface ServerStatus {
   currentStatus: number;
   customModificationName?: string;
   serverName: string;
+  parameters: string;
   map: string;
   mode: string,
   serverSettings: ServerSetting[];
