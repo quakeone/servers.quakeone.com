@@ -21,9 +21,13 @@ import {ServerStatus} from '@/model/ServerStatus'
 import {partition, sort, filter, pipe} from 'ramda'
 import ActiveServerGrid from '@/components/servers/ActiveServerGrid.vue'
 import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
+import {isIdlePlayer} from '@/helpers/server'
 
 const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
-const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => lastActiveTime(b) -lastActiveTime(a))
+const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => b.currentStatus === 0 
+  ? lastActiveTime(b) - lastActiveTime(a)
+  : -1)
+
 const sortActive = sort((a: ServerStatus, b: ServerStatus) => b.players.length - a.players.length)
 
 export default defineComponent({
@@ -49,7 +53,9 @@ export default defineComponent({
     
     const servers = computed(() => {
       const filtered = filter((s:ServerStatus) => props.gameId === '' || s.gameId.toString() === props.gameId)(serverStatuses.value)
-      const [active, empty] = partition((server: ServerStatus) => server.currentStatus === 0 && server.players.length > 0, filtered)
+      const [active, empty] = partition((server: ServerStatus) => 
+        server.currentStatus === 0 && server.players.map(p => !isIdlePlayer(p)).length > 0, 
+        filtered)
       return {
         active: sortActive(active), 
         empty: sortEmpty(empty)
