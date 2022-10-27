@@ -7,6 +7,6 @@ export const isIdlePlayer = (player: PlayerStatus) => {
     return false
   } else {
     const fragRatio = player.totalFrags / player.upTime;
-    return fragRatio > (3/3600) // 3 frags an hour to be labeled as "active" seems reasonable enough.
+    return fragRatio < (3/3600) // 3 frags an hour to be labeled as "active" seems reasonable enough.
   }
 }

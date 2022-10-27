@@ -23,7 +23,7 @@
       span.bright {{serverStatus.map}}
       span.vert-divide |
       span players 
-      span.bright 0/{{serverStatus.maxPlayers}}
+      span.bright {{serverStatus.players.length}}/{{serverStatus.maxPlayers}}
       span.vert-divide |
       span {{matchStatus}}
   .map-image
