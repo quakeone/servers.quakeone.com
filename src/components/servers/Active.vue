@@ -126,7 +126,7 @@ export default defineComponent({
     grid-template-areas:
       "title title"
       "image details";
-    grid-template-columns: 60% auto;
+    grid-template-columns: 60% 36%;
   }
 
   .details {

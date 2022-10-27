@@ -1,14 +1,14 @@
 <template lang="pug">
 .server-address
-  .top
-    .container
-      .address.bright {{address}}
-      .port 
-        span port:
-        span.bright {{port}}
-    .icon
+  .address-container.bright
+    .address(v-tippy='{ trigger : "mouseenter"}' :content="address + ':' + port ")  {{address}}
+    .icon(v-tippy='{ trigger : "mouseenter"}' content="Copy") 
       FontAwesome.copy-icon(@click="onCopy" :icon="['far', 'clone']"
         v-tippy='{ trigger : "click"}' content="Copied to clipboard")
+    
+  .port 
+    span port:
+    span.bright {{port}}
   .copy-text(@click="onCopy" v-tippy='{ trigger : "click"}' content="Copied to clipboard") copy to clipboard
 </template>
 
@@ -94,6 +94,14 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
+.address-container {
+  white-space: nowrap;
+  display: flex;
+  .address {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 .top {
   display: flex;
   justify-content: space-between;
