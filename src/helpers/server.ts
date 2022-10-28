@@ -4,6 +4,7 @@ import { ServerStatus } from "@/model/ServerStatus";
 const IDLE_SECONDS = 3600 // 1 hour
 
 export const isIdlePlayer = (player: PlayerStatus) => {
+  if (player.playerType === 2) return true
   if (player.upTime < IDLE_SECONDS) {    
     return false
   } else {

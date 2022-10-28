@@ -3,4 +3,5 @@ export interface Player {
   pant: number,
   shirt: number,
   name: string
+  playerType: number
 }
