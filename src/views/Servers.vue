@@ -1,10 +1,19 @@
 <template lang="pug">
 .servers
-  .tabs 
-    GameFilter(:gameId="gameId")
+  .header
+    .tabs 
+      GameFilter(:gameId="gameId")
+    .links
+      p.text-small
+        a(href="/about") About
   .active(v-if="loading === 'IDLE'")
     template(v-if="servers.active.length === 0")
-      h2 There are currently no active servers
+      h3 There are currently no active players
+      h4 Join a server or find a player on discord ( 
+        a(href="https://discord.quakeone.com/" title='Net Quake Community Discord') NQ
+        |  | 
+        a(href="https://discord.gg/HWes2p9gXG" title="Quake:Enhanced Community Discord") QE
+        |  )
     template(v-else)
       ActiveServerGrid.section(:servers="servers.active")
   .empty(v-if="loading === 'IDLE'")
@@ -78,6 +87,14 @@ export default defineComponent({
 
 <style lang="scss">
 .servers {
+  .header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+  .links {
+    font-size: .9rem;
+  }
   .section {
     margin-top: 1rem;
   }
