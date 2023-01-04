@@ -1,6 +1,6 @@
 <template lang="pug">
 .server-detail
-  BackButton(@back="router.go(-1)") 
+  BackButton(@back="router.push('/')") 
     | Back to Servers List
   template(v-if="details.status")
     .header
