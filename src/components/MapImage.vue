@@ -15,8 +15,8 @@ export default defineComponent({
   },
   setup (props) {
     const image = ref<HTMLImageElement|null>(null)
-    const generic = `${process.env.VUE_APP_THUMBNAILS_PATH}/generic.jpg`
-    const map = computed(() => process.env.VUE_APP_THUMBNAILS_PATH + '/' + props.map + '.jpg')
+    const generic = `${import.meta.env.VITE_THUMBNAILS_PATH}/generic.jpg`
+    const map = computed(() => import.meta.env.VITE_THUMBNAILS_PATH + '/' + props.map + '.jpg')
 
     onMounted(() => {
       if (image.value) {

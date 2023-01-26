@@ -1,5 +1,5 @@
 export type Write = (height: number, base64String: string) => string;
-export type WriteScore = (height: number, score: number, shirt: number, pant: number) => string;
+export type WriteScore = (height: number, score: number, shirtColor: number, pantColor: number) => string;
 export type Writer = {write: Write; writeScore: WriteScore};
 
 export const playerColors = [
@@ -107,8 +107,8 @@ const writeToCanvas = (
 const writeScore = (canvas: HTMLCanvasElement, charmap: HTMLImageElement) => (
   height: number,
   score: number,
-  shirt: number,
-  pant: number,
+  shirtColor: number,
+  pantColor: number,
 ) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) {
@@ -120,9 +120,9 @@ const writeScore = (canvas: HTMLCanvasElement, charmap: HTMLImageElement) => (
   ctx.canvas.height = height;
 
   const halfHeight = height / 2;
-  ctx.fillStyle = playerColors[shirt];
+  ctx.fillStyle = playerColors[shirtColor];
   ctx.fillRect(0, 0, width, halfHeight);
-  ctx.fillStyle = playerColors[pant];
+  ctx.fillStyle = playerColors[pantColor];
   ctx.fillRect(0, halfHeight, width, halfHeight);
   const strScore = score.toString();
 
@@ -139,6 +139,11 @@ const write = (canvas: HTMLCanvasElement, charmap: HTMLImageElement) => (height:
     return '';
   }
 
+  try {
+    atob(base64String) || ' ';
+  }catch(err){ 
+    debugger
+  }
   const strToWrite = atob(base64String) || ' ';
   const lines = strToWrite.split('\n')
   const maxLine = lines.reduce((len, line) => len > line.length ? len : line.length, 0)

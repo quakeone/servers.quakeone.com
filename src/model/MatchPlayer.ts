@@ -5,7 +5,7 @@ export interface MatchPlayer extends Player {
   playerStayDuration: number,
   playerMatchStart: number,
   playerMatchEnd: number,
-  pant: number,
-  shirt: number,
+  pantColor: number,
+  shirtCOlor: number,
   frags: number
 }

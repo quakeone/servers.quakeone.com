@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import {duration} from '@/helpers/date'
-import Match from '@/model/Match'
 import {defineProps, computed, inject} from 'vue'
-import { Writer } from '@/helpers/charmap'
-import { Player } from '@/model/Player'
+import type { Writer } from '@/helpers/charmap'
+import type { Player } from '@/model/Player'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import {parseTeams} from  '@/helpers/teams'
-import {TeamMatch} from '@/model/TeamMatch'
-import {Teams} from '@/model/Teams'
+import type {TeamMatch} from '@/model/TeamMatch'
+import type {Teams} from '@/model/Teams'
 
 const charWriter = inject<Writer>('charWriter')
 const props = defineProps<{match: TeamMatch}>()
@@ -33,7 +32,7 @@ const observers = computed(() => props.match.teams.observers)
           .col(style="text-align:right;")
             img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
           .col.name(style="padding-left: 1rem; text-align: left")
-            img(:src="charWriter.write(12, btoa(team.name))" style="display:inline;")
+            img(:src="charWriter.write(12, team.nameRaw)" style="display:inline;")
 
   .remaining(v-if="observers.length > 3") {{observers.length}} observers
 </template>

@@ -15,7 +15,7 @@ import {ServerStatus} from '@/model/ServerStatus'
 import MatchRow from '@/components/matches/Match.vue'
 import { Match } from '@/model/Match'
 
-const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
+const lastActiveTime = (server: ServerStatus) => new Date(server.lastMatchStart).getTime()
 
 export default defineComponent({
   name: 'Home',

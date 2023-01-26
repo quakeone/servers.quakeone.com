@@ -32,7 +32,7 @@ import ActiveServerGrid from '@/components/servers/ActiveServerGrid.vue'
 import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 import {isIdlePlayer, isFteServer} from '@/helpers/server'
 
-const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
+const lastActiveTime = (server: ServerStatus) => new Date(server.lastMatchStart).getTime()
 const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => b.currentStatus === 0 
   ? lastActiveTime(b) - lastActiveTime(a)
   : -1)
@@ -63,10 +63,10 @@ export default defineComponent({
     const servers = computed(() => {
       const filtered = filter((s:ServerStatus) => 
           props.gameId === '' || isFteServer(s) || s.gameId.toString() === props.gameId)(serverStatuses.value)
+
       const [active, empty] = partition((server: ServerStatus) => {
         return server.currentStatus === 0 && server.players.filter(p => !isIdlePlayer(p)).length > 0
-      }, 
-        filtered)
+      }, filtered)
       return {
         active: sortActive(active), 
         empty: sortEmpty(empty)

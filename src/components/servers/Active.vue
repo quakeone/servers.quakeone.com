@@ -2,7 +2,7 @@
 .active-server
   .title
     h3
-      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.serverName}}
+      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.hostname}}
     h3 
       GameType(:gameId="serverStatus.gameId")
   .game-image
@@ -14,9 +14,9 @@
         .map-text {{serverStatus.map}}
   .details
     div
-      span.bright {{serverStatus.modificationCode}}
+      span.bright {{serverStatus.mod}}
     .divider  
-    ServerAddress(:address="serverStatus.dNS" :port="serverStatus.port")
+    ServerAddress(:address="serverStatus.hostname" :port="serverStatus.port")
     .divider
     FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
     span.bright  {{serverStatus.location || 'unknown'}}
@@ -32,12 +32,12 @@
 </template>
 
 <script lang="ts">
-import { ServerStatus } from '@/model/ServerStatus'
+import type { ServerStatus } from '@/model/ServerStatus'
 import { defineComponent, PropType, computed, inject } from 'vue'
 import * as match from '@/helpers/match'
 import ServerAddress from '../ServerAddress.vue'
-import { PlayerStatus } from '@/model/PlayerStatus'
-import { Writer } from '@/helpers/charmap'
+import type { PlayerStatus } from '@/model/PlayerStatus'
+import type { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
 import GameType from '@/components/GameType.vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
@@ -59,10 +59,10 @@ export default defineComponent({
   },
   setup(props) {
     const matchStatus = computed(() => {
-      return match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)
+      return match.status(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd)
     })
     const matchTime = computed(() => {
-      return match.time(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)
+      return match.time(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd)
     })
     const serverStatusString = computed(() => {
       return serverStatusMap[props.serverStatus.currentStatus] || 'Unknown'

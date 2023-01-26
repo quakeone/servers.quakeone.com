@@ -6,8 +6,8 @@ span(v-tippy="{allowHTML: true}"
 
 <script lang="ts" setup>
 import {watch, defineProps, inject, ref} from 'vue'
-import { PlayerStatus } from '@/model/PlayerStatus'
-import { Writer } from '@/helpers/charmap'
+import type { PlayerStatus } from '@/model/PlayerStatus'
+import type { Writer } from '@/helpers/charmap'
 
 const charWriter = inject<Writer>('charWriter')
 const props = defineProps<{
@@ -24,10 +24,10 @@ watch(props, (newValue) => {
   const body = sortedPlayers.map((player: PlayerStatus) => {
       return `<tr style="line-height: 1;">
       <td style="text-align:right;">
-        <img src="${charWriter.writeScore(14, player.frags, player.shirt, player.pant)}" style="display:inline;">
+        <img src="${charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)}" style="display:inline;">
       </td>
       <td style="padding-left: 1rem; text-align: left">
-        <img src="${charWriter.write(12, btoa(player.name))}" style="display:inline;">
+        <img src="${charWriter.write(12, player.nameRaw)}" style="display:inline;">
       </td>
       </tr>`;
     })

@@ -12,14 +12,12 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    "outDir": "dist",
     "lib": [
       "esnext",
       "dom",

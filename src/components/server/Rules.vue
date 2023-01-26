@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ServerSetting} from '@/model/ServerSetting'
+import type {ServerSetting} from '@/model/ServerSetting'
 import {defineProps} from 'vue'
 
 const props = defineProps<{rules: ServerSetting[]}>()
