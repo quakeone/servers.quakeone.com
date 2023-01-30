@@ -25,11 +25,11 @@
 import { defineComponent, PropType, computed, watch, ref, inject } from 'vue'
 import {dateToUtc, duration} from '@/helpers/date'
 import ServerAddress from '../ServerAddress.vue'
-import { PlayerStatus } from '@/model/PlayerStatus'
-import { Writer } from '@/helpers/charmap'
+import type { PlayerStatus } from '@/model/PlayerStatus'
+import type { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
-import { Match } from '@/model/Match'
-import { MatchPlayer } from '@/model/MatchPlayer'
+import type { Match } from '@/model/Match'
+import type { MatchPlayer } from '@/model/MatchPlayer'
 
 const gameTypeMap: Record<number, string> = {
   0: "Net Quake",
@@ -68,7 +68,7 @@ export default defineComponent({
       const body = sortedPlayers.value.map((player: MatchPlayer) => {
           return `<tr style="line-height: 1;">
           <td style="text-align:right;">
-            <img src="${charWriter.writeScore(14, player.frags, player.shirt, player.pant)}" style="display:inline;">
+            <img src="${charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)}" style="display:inline;">
           </td>
           <td style="padding-left: 1rem; text-align: left">
             <img src="${charWriter.write(12, btoa(player.name))}" style="display:inline;">

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { format } from 'date-fns'
 import {defineProps, computed} from 'vue'
-import Match from '@/model/Match'
+import type {Match} from '@/model/Match'
 import MapImage from '../../MapImage.vue'
 import TDM from './TDM.vue'
 import CTF from './CTF.vue'

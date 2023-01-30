@@ -1,5 +1,5 @@
-import { MatchPlayer } from "./MatchPlayer"
-import { PlayerStatus } from "./PlayerStatus"
+import type { MatchPlayer } from "./MatchPlayer"
+import type { PlayerStatus } from "./PlayerStatus"
 
 export type Team = {
   color: number,

@@ -4,15 +4,15 @@ template(v-if="!loading && charWriter")
     tbody(v-for="team in teams.teams")
       tr(style="line-height: 1;" v-for="player in team.players")
         td(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, player.frags, player.shirt, player.pant)" style="display:inline;")
+          img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
         td(style="padding-left: 1rem; text-align: left")
           img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
     tbody(v-if="teams.observers && teams.observers.length > 0")
       tr(style="line-height: 1;" v-for="player in teams.observers")
         td(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, player.frags, player.shirt, player.pant)" style="display:inline;")
+          img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
         td(style="padding-left: 1rem; text-align: left")
-          img(:src="charWriter.write(12, btoa(player.name))" style="display:inline;")
+          img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
 
 </template>
 
@@ -34,7 +34,6 @@ export default defineComponent({
     onMounted(() => {
       loading.value = false
     })
-    const btoa = (str: string) => window.btoa(str)
     return {
       charWriter,
       loading,

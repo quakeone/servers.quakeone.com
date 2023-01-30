@@ -1,8 +1,8 @@
 import {dateToUtc, duration} from '@/helpers/date'
-import { Match } from '@/model/Match'
-import { ServerStatus } from '@/model/ServerStatus'
-import { TeamMatch } from '@/model/TeamMatch'
-import { TeamServerStatus } from '@/model/TeamServerStatus'
+import type { Match } from '@/model/Match'
+import type { ServerStatus } from '@/model/ServerStatus'
+import type { TeamMatch } from '@/model/TeamMatch'
+import type { TeamServerStatus } from '@/model/TeamServerStatus'
 import { parseTeams } from './teams'
 
 export const status = (lastStart: string, lastEnd: string) => {
@@ -44,13 +44,13 @@ export const parseMatch = (match: Match) : (Match | TeamMatch) => {
 
 export const parseServerStatus = (match: ServerStatus) : (ServerStatus | TeamServerStatus) => {
   const teams = parseTeams(match.players)
-  if (match.modification === 'CRMod' && match.mode === 'match') {
+  if (match.mod === 'CRMod' && match.mode === 'match') {
     return {
       ...match,
       matchType: 'TDM',
       teams
     } 
-  } else if (match.modification === 'CRCTF' && match.mode !== 'practice') {
+  } else if (match.mod === 'CRCTF' && match.mode !== 'practice') {
     return {
       ...match,
       matchType: 'CTF',

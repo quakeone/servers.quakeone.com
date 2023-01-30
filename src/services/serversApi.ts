@@ -1,10 +1,10 @@
-import { Match } from "@/model/Match"
-import { PagedResult } from "@/model/PagedResult"
-import { ServerDetail } from "@/model/ServerDetail"
-import { ServerStatus } from "@/model/ServerStatus"
+import type { Match } from "@/model/Match"
+import type { PagedResult } from "@/model/PagedResult"
+import type { ServerDetail } from "@/model/ServerDetail"
+import type { ServerStatus } from "@/model/ServerStatus"
 import axios from "axios"
 
-const apiHost = process.env.VUE_APP_SERVERS_API
+const apiHost = import.meta.env.VITE_SERVERS_API
 
 export const getStatus = (): Promise<ServerStatus[]> => {
   return axios

@@ -1,5 +1,5 @@
-import { PlayerStatus } from "@/model/PlayerStatus"
-import { ServerStatus } from "@/model/ServerStatus";
+import type { PlayerStatus } from "@/model/PlayerStatus"
+import type { ServerStatus } from "@/model/ServerStatus";
 
 const IDLE_SECONDS = 3600 // 1 hour
 

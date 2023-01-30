@@ -5,15 +5,15 @@
       GameType(:gameId="serverStatus.gameId")
   .details
     h3(:class="{'is-down': serverStatus.currentStatus !== 0}")
-      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.serverName}}
+      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.hostname}}
       FontAwesome(
         v-if="serverStatus.currentStatus !== 0" 
         :icon="['fas', 'exclamation-circle']"
         v-tippy :content="serverStatusMap[serverStatus.currentStatus]")
-    ServerAddressInline.bright(:address="serverStatus.dNS" :port="serverStatus.port")
+    ServerAddressInline.bright(:address="serverStatus.address" :port="serverStatus.port")
     div  
-    .mod(v-if="serverStatus.modificationCode")
-      span.bright {{serverStatus.modificationCode}}
+    .mod(v-if="serverStatus.mod")
+      span.bright {{serverStatus.mod}}
       span.vert-divide |
       span
         FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
@@ -60,7 +60,7 @@ export default defineComponent({
       matchStatus: computed(() => 
         props.serverStatus.currentStatus !== 0 
         ? serverStatusMap[props.serverStatus.currentStatus]
-        : match.status(props.serverStatus.recentMatchStart, props.serverStatus.recentMatchEnd)),
+        : match.status(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd)),
     }
   }
 })

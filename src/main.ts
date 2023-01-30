@@ -11,7 +11,8 @@ import {faMapMarkerAlt, faExclamationCircle, faChevronLeft, faRobot, faCrown } f
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSync } from '@fortawesome/free-solid-svg-icons';
-import { createWriter, Writer } from '@/helpers/charmap'
+import { createWriter } from '@/helpers/charmap'
+import type { Writer } from '@/helpers/charmap'
 
 library.add(faSync)
 library.add(faClone)

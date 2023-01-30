@@ -18,7 +18,7 @@ import {partition, sort} from 'ramda'
 import Active from '@/components/servers/Active.vue'
 import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 
-const lastActiveTime = (server: ServerStatus) => new Date(server.recentMatchStart).getTime()
+const lastActiveTime = (server: ServerStatus) => new Date(server.lastMatchStart).getTime()
 const sortEmpty = sort((a: ServerStatus, b: ServerStatus) => lastActiveTime(b) -lastActiveTime(a))
 const sortActive = sort((a: ServerStatus, b: ServerStatus) => b.players.length - a.players.length)
 

@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import {onBeforeUnmount, ref, defineProps, computed} from 'vue'
-import {ServerDetail} from '@/model/ServerDetail'
+import type {ServerDetail} from '@/model/ServerDetail'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'
 import GameType from '@/components/GameType.vue'
@@ -51,9 +51,9 @@ import MatchStatus from '@/components/server/status/MatchStatus.vue'
 import Rules from '@/components/server/Rules.vue'
 import {getServerDetails, getServerMatches} from '@/services/serversApi'
 import {useRouter} from 'vue-router'
-import {Match as MatchModel} from '@/model/Match'
+import type {Match as MatchModel} from '@/model/Match'
 import MatchInstance from '@/components/server/match/MatchInstance.vue'
-import {PagedResult} from '@/model/PagedResult'
+import type {PagedResult} from '@/model/PagedResult'
 import MapWithTeamsList from '@/components/MapWithTeamList.vue'
 import {parseServerStatus} from '@/helpers/match'
 import {useRoute} from 'vue-router'
@@ -89,8 +89,7 @@ const newMatchPage = (pageNum: number) => {
 const update = () => 
   Promise.all([
     getServerDetails(props.serverId)
-      .then(({hourlyStats, mapStats, status} )=> ({
-        hourlyStats,
+      .then(({ mapStats, status} )=> ({
         mapStats,
         status: parseServerStatus(status)
       })),

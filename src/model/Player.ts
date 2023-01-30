@@ -1,7 +1,7 @@
 export interface Player {
   frags: number,
-  pant: number,
-  shirt: number,
+  pantColor: number,
+  shirtColor: number,
   name: string
   playerType: number
 }

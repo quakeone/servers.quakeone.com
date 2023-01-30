@@ -1,7 +1,7 @@
-import { PlayerStatus } from '@/model/PlayerStatus'
+import type { PlayerStatus } from '@/model/PlayerStatus'
 import {groupBy} from 'ramda'
-import { Teams } from '@/model/Teams'
-import { MatchPlayer } from '@/model/MatchPlayer'
+import type { Teams } from '@/model/Teams'
+import type { MatchPlayer } from '@/model/MatchPlayer'
 
 const teamName: Record<number, string> = {
   13: 'Team Blue',
@@ -11,7 +11,7 @@ const teamName: Record<number, string> = {
 }
 
 export const parseTeams = (players: MatchPlayer[] | PlayerStatus[]): Teams => {
-  const playerGroups = groupBy<MatchPlayer | PlayerStatus>(p => p.pant.toString(), players)
+  const playerGroups = groupBy<MatchPlayer | PlayerStatus>(p => p.pantColor.toString(), players)
   let maxTeamSize = 0
   const teams = Object.keys(playerGroups)
     .filter(c => c !== '0')

@@ -29,9 +29,9 @@ export default defineComponent({
     sortedServers(): ServerStatus[] {
       return [...this.servers].sort((a:ServerStatus, b: ServerStatus) => 
         a.currentStatus === b.currentStatus
-          ? a.recentMatchStart === b.recentMatchStart 
+          ? a.currentStatus === b.currentStatus 
             ? 0 
-            :  a.recentMatchStart > b.recentMatchStart ? -1 : 1
+            :  a.currentStatus > b.currentStatus ? -1 : 1
           :a.currentStatus < b.currentStatus ? -1 : 0)
     }
   }

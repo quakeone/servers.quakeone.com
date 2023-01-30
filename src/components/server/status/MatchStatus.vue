@@ -16,19 +16,19 @@
 import FFA from './FFA.vue'
 import Down from './Down.vue'
 import {defineProps, computed} from 'vue'
-import {ServerDetail} from '@/model/ServerDetail'
+import type {ServerDetail} from '@/model/ServerDetail'
 import * as matchHelper from '@/helpers/match'
 
 const props = defineProps<{server: ServerDetail}>()
 const matchStatus = computed(() => {
-  return matchHelper.status(props.server.recentMatchStart, props.server.recentMatchEnd)
+  return matchHelper.status(props.server.status.lastMatchStart, props.server.status.lastMatchEnd)
 })
 const matchTime = computed(() => {
-  const [time, duration] = matchHelper.time(props.server.recentMatchStart, props.server.recentMatchEnd).split(' ')
+  const [time, duration] = matchHelper.time(props.server.status.lastMatchStart, props.server.status.lastMatchEnd).split(' ')
   return {time, duration}
 })
 const subStatus = computed(() => {
-  if (props.server.currentStatus === 0) {
+  if (props.server.status.currentStatus === 0) {
     return FFA
   } else {
     return Down
