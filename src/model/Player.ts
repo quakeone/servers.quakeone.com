@@ -3,5 +3,6 @@ export interface Player {
   pantColor: number,
   shirtColor: number,
   name: string
-  playerType: number
+  nameRaw: string
+  type: number
 }

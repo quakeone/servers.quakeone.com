@@ -1,7 +1,10 @@
-import { ServerStatus } from "./ServerStatus";
-import { TeamServerStatus } from "./TeamServerStatus";
+
+import type { Match } from "./Match";
+import type { ServerStatus } from "./ServerStatus";
+import type { TeamMatch } from "./TeamMatch";
 
 export interface ServerDetail {
-  status: ServerStatus | TeamServerStatus,
+  match?: Match | TeamMatch
+  status: ServerStatus,
   mapStats: any
 }

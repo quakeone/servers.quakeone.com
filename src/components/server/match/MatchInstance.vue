@@ -1,29 +1,34 @@
 <script lang="ts" setup>
-import { format } from 'date-fns'
+import { differenceInSeconds, format, formatDistanceStrict } from 'date-fns'
 import {defineProps, computed} from 'vue'
 import type {Match} from '@/model/Match'
 import MapImage from '../../MapImage.vue'
 import TDM from './TDM.vue'
 import CTF from './CTF.vue'
 import FFA from './FFA.vue'
-import {parseMatch} from '@/helpers/match'
+import {parseApiMatch, time as parseTime} from '@/helpers/match'
+import type { TeamMatch } from '@/model/TeamMatch'
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
-const props = defineProps<{match: Match}>()
+const props = defineProps<{match: (Match | TeamMatch)}>()
 
 const startDate =  computed(() => new Date(props.match.matchStart))
 const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
+const matchTimeAgo = computed(() =>  formatDistanceStrict(startDate.value, new Date(), {
+  addSuffix: true
+}))
+const matchDuration = computed(() => differenceInSeconds(new Date(props.match.matchEnd), new Date(props.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "dd"))
-const match = computed(() => parseMatch(props.match))
-const isTeam = computed(() => 'matchType' in match.value)
+const isTeam = computed(() => 'matchType' in props.match)
 const detail = computed(() => {
   if (isTeam.value) {
-    return match.value.matchType === 'CTF' ? CTF : TDM
+    return props.match.matchType === 'CTF' ? CTF : TDM
   }
   return FFA
 })
-const teamSize = computed(() => isTeam.value ? match.value.teams.size : '')
-const matchType = computed(() => isTeam.value ? match.value.matchType : '')
+const teamSize = computed(() => isTeam.value ? props.match.teams.size : '')
+const matchType = computed(() => isTeam.value ? props.match.matchType : '')
+
 </script>
 
 <template lang="pug">
@@ -37,9 +42,9 @@ const matchType = computed(() => isTeam.value ? match.value.matchType : '')
   .title
     h3 {{props.match.name}}
     .subtitle
-      span.bright  {{fullMatchDate}}  
+      span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
       span.vert-divide  | 
-      span.bright  {{Math.floor(props.match.duration/60)}} 
+      span.bright  {{Math.ceil(matchDuration/60)}} 
       span  minutes 
       span.vert-divide  | 
       span map: 
@@ -62,7 +67,7 @@ const matchType = computed(() => isTeam.value ? match.value.matchType : '')
   align-items: center;
 }
 .title {
-  gird-area: title;
+  grid-area: title;
   padding: 0 1rem;
 }
 .detail {

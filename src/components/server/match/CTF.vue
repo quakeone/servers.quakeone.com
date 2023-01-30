@@ -11,7 +11,8 @@ import type {Teams} from '@/model/Teams'
 const charWriter = inject<Writer>('charWriter')
 const props = defineProps<{match: TeamMatch}>()
 const playTime = player => duration(player.playerStayDuration * 1000)
-const btoa = (str: string) => window.btoa(str)
+
+const toBase64 = (str: string) => window.btoa(str)
 
 const teamSize = computed(() => props.match.teams.size)
 const matchType = computed(() => props.match.matchType)
@@ -32,7 +33,7 @@ const observers = computed(() => props.match.teams.observers)
           .col(style="text-align:right;")
             img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
           .col.name(style="padding-left: 1rem; text-align: left")
-            img(:src="charWriter.write(12, team.nameRaw)" style="display:inline;")
+            img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
 
   .remaining(v-if="observers.length > 3") {{observers.length}} observers
 </template>

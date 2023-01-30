@@ -9,7 +9,7 @@
       h3 {{match.name}}
       div {{gameType}}
     .bright 
-      ServerAddress(:address="match.dns" :port="match.port")
+      ServerAddress(:address="match.address" :port="match.port")
     div 
       span mod: 
       span.bright {{match.modification}}

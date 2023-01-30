@@ -1,17 +1,16 @@
 import type {MatchPlayer} from './MatchPlayer'
+import { MatchPlayerProgress } from './MatchProgress'
 
 export interface Match {
-  gameId: number,
   matchId: number,
   serverId: number,
-  dns: string,
-  port: number,
-  name: string,
   map: string,
   mode: string
   mod: string,
+  timelimit: number,
+  fraglimit: number,
   matchStart: string,
   matchEnd: string,
-  duration: number,
   players: MatchPlayer[]
+  progress?: MatchPlayerProgress[]
 }

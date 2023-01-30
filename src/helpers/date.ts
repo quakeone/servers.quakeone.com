@@ -1,3 +1,5 @@
+import { differenceInSeconds } from "date-fns"
+
 export const dateToUtc = (date: Date) => {
   const date_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
     date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds())
@@ -24,3 +26,11 @@ export const duration = (milliseconds: number) => {
   }
   return `${secs} secs`
 }
+
+export const difference = (start: Date, end: Date) => {
+  if (!end) {
+    return -1
+  }
+  return differenceInSeconds(start, end)
+}
+

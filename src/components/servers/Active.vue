@@ -15,11 +15,13 @@
   .details
     div
       span.bright {{serverStatus.mod}}
+      span(v-if="serverStatus.mode")  · 
+      span.bright(v-if="serverStatus.mode") {{serverStatus.mode}}
     .divider  
-    ServerAddress(:address="serverStatus.hostname" :port="serverStatus.port")
+    ServerAddress(:address="serverStatus.address" :port="serverStatus.port")
     .divider
     FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
-    span.bright  {{serverStatus.location || 'unknown'}}
+    span.bright  {{serverStatus.locality || 'unknown'}}
     div(v-if="serverStatus.currentStatus === 0")
       span Map: 
       span.bright {{serverStatus.map}}

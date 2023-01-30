@@ -5,13 +5,13 @@
   template(v-if="details.status")
     .header
       .summary
-        h2 {{details.status.serverName}}
+        h2 {{details.status.hostname}}
         .details
           GameType.bright(:gameId="details.status.gameId")
           ModType.bright(:mod="details.status.modificationCode")
-          Location(:location="details.status.location")
+          Location(:location="details.status.locality")
       .connection
-        ServerAddress(:address="details.status.dNS" :port="details.status.port")
+        ServerAddress(:address="details.status.address" :port="details.status.port")
     .content
       .status
         MatchStatus(:server="details.status")
@@ -30,6 +30,8 @@
             :playerList="details.status.players")
             .map-lower-right
               .map-text {{details.status.map}}
+      //- .current-match(v-if="details.match")
+      //-   ProgressGraph(:match="details.match" :height="100" :width="400")
       .matches
         h2 Recent Matches
         .match-container(v-for="match in sortedMatches")
@@ -52,12 +54,15 @@ import Rules from '@/components/server/Rules.vue'
 import {getServerDetails, getServerMatches} from '@/services/serversApi'
 import {useRouter} from 'vue-router'
 import type {Match as MatchModel} from '@/model/Match'
+import type {TeamMatch as TeamMatchModel} from '@/model/TeamMatch'
 import MatchInstance from '@/components/server/match/MatchInstance.vue'
 import type {PagedResult} from '@/model/PagedResult'
 import MapWithTeamsList from '@/components/MapWithTeamList.vue'
-import {parseServerStatus} from '@/helpers/match'
+import {parseApiMatch} from '@/helpers/match'
 import {useRoute} from 'vue-router'
 import Pager from '../components/Pager.vue'
+import type { ServerStatus } from '@/model/ServerStatus'
+import ProgressGraph from '@/components/server/match/ProgressGraph.vue'
 
 const route = useRoute()
 
@@ -89,13 +94,18 @@ const newMatchPage = (pageNum: number) => {
 const update = () => 
   Promise.all([
     getServerDetails(props.serverId)
-      .then(({ mapStats, status} )=> ({
+      .then(({ match, mapStats, status} )=> ({
+        match: match ? parseApiMatch(match) : null,
         mapStats,
-        status: parseServerStatus(status)
+        status: status as ServerStatus
       })),
     getServerMatches(props.serverId, props.matchPage)
+      .then(matches => ({
+        totalResults: matches.totalResults,
+        results: matches.results.map(parseApiMatch)
+      }))
   ])
-  .then(([_details, _matches]: [_details: ServerDetail, _matches: PagedResult<MatchModel>]) => {
+  .then(([_details, _matches]: [_details: ServerDetail, _matches: PagedResult<MatchMode | TeamMatchModel>]) => {
     details.value = _details
     matches.value = _matches
   })

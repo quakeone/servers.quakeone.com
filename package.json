@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.0.1",
     "axios": "^0.21.1",
+    "d3": "^7.8.2",
     "date-fns": "^2.28.0",
     "pug": "^3.0.2",
     "vue": "^3.2.45",
@@ -21,6 +22,7 @@
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.0",
     "@types/ramda": "^0.27.44",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",

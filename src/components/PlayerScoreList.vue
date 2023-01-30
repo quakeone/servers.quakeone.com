@@ -6,9 +6,9 @@ template(v-if="!loading && charWriter")
         td(style="text-align:right;")
           img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
         td(style="padding-left: .2rem; text-align: left") 
-          span.player-type(v-if="player.playerType === 2") 
+          span.player-type(v-if="player.type === 2") 
             FontAwesome(:icon="['fas', 'robot']")
-          span.player-type(v-if="player.playerType === 1") 
+          span.player-type(v-if="player.type === 1") 
             FontAwesome(:icon="['fas', 'crown']")
         td(style="padding-left: .2rem; text-align: left")
           img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
@@ -35,7 +35,7 @@ export default defineComponent({
       loading.value = false
     })
     const playerType = (player: Player) => {
-      if (player.playerType === 2) {
+      if (player.type === 2) {
         return 'bot';
       }
       return ''

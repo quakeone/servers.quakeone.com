@@ -2,6 +2,7 @@ import type { PlayerStatus } from '@/model/PlayerStatus'
 import {groupBy} from 'ramda'
 import type { Teams } from '@/model/Teams'
 import type { MatchPlayer } from '@/model/MatchPlayer'
+import { ApiMatchPlayer } from '@/services/types/ApiMatch'
 
 const teamName: Record<number, string> = {
   13: 'Team Blue',

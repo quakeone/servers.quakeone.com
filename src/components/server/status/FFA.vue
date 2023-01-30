@@ -12,16 +12,16 @@
 <script setup lang="ts">
 import {defineProps, computed} from 'vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
-import type {ServerDetail} from '@/model/ServerDetail'
 import type {PlayerStatus} from '@/model/PlayerStatus'
 import * as matchHelper from '@/helpers/match'
 import {partition} from 'ramda'
+import type { ServerStatus } from '@/model/ServerStatus'
 
-const props = defineProps<{server: ServerDetail}>()
+const props = defineProps<{server: ServerStatus}>()
 const players = computed(() => {
   const [observer, active] = partition((p: PlayerStatus) => 
     p.shirtColor === 0 && p.pantColor === 0 && p.frags === -99
-  , props.server.status.players)
+  , props.server.players)
   return {active, observer}
 })
 </script>

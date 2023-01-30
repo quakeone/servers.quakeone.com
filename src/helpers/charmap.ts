@@ -1,24 +1,8 @@
+import {playerColors} from '@/helpers/playerColors'
 export type Write = (height: number, base64String: string) => string;
 export type WriteScore = (height: number, score: number, shirtColor: number, pantColor: number) => string;
 export type Writer = {write: Write; writeScore: WriteScore};
 
-export const playerColors = [
-  '#FFFFFF',
-  '#be9558',
-  '#b8b8ed',
-  '#8f8f24',
-  '#ab0505',
-  '#d0ab24',
-  '#ffa287',
-  '#ffbe9c',
-  '#c38fa2',
-  '#e2c3ab',
-  '#80a28f',
-  '#f8d624',
-  '#8080ff',
-  '#8080ff',
-  '#8080ff',
-];
 let staticCharmap: (HTMLImageElement)
 export const createWriter = (): Promise<Writer> => {
   const canvas = document.createElement('CANVAS') as HTMLCanvasElement;

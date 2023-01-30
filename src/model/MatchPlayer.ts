@@ -1,11 +1,15 @@
 import { Player } from "./Player";
 
 export interface MatchPlayer extends Player {
+  playerMatchId: number,
   name : string,
-  playerStayDuration: number,
+  nameRaw: string,
+  type: number,
   playerMatchStart: number,
   playerMatchEnd: number,
+  skin: string,
+  model: string,
   pantColor: number,
-  shirtCOlor: number,
+  shirtColor: number,
   frags: number
 }

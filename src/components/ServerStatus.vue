@@ -1,6 +1,6 @@
 <template lang="pug">
 .card.server-card
-  h4.server-name {{ serverStatus.serverName }} - {{playerCount}}
+  h4.server-name {{ serverStatus.hostname }} - {{playerCount}}
   .player-list
     .player-list__player(v-for="player in players")
       .player__name {{player.name}}

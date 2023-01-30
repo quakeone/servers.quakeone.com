@@ -1,14 +1,16 @@
 import type { PlayerStatus } from "@/model/PlayerStatus"
 import type { ServerStatus } from "@/model/ServerStatus";
+import { connectedTimeSeconds } from "./player";
 
 const IDLE_SECONDS = 3600 // 1 hour
 
 export const isIdlePlayer = (player: PlayerStatus) => {
-  if (player.playerType === 2) return true
-  if (player.upTime < IDLE_SECONDS) {    
+  if (player.type === 2) return true
+  const upTime = connectedTimeSeconds(player)
+  if (upTime < IDLE_SECONDS) {    
     return false
   } else {
-    const fragRatio = player.totalFrags / player.upTime;
+    const fragRatio = player.totalFrags / upTime;
     return fragRatio < (3/3600) // 3 frags an hour to be labeled as "active" seems reasonable enough.
   }
 }

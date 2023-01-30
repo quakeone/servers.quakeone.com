@@ -2,42 +2,45 @@
 .empty-row
   .game-type 
     .game-type-text
-      GameType(:gameId="serverStatus.gameId")
+      GameType(:gameId="props.serverStatus.gameId")
   .details
-    h3(:class="{'is-down': serverStatus.currentStatus !== 0}")
-      router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.hostname}}
+    h3(:class="{'is-down': props.serverStatus.currentStatus !== 0}")
+      router-link(:to="'/server/' + props.serverStatus.serverId") {{props.serverStatus.hostname}}
       FontAwesome(
-        v-if="serverStatus.currentStatus !== 0" 
+        v-if="props.serverStatus.currentStatus !== 0" 
         :icon="['fas', 'exclamation-circle']"
-        v-tippy :content="serverStatusMap[serverStatus.currentStatus]")
-    ServerAddressInline.bright(:address="serverStatus.address" :port="serverStatus.port")
+        v-tippy :content="serverStatusMap[props.serverStatus.currentStatus]")
+    ServerAddressInline.bright(:address="props.serverStatus.address" :port="props.serverStatus.port")
     div  
-    .mod(v-if="serverStatus.mod")
-      span.bright {{serverStatus.mod}}
+    .mod(v-if="props.serverStatus.mod")
+      span.bright(v-tippy :content="modInfo.tooltip") {{modInfo.label}}
+      span(v-if="props.serverStatus.mode")  · 
+      span.bright(v-if="props.serverStatus.mode") {{props.serverStatus.mode}}
       span.vert-divide |
       span
         FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
-      span.bright {{serverStatus.location || 'Unknown'}}
+      span.bright {{props.serverStatus.locality || 'Unknown'}}
     .bottom
       span map  
-      span.bright {{serverStatus.map}}
+      span.bright {{props.serverStatus.map}}
       span.vert-divide |
       span players 
-      span.bright {{serverStatus.players.length}}/{{serverStatus.maxPlayers}}
+      span.bright {{props.serverStatus.players.length}}/{{props.serverStatus.maxPlayers}}
       span.vert-divide |
       span {{matchStatus}}
   .map-image
-    MapImage(:map="serverStatus.map")
-      .map-text {{serverStatus.map}}
+    MapImage(:map="props.serverStatus.map")
+      .map-text {{props.serverStatus.map}}
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import MapImage from '../MapImage.vue'
-import { ServerStatus } from '@/model/ServerStatus'
+import type { ServerStatus } from '@/model/ServerStatus'
 import ServerAddressInline from '../ServerAddressInline.vue'
-import {PropType, defineComponent, computed} from 'vue'
+import {defineComponent, computed} from 'vue'
 import GameType from '../GameType.vue'
 import * as match from '@/helpers/match'
+import {getModInfo} from '@/helpers/mod'
 
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
@@ -46,24 +49,13 @@ const serverStatusMap: Record<number, string> = {
   3: 'Query Error'
 }
 
-export default defineComponent({
-  components: {GameType,ServerAddressInline, MapImage },
-  props: {
-    serverStatus: {
-      type: Object as PropType<ServerStatus>,
-      required: true
-    }
-  },
-  setup(props) {
-    return {
-      serverStatusMap,
-      matchStatus: computed(() => 
-        props.serverStatus.currentStatus !== 0 
-        ? serverStatusMap[props.serverStatus.currentStatus]
-        : match.status(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd)),
-    }
-  }
-})
+const modInfo = computed(() => getModInfo(props.serverStatus.mod, props.serverStatus.mode));
+const props = defineProps<{serverStatus: ServerStatus}>()
+
+const matchStatus = computed(() => 
+  props.serverStatus.currentStatus !== 0 
+  ? serverStatusMap[props.serverStatus.currentStatus]
+  : match.status(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd));
 </script>
 
 <style lang="scss" scoped>

@@ -5,12 +5,15 @@ import {defineProps, computed, inject} from 'vue'
 import type { Writer } from '@/helpers/charmap'
 import type { Player } from '@/model/Player'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
+import { matchTimeSeconds } from '@/helpers/player'
+import type { MatchPlayer } from '@/model/MatchPlayer'
+
+const props = defineProps<{match: Match}>()
 
 const charWriter = inject<Writer>('charWriter')
-const props = defineProps<{match: Match}>()
 const topThree = computed(() => [...props.match.players].sort((a, b) => b.frags - a.frags).slice(0,3))
-const playTime = player => duration(player.playerStayDuration * 1000)
-const btoa = (str: string) => window.btoa(str)
+const playTime = (player: MatchPlayer) => Math.ceil(matchTimeSeconds(player) / 60)
+
 </script>
 
 <template lang="pug">
@@ -26,7 +29,7 @@ const btoa = (str: string) => window.btoa(str)
         .col.name(style="padding-left: 1rem; text-align: left")
           img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
         .col.play-time
-          span.bright {{Math.floor(player.playerStayDuration / 60)}} 
+          span.bright {{playTime(player)}} 
           span  mins
   .remaining(v-if="props.match.players.length > 3")
     PlayersTooltip(:players="props.match.players") {{props.match.players.length - 3}} more
