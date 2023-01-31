@@ -10,7 +10,7 @@ export default defineComponent({
   props: {
     map: {
       type: String,
-      required: true
+      default: ''
     }
   },
   setup (props) {
@@ -20,13 +20,17 @@ export default defineComponent({
 
     onMounted(() => {
       if (image.value) {
-        image.value.style.backgroundImage = `url(${map.value}), url(${generic})`
+        image.value.style.backgroundImage = map.value 
+          ? `url(${map.value}), url(${generic})`
+          : `url(${generic})`
       }
     })
 
     watch(map, () => {
       if (image.value) {
-        image.value.style.backgroundImage = `url(${map.value}), url(${generic})`
+        image.value.style.backgroundImage = map.value 
+          ? `url(${map.value}), url(${generic})`
+          : `url(${generic})`
       }
     })
 
@@ -40,5 +44,6 @@ export default defineComponent({
 .map-image {
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative;
 }
 </style>

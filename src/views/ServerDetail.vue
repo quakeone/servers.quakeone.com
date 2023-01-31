@@ -7,9 +7,13 @@
       .summary
         h2 {{details.status.hostname}}
         .details
-          GameType.bright(:gameId="details.status.gameId")
-          ModType.bright(:mod="details.status.modificationCode")
-          Location(:location="details.status.locality")
+          GameType.bright(
+            :size="Full"
+            :gameId="details.status.gameId"
+            )
+          .mod
+            ModMode(:mod="details.status.mod" :mode="details.status.mode")
+          Location(:location="details.status.locality", :country="details.status.country")
       .connection
         ServerAddress(:address="details.status.address" :port="details.status.port")
     .content
@@ -63,6 +67,7 @@ import {useRoute} from 'vue-router'
 import Pager from '../components/Pager.vue'
 import type { ServerStatus } from '@/model/ServerStatus'
 import ProgressGraph from '@/components/server/match/ProgressGraph.vue'
+import ModMode from '@/components/ModMode.vue'
 
 const route = useRoute()
 

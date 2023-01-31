@@ -2,7 +2,9 @@
 .empty-row
   .game-type 
     .game-type-text
-      GameType(:gameId="props.serverStatus.gameId")
+      GameType(
+            size="Abbreviated"
+            :gameId="props.serverStatus.gameId")
   .details
     h3(:class="{'is-down': props.serverStatus.currentStatus !== 0}")
       router-link(:to="'/server/' + props.serverStatus.serverId") {{props.serverStatus.hostname}}
@@ -12,14 +14,10 @@
         v-tippy :content="serverStatusMap[props.serverStatus.currentStatus]")
     ServerAddressInline.bright(:address="props.serverStatus.address" :port="props.serverStatus.port")
     div  
-    .mod(v-if="props.serverStatus.mod")
-      span.bright(v-tippy :content="modInfo.tooltip") {{modInfo.label}}
-      span(v-if="props.serverStatus.mode")  · 
-      span.bright(v-if="props.serverStatus.mode") {{props.serverStatus.mode}}
+    .mid(v-if="props.serverStatus.mod")
+      ModMode(:mod="props.serverStatus.mod" :mode="props.serverStatus.mode")
       span.vert-divide |
-      span
-        FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
-      span.bright {{props.serverStatus.locality || 'Unknown'}}
+      Location(:location="props.serverStatus.locality", :country="props.serverStatus.country")
     .bottom
       span map  
       span.bright {{props.serverStatus.map}}
@@ -40,7 +38,8 @@ import ServerAddressInline from '../ServerAddressInline.vue'
 import {defineComponent, computed} from 'vue'
 import GameType from '../GameType.vue'
 import * as match from '@/helpers/match'
-import {getModInfo} from '@/helpers/mod'
+import ModMode from '@/components/ModMode.vue'
+import Location from '@/components/Location.vue'
 
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
@@ -49,7 +48,6 @@ const serverStatusMap: Record<number, string> = {
   3: 'Query Error'
 }
 
-const modInfo = computed(() => getModInfo(props.serverStatus.mod, props.serverStatus.mode));
 const props = defineProps<{serverStatus: ServerStatus}>()
 
 const matchStatus = computed(() => 
@@ -62,7 +60,7 @@ const matchStatus = computed(() =>
 .empty-row {
   display: grid;
   .vert-divide {
-    margin: 0.5rem;
+    margin: .1rem 0.5rem;
   }
 
   .game-type {
@@ -78,6 +76,10 @@ const matchStatus = computed(() =>
   .details {
     padding: .5rem 0;
     grid-area: details;
+    .mid {
+      display: flex;
+      align-items: center;
+    }
     .map-icon {
       margin-right: .5rem;
     }

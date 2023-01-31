@@ -1,17 +1,19 @@
 export type ModInfo = {
-  tooltip: string,
-  label: string
+  full: string,
+  abbv: string
 }
 const map: Record<string, ModInfo> = {
-  'ffa': {label: 'FFA', tooltip: 'Free For All'},
-  'ctf': {label: 'CTF', tooltip: 'Capture The Flag'},
-  'match': {label: 'TDM', tooltip: 'Team Deathmatch'},
-  'tdm': {label: 'TDM', tooltip: 'Team Deathmatch'},
-  'ca': {label: 'CA', tooltip: 'Clan Arena'},
-  'ra': {label: 'RA', tooltip: 'Rocket Arena'},
-  'rq': {label: 'RQ', tooltip: 'Rune Quake'},
-  'tf': {label: 'TF', tooltip: 'Team Fortress'}
+  'ffa': {abbv: 'FFA', full: 'Free For All'},
+  'ctf': {abbv: 'CTF', full: 'Capture The Flag'},
+  'match': {abbv: 'TDM', full: 'Team Deathmatch'},
+  'tdm': {abbv: 'TDM', full: 'Team Deathmatch'},
+  'ca': {abbv: 'CA', full: 'Clan Arena'},
+  'cax': {abbv: 'CA', full: 'Clan Arena'},
+  'ra': {abbv: 'RA', full: 'Rocket Arena'},
+  'rq': {abbv: 'RQ', full: 'Rune Quake'},
+  'tf': {abbv: 'TF', full: 'Team Fortress'},
+  'practice': {abbv: 'PR', full: 'Practice'}
 }
-export const getModInfo = (mod: string, mode: string): ModInfo => {
-  return map[mode] || map[mod.toLowerCase()] || {label: mod, tooltip: mod}
+export const getModInfo = (mod: string, mode?: string): ModInfo => {
+  return (mode && map[mode]) || map[mod.toLowerCase()] || {abbv: mod, full: mod}
 }

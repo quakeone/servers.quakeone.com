@@ -1,10 +1,16 @@
 <template lang="pug">
-.game-type(v-tippy :content="gameType") {{gameTypeAbbrv}}
+template(v-if="props.size == 'Abbreviated'")
+  .game-type(
+    v-tippy 
+    :content="gameType") {{gameTypeAbbrv}}
+template(v-else)
+  .game-type {{gameType}}
 </template>
 
 <script setup lang="ts">
 import {defineProps, computed} from 'vue'
 
+export type Size = 'Abbreviated' | 'Full'
 const gameTypeMapAbbrv: Record<number, string> = {
   0: "NQ",
   1: "QW",
@@ -22,7 +28,11 @@ const gameTypeMap: Record<number, string> = {
   5: "Quake Enhanced"
 }
 
-const props = defineProps<{gameId: number}>()
+const props = defineProps<{
+  gameId: number,
+  size: Size
+}>()
+
 const gameTypeAbbrv = computed(() => gameTypeMapAbbrv[props.gameId] || 'N/A')
 const gameType = computed(() => gameTypeMap[props.gameId] || 'Unknown')
 </script>

@@ -36,13 +36,13 @@ export const parseApiMatch = (apiMatch: ApiMatch) : (Match | TeamMatch) => {
     progress: parseMatchProgress(apiMatch)
   } as Match
   const teams = parseTeams(match.players)
-  if (match.mod === 'CRMod' && match.mode === 'match') {
+  if (match.mode === 'tdm') {
     return {
       ...match,
       matchType: 'TDM',
       teams
     } 
-  } else if (match.mod === 'CRCTF' && match.mode !== 'practice') {
+  } else if (match.mode == 'ctf' || match.mod == 'CRCTF') {
     return {
       ...match,
       matchType: 'CTF',

@@ -4,7 +4,9 @@
     h3
       router-link(:to="'/server/' + serverStatus.serverId") {{serverStatus.hostname}}
     h3 
-      GameType(:gameId="serverStatus.gameId")
+      GameType(
+        size="Abbreviated"
+        :gameId="serverStatus.gameId")
   .game-image
     MapWithPlayerList(
       :map="serverStatus.map", 
@@ -14,14 +16,11 @@
         .map-text {{serverStatus.map}}
   .details
     div
-      span.bright {{serverStatus.mod}}
-      span(v-if="serverStatus.mode")  · 
-      span.bright(v-if="serverStatus.mode") {{serverStatus.mode}}
+      ModMode(:mod="serverStatus.mod" :mode="serverStatus.mode")
     .divider  
     ServerAddress(:address="serverStatus.address" :port="serverStatus.port")
     .divider
-    FontAwesome.map-icon(:icon="['fas', 'map-marker-alt']")
-    span.bright  {{serverStatus.locality || 'unknown'}}
+    Location(:location="serverStatus.locality", :country="serverStatus.country")
     div(v-if="serverStatus.currentStatus === 0")
       span Map: 
       span.bright {{serverStatus.map}}
@@ -43,6 +42,8 @@ import type { Writer } from '@/helpers/charmap'
 import MapWithPlayerList from '../MapWithPlayerList.vue'
 import GameType from '@/components/GameType.vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
+import Location from '@/components/Location.vue'
+import ModMode from '@/components/ModMode.vue'
 
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
@@ -52,7 +53,7 @@ const serverStatusMap: Record<number, string> = {
 }
 
 export default defineComponent({
-  components: {GameType,  ServerAddress, MapWithPlayerList, PlayersTooltip},
+  components: {GameType,  ServerAddress, MapWithPlayerList, PlayersTooltip, Location, ModMode},
   props: {
     serverStatus: {
       type: Object as PropType<ServerStatus>,
