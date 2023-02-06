@@ -13,7 +13,7 @@ export type ApiMatchPlayer = {
 }
 
 export type ApiMatch = {
-  matchId: number,
+  serverMatchId: number,
   serverId: number,
   map: string,
   mode: string

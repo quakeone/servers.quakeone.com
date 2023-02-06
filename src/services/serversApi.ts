@@ -30,3 +30,9 @@ export const getServerDetails = (serverId: number): Promise<ApiServerDetail> => 
     .get(`${apiHost}/server/${serverId}`)
     .then(response => response.data)
 }
+
+export const getMatchDetail = (serverMatchId: number): Promise<ApiMatch> => {
+  return axios
+    .get(`${apiHost}/match/${serverMatchId}`)
+    .then(response => response.data)
+}

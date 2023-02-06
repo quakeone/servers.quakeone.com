@@ -2,7 +2,7 @@ import type {MatchPlayer} from './MatchPlayer'
 import { MatchPlayerProgress } from './MatchProgress'
 
 export interface Match {
-  matchId: number,
+  serverMatchId: number,
   serverId: number,
   map: string,
   mode: string

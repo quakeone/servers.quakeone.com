@@ -18,12 +18,17 @@ const props = defineProps<{rules: ServerSetting[]}>()
 table {
   width: 100%;
   border-top: 1px solid $grey-2;
+        border-collapse: collapse;
+  
   td.setting {
     width: 20%;
     border-right: 1px solid $grey-2;
+    font-size: .8rem;
+    padding-right: 1rem;
   }
   td.value {
     padding-left: 1rem;
+    font-size: .8rem;
   } 
 }
 </style>

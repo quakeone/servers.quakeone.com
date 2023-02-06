@@ -22,7 +22,7 @@ export const createWriter = (): Promise<Writer> => {
       });
     };
     staticCharmap.onerror = reject;
-    staticCharmap.src = '/charset.png';
+    staticCharmap.src = '/charset-3.png';
   });
 };
 

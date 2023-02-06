@@ -1,4 +1,4 @@
-export type MatchPlayerDatapoint {
+export type MatchPlayerDatapoint = {
   timestamp: string;
   frags: number;
   pantColor: number;

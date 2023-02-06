@@ -8,7 +8,7 @@
         h2 {{details.status.hostname}}
         .details
           GameType.bright(
-            :size="Full"
+            size="Full"
             :gameId="details.status.gameId"
             )
           .mod
@@ -16,6 +16,7 @@
           Location(:location="details.status.locality", :country="details.status.country")
       .connection
         ServerAddress(:address="details.status.address" :port="details.status.port")
+        ClientDownload(:gameId="details.status.gameId" :params="details.status.parameters")
     .content
       .status
         MatchStatus(:server="details.status")
@@ -34,14 +35,11 @@
             :playerList="details.status.players")
             .map-lower-right
               .map-text {{details.status.map}}
-      //- .current-match(v-if="details.match")
-      //-   ProgressGraph(:match="details.match" :height="100" :width="400")
+      .progress(v-if="details.match")
+        ProgressGraph(:match="details.match" :height="100" :width="400")
       .matches
-        h2 Recent Matches
-        .match-container(v-for="match in sortedMatches")
-          MatchInstance(:match="match")
-        .match-pager
-          Pager(:currentPage="matchPage" :pageCount="matchPages" @newPage="newMatchPage")
+        h2 Previous Matches
+        MatchList(:matches="matches" :pageNum="props.matchPage" @newPage="newMatchPage")
 </template>
 
 <script lang="ts" setup>
@@ -59,15 +57,15 @@ import {getServerDetails, getServerMatches} from '@/services/serversApi'
 import {useRouter} from 'vue-router'
 import type {Match as MatchModel} from '@/model/Match'
 import type {TeamMatch as TeamMatchModel} from '@/model/TeamMatch'
-import MatchInstance from '@/components/server/match/MatchInstance.vue'
-import type {PagedResult} from '@/model/PagedResult'
 import MapWithTeamsList from '@/components/MapWithTeamList.vue'
 import {parseApiMatch} from '@/helpers/match'
 import {useRoute} from 'vue-router'
-import Pager from '../components/Pager.vue'
 import type { ServerStatus } from '@/model/ServerStatus'
 import ProgressGraph from '@/components/server/match/ProgressGraph.vue'
 import ModMode from '@/components/ModMode.vue'
+import MatchList from '@/components/server/match/MatchList.vue'
+import type { PagedResult } from '@/model/PagedResult'
+import ClientDownload from '@/components/ClientDownload.vue'
 
 const route = useRoute()
 
@@ -173,6 +171,9 @@ update()
   
   .content {
     display: grid;
+    .progress {
+      grid-area: progress;
+    }
     .status {
       grid-area: status;
       padding-top: 1rem;
@@ -206,27 +207,21 @@ update()
       "connection"
       "status"
       "map"
+      "progress"
       "rules"
       "matches";
     @media screen and (min-width: $phone-breakpoint) {
-      grid-template-columns: 60% 40%;
+      grid-template-columns: 50% 50%;
       grid-template-areas:
         "header header"
         "summary connection"
         "map status"
+        "map progress"
         "map rules"
         "matches matches";
-      .server-rules {
+      .server-rules, .status, .progress {
         margin-left: 1rem;
       }
-      .status {
-        margin-left: 1rem;
-      }
-    }
-    .match-container {
-      margin: 1rem 0;
-      padding-top: 1rem;
-      border-top: 1px solid $grey-2;
     }
   }
 }

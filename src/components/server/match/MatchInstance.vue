@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { differenceInSeconds, format, formatDistanceStrict } from 'date-fns'
-import {defineProps, computed} from 'vue'
+import {defineProps, computed, reactive, watch} from 'vue'
 import type {Match} from '@/model/Match'
 import MapImage from '../../MapImage.vue'
 import TDM from './TDM.vue'
@@ -8,55 +8,106 @@ import CTF from './CTF.vue'
 import FFA from './FFA.vue'
 import {parseApiMatch, time as parseTime} from '@/helpers/match'
 import type { TeamMatch } from '@/model/TeamMatch'
-const fullDateTime = 'LLL dd, yyyy h:mmbb'
-const props = defineProps<{match: (Match | TeamMatch)}>()
+import {getMatchDetail} from '@/services/serversApi'
+import ProgressGraph from './ProgressGraph.vue'
+import Loading from '@/components/Loading.vue'
 
-const startDate =  computed(() => new Date(props.match.matchStart))
+type ExpandState = 'NotExpanded' | 'Loading' | 'Expanded'
+const fullDateTime = 'LLL dd, yyyy h:mmbb'
+
+const props = defineProps<{
+  match: (Match | TeamMatch),
+  expanded: boolean
+}>()
+
+const emits = defineEmits<{
+  (e: 'requestExpand', pageNum: number): void
+}>()
+
+const model = reactive<{
+  expandState: ExpandState,
+  match: (Match | TeamMatch)
+}>({
+  expandState: 'NotExpanded',
+  match: props.match 
+})
+
+const startDate =  computed(() => new Date(model.match.matchStart))
 const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
-const matchTimeAgo = computed(() =>  formatDistanceStrict(startDate.value, new Date(), {
+const matchTimeAgo = computed(() => formatDistanceStrict(startDate.value, new Date(), {
   addSuffix: true
 }))
-const matchDuration = computed(() => differenceInSeconds(new Date(props.match.matchEnd), new Date(props.match.matchStart)))
+const matchDuration = computed(() => differenceInSeconds(new Date(model.match.matchEnd), new Date(model.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "dd"))
-const isTeam = computed(() => 'matchType' in props.match)
+const isTeam = computed(() => 'matchType' in model.match)
 const detail = computed(() => {
   if (isTeam.value) {
-    return props.match.matchType === 'CTF' ? CTF : TDM
+    return model.match.matchType === 'CTF' ? CTF : TDM
   }
   return FFA
 })
-const teamSize = computed(() => isTeam.value ? props.match.teams.size : '')
-const matchType = computed(() => isTeam.value ? props.match.matchType : '')
-
+const teamSize = computed(() => isTeam.value ? model.match.teams.size : '')
+const matchType = computed(() => isTeam.value ? model.match.matchType : '')
+const loadShowMore = () =>{
+  model.expandState = 'Loading'
+  return getMatchDetail(model.match.serverMatchId)
+    .then(match => {
+      model.match = parseApiMatch(match)
+      model.expandState = 'Expanded'
+    })
+}
+watch(props, (newProps, oldProps) => {
+  if (newProps.expanded) {
+    if (model.expandState === 'NotExpanded')
+      loadShowMore()
+  } else {
+    model.expandState = 'NotExpanded'
+  }
+}, {immediate: true})
 </script>
 
 <template lang="pug">
-.match
-  .date
-    .date-day {{matchDay}}
-    .date-month {{matchMonth}}
-    .match-type(v-if="isTeam") {{matchType}}
-    .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
-    
-  .title
-    h3 {{props.match.name}}
-    .subtitle
-      span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
-      span.vert-divide  | 
-      span.bright  {{Math.ceil(matchDuration/60)}} 
-      span  minutes 
-      span.vert-divide  | 
-      span map: 
-      span.bright  {{props.match.map}}
-  .detail
-    component(:is="detail" :match="match")
-  .map-image
-    MapImage(:map="props.match.map")
-      .map-text {{props.match.map}}
+.match-instance
+  .match
+    .date
+      .date-day {{matchDay}}
+      .date-month {{matchMonth}}
+      .match-type(v-if="isTeam") {{matchType}}
+      .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
+      
+    .title
+      h3 {{model.match.name}}
+      .subtitle
+        span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
+        span.vert-divide  | 
+        span.bright  {{Math.ceil(matchDuration/60)}} 
+        span  minutes 
+        span.vert-divide  | 
+        span map: 
+        span.bright  {{model.match.map}}
+    .detail
+      component(:is="detail" :match="model.match" :expanded="model.expandState==='Expanded'")
+      .buttons
+        Loading.loading(v-if="model.expandState === 'Loading'")
+        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") Show More  
+        a(v-else @click="model.expandState = 'NotExpanded'") Hide  
+
+    .map-image
+      MapImage(:map="model.match.map")
+        .stuff
+        .map-text {{model.match.map}}
+
 </template>
 
 <style lang="scss" scoped>
+.stuff {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 98%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 98%);
+  padding-top: 68%;
+}
 .match-type, .match-size {
   display: none;
 }
@@ -77,7 +128,6 @@ const matchType = computed(() => isTeam.value ? props.match.matchType : '')
   display: none;
   grid-area: map;
   position: relative;
-  height: 100%;
 
   .map-text {
     padding: 4px;
@@ -112,7 +162,10 @@ const matchType = computed(() => isTeam.value ? props.match.matchType : '')
     grid-template-areas: 
       "big-date title map"
       "big-date detail map";
-    grid-template-columns: 3rem auto 250px;
+    grid-template-columns: 3rem auto 200px;
+  }
+  .loading {
+    height:1.5rem;
   }
 }
 .date { 
