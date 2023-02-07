@@ -1,10 +1,13 @@
 <template lang="pug">
 .rules
   h3 Rules
-  table
-    tr(v-for="rule in props.rules")
-      td.setting {{rule.setting}}
-      td.value {{rule.value}}
+  .scrollable-wrapper
+    table
+      tbody
+        tr(v-for="rule in props.rules")
+          td.setting {{rule.setting}}
+          td.value {{rule.value}}
+
 </template>
 
 <script lang="ts" setup>
@@ -15,6 +18,11 @@ const props = defineProps<{rules: ServerSetting[]}>()
 </script>
 
 <style scoped lang="scss">
+// .scrollable-wrapper {
+//   max-height: 200px;
+//   overflow-y: auto;
+//   scrollbar-color: green;
+// }
 table {
   width: 100%;
   border-top: 1px solid $grey-2;

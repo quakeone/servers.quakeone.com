@@ -8,7 +8,6 @@ import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import { matchTimeSeconds } from '@/helpers/player'
 import type { MatchPlayer } from '@/model/MatchPlayer'
 import { differenceInSeconds } from 'date-fns'
-import ProgressGraph from './ProgressGraph.vue'
 
 const props = defineProps<{
   match: Match,
@@ -32,8 +31,8 @@ const playTime = (player: MatchPlayer) => {
 </script>
 
 <template lang="pug">
-.ffa-match(:class="{expanded: props.expanded}")
-  .player-list 
+.ffa-match
+  .player-list
     .list-head
       .ch.title Top Three
       .ch Time
@@ -41,78 +40,51 @@ const playTime = (player: MatchPlayer) => {
       .row(style="line-height: 1;" v-for="player in players")
         .col(style="text-align:right;")
           img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
-        .col.name(style="padding-left: 1rem; text-align: left")
+        .col.type
+          span.player-type(v-if="player.type === 2") 
+            FontAwesome(:icon="['fas', 'robot']")
+          span.player-type(v-if="player.type === 1") 
+            FontAwesome(:icon="['fas', 'crown']")
+        .col.name
           img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
         .col.play-time
           span.bright {{playTime(player)}} 
           span  mins
-  .progress(v-if="props.expanded")
-    .list-head
-      .ch.title Progress
 
-    ProgressGraph(:match="props.match" :height="75" :width="300")
-  .remaining(v-if="props.match.players.length > 3 && !props.expanded")
+  .remaining(v-if="props.match.players.length > 3")
     PlayersTooltip(:players="props.match.players") {{props.match.players.length - 3}} more
 </template>
 
 <style lang="scss" scoped>
-.ffa-match {
+.player-list {
+  margin-top: 1rem;
+}
+.play-time {
+  border-left: 1px solid $grey-2;
+  text-align: right;
+}
+.list-head {
   display: grid;
-  grid-template-columns: auto;
-  grid-template-areas:
-    "players"
-    "remaining";
-  .progress {
-    grid-area: progress;
-  }
-  .remaining {
-    grid-area: remaining;
-  }
-  &.expanded {
-    grid-template-areas:
-      "players progress";
-    .list-body {
-      
-      grid-template-columns: min-content auto 5rem;
-
-    }
-  }
-  .list-head {
-      background-color: $grey-2;
-      font-weight: bold;
-  }
-  .player-list {
-    grid-area: players;
-    .list-head {
-      display: grid;
-      grid-template-columns: auto 5rem;
-      .ch {
-        text-align: center;
-      }
-    }
-    .list-body {
-      display: grid;
-      grid-template-columns: min-content auto 5rem;
-      .row {
-        display: contents;
-        .col.name {
-          overflow: hidden;
-        }
-        col.play-time {
-          border-left: 1px solid $grey-2;
-          text-align: right;
-        }
-        // .col.progress {
-        //   grid-row: 1/-1;
-
-        // }
-      }
-    }
+  grid-template-columns: auto 5rem;
+  background-color: $grey-2;
+  font-weight: bold;
+  .ch {
+    text-align: center;
   }
 }
-.status-container {
-  margin-top: 1rem;
-  display: flex;
-  align-items: flex-start;
+.list-body {
+  display: grid;
+  .row {
+    display: contents;
+    .col.name {
+      overflow: hidden;
+      text-align: left;
+      padding-left: .4rem;
+    }
+    .col.type {
+      padding-left: .4rem;
+    }
+  }
+  grid-template-columns: min-content min-content auto 5rem;
 }
 </style>

@@ -11,7 +11,7 @@ import { faClone } from '@fortawesome/free-regular-svg-icons'
 import {faMapMarkerAlt, faExclamationCircle, faChevronLeft, faRobot, faCrown } from '@fortawesome/free-solid-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faSync } from '@fortawesome/free-solid-svg-icons'
+import { faSync,faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { createWriter } from '@/helpers/charmap'
 import type { Writer } from '@/helpers/charmap'
 
@@ -22,6 +22,7 @@ library.add(faExclamationCircle)
 library.add(faChevronLeft)
 library.add(faRobot)
 library.add(faCrown)
+library.add(faTrophy)
 
 createWriter().then((charWriter:Writer) => {
   createApp(App)

@@ -36,7 +36,7 @@
             .map-lower-right
               .map-text {{details.status.map}}
       .progress(v-if="details.match")
-        ProgressGraph(:match="details.match" :height="100" :width="400")
+        ProgressGraph(:match="details.match" :height="125" :width="475")
       .matches
         h2 Previous Matches
         MatchList(:matches="matches" :pageNum="props.matchPage" @newPage="newMatchPage")

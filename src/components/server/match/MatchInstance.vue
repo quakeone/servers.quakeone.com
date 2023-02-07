@@ -21,7 +21,8 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'requestExpand', pageNum: number): void
+  (e: 'requestExpand'): void,
+  (e: 'requestCollapse'): void
 }>()
 
 const model = reactive<{
@@ -69,12 +70,13 @@ watch(props, (newProps, oldProps) => {
 
 <template lang="pug">
 .match-instance
-  .match
+  .match(:class="{expanded: model.expandState==='Expanded'}")
     .date
       .date-day {{matchDay}}
       .date-month {{matchMonth}}
       .match-type(v-if="isTeam") {{matchType}}
       .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
+      
       
     .title
       h3 {{model.match.name}}
@@ -91,12 +93,16 @@ watch(props, (newProps, oldProps) => {
       .buttons
         Loading.loading(v-if="model.expandState === 'Loading'")
         a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") Show More  
-        a(v-else @click="model.expandState = 'NotExpanded'") Hide  
+        a(v-else @click="emits('requestCollapse')") Hide  
 
-    .map-image
+    .graphics
       MapImage(:map="model.match.map")
         .stuff
         .map-text {{model.match.map}}
+
+    .progress(v-if="model.expandState==='Expanded'")
+      ProgressGraph(:match="model.match" :height="125" :width="475")
+
 
 </template>
 
@@ -124,20 +130,23 @@ watch(props, (newProps, oldProps) => {
 .detail {
   grid-area: detail;
 }
-.map-image {
+.graphics {
   display: none;
   grid-area: map;
-  position: relative;
+  .map-image {
+    position: relative;
 
-  .map-text {
-    padding: 4px;
-    text-shadow: 2px 2px rgba(0,0,0,.9);
-    //background-color: rgba(0,0,0,.4);
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+    .map-text {
+      padding: 4px;
+      text-shadow: 2px 2px rgba(0,0,0,.9);
+      //background-color: rgba(0,0,0,.4);
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
   }
 }
+
 .match {
   display: grid;
   
@@ -149,8 +158,11 @@ watch(props, (newProps, oldProps) => {
     .match-type {
       margin-top: .5rem;
     }
-    .map-image {
+    .graphics {
       display: block;
+    }
+    .progress {
+      width: 475px;
     }
     .detail {
       padding: 0 1rem;
@@ -163,6 +175,14 @@ watch(props, (newProps, oldProps) => {
       "big-date title map"
       "big-date detail map";
     grid-template-columns: 3rem auto 200px;
+
+    &.expanded {
+      grid-template-areas: 
+        "big-date title map"
+        "big-date detail map"
+        "big-date detail progress";
+      grid-template-columns: 3rem auto 475px;
+    }
   }
   .loading {
     height:1.5rem;

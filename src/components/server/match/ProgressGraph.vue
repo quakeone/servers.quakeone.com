@@ -6,28 +6,27 @@ svg.match-progress(v-if="domainX != null"
   :viewBox="`0 0 ${width} ${height}`")
   text.svg-match__progress(x="20" y="35") 
   g
-    g
-      rect.svg-match__timeline-full(
-        x="0" 
-        :y="height - 6" 
-        :width="rangeX[1]"
-        height="6")
-      rect.svg-match__timeline-progress(
-        x="0" 
-        :y="height - 5" 
-        :width="timelineProgress"
-        height="4")
-      rect.svg-match__timeline-text-bg(
-          :x="x(domainX[1])" 
-          :y="height - 14"
-          width="35px"
-          height="14px")
-    g(transform="translate(33, 7)")
+    rect.svg-match__timeline-full(
+      x="0" 
+      :y="height - 8" 
+      :width="rangeX[1]"
+      height="8")
+    rect.svg-match__timeline-progress(
+      x="0" 
+      :y="height - 8" 
+      :width="timelineProgress"
+      height="8")
+    rect.svg-match__timeline-text-bg(
+      :x="x(domainX[1])" 
+      :y="height - model.progressAreaHeight"
+      width="50px"
+      :height="model.progressAreaHeight")
+    g(transform="translate(46, 16)")
       text.svg-match__timeline-text(
-          text-anchor="end"
-          :x="x(domainX[1])" 
-          :y="y(0)"
-          ) {{ matchLength }}
+        text-anchor="end"
+        :x="x(domainX[1])" 
+        :y="y(0)"
+        ) {{ matchLength }}
     path.svg-match__line(v-for="playerProgress in sortedProgression"
       :d="progressLine(playerProgress)" 
       :stroke="playerColors[playerProgress.pantColor]")
@@ -50,16 +49,41 @@ import {computed, reactive, watch, onBeforeUnmount, ref} from 'vue'
 import { addMinutes, addSeconds,differenceInSeconds } from 'date-fns'
 import { match } from 'ramda'
 
-const nameLabelsWidth = 50;
+const nameLabelsWidth = 75;
 const props = defineProps<{
   match: Match,
   width: number,
   height: number
 }> ()
 
-const model = reactive<{padding: number, matchLengthSeconds: number}>({
+const model = reactive<{
+  padding: number, 
+  progressAreaHeight: number,
+  matchLengthSeconds: number
+}>({
   padding: 10,
+  progressAreaHeight: 20,
   matchLengthSeconds: 0
+})
+
+const maxPlayerTime = computed(() => {
+  return props.match.progress!.reduce(
+      (max, progress) => {
+        const test = progress.progression.reduce(
+          (max2, pr) => pr.timestamp > max2 ? pr.timestamp : max2,
+          max) 
+        return test > max ? test : max
+      }, '2020-01-01')
+})
+
+const maxPlayerFrags = computed(() => {
+  return props.match.progress!.reduce(
+      (max, progress) => {
+        const test = progress.progression.reduce(
+          (max2, pr) => pr.frags > max2 ? pr.frags : max2,
+          max) 
+        return test > max ? test : max
+      }, 0)
 })
 
 const sortedProgression = computed(() => 
@@ -68,14 +92,16 @@ const sortedProgression = computed(() =>
       (a,b) => a.progression[a.progression.length - 1].frags == b.progression[b.progression.length - 1].frags 
         ? 0
         : a.progression[a.progression.length - 1].frags < b.progression[b.progression.length - 1].frags  ? -1 : 1 ))
+
 const rangeX  = computed(() => {
   const width = props.width - model.padding - nameLabelsWidth;
   return [0, width];
 })
 
+
 const rangeY  = computed(() => {
-  const height = props.height - model.padding;
-  return [model.padding, height];
+  const height = props.height - model.progressAreaHeight;
+  return [model.progressAreaHeight, height];
 })
 
 const domainX = computed(() => {
@@ -92,12 +118,10 @@ const domainX = computed(() => {
 })
 
 const domainY = computed(() => {
-  if (props.match.fraglimit > 0) {
-    return [props.match.fraglimit, 0]
-  } else {
-    const maxFrag = props.match.players.reduce((max, player) => max < player.frags ? player.frags : max, 0)
-    return [maxFrag < 10 ? 15 : maxFrag + 5, 0]
-  }
+  const maxFrag = maxPlayerFrags.value
+  const ceiling = props.match.fraglimit || 20;
+
+  return [maxFrag < ceiling ? ceiling : maxFrag + 5, 0]
 })
 
 const svg = ref<HTMLOrSVGElement | null>(null)
@@ -141,13 +165,7 @@ const lastPoint = (progress: MatchPlayerProgress) => {
 const currentMaxTime = computed(() => {
   let maxTime = props.match.matchEnd
   if (!maxTime) {
-    maxTime = props.match.progress!.reduce(
-      (max, progress) => {
-        const test = progress.progression.reduce(
-          (max2, pr) => pr.timestamp > max2 ? pr.timestamp : max2,
-          max) 
-        return test > max ? test : max
-      }, '2020-01-01')
+    maxTime = maxPlayerTime.value
   }
   return new Date(maxTime)
 })
@@ -182,7 +200,7 @@ $background: $grey-2;
     stroke-width: 1px;
   }
   &__name-text {
-    font-size: 8px;
+    font-size: 12px;
     font-weight: bold;;
   }
   &__timeline-progress {
@@ -197,7 +215,8 @@ $background: $grey-2;
   &__timeline-text {
     background-color: $background;
     fill: $tan;
-    font-size: 12px;
+    font-size: 16px;
+    font-weight: bold;
   }
 }
 

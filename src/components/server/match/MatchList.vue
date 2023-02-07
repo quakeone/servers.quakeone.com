@@ -4,11 +4,15 @@
     MatchInstance(
       :key="match.serverMatchId"
       :match="match" 
-      @requestExpand="expandRequested" 
+      @requestExpand="matchId => model.expandedItem = matchId" 
+      @requestCollapse="() => model.expandedItem = -1" 
       :expanded="match.serverMatchId === model.expandedItem")
+
   .match-pager
     Pager(:currentPage="props.pageNum" :pageCount="matchPages" @newPage="emits('newPage', $event)")
+
 </template>
+
 
 <script setup lang="ts">
 import Pager from '@/components/Pager.vue'
