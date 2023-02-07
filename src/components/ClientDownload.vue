@@ -28,7 +28,7 @@ const links = computed(() => {
   const _links: GameLink[] = []
   if (props.gameId === 0 || isFte.value) {
     _links.push({title: 'QSS-M', link: 'https://qssm.quakeone.com/'})
-    _links.push({title: 'QRack', link: 'https://github.com/Novum/vkQuake/release'})
+    _links.push({title: 'Qrack', link: 'https://www.quakeone.com/qrack'})
     _links.push({title: 'vkQuake', link: 'https://github.com/Novum/vkQuake/releases'})
   }
   if (props.gameId === 1){
