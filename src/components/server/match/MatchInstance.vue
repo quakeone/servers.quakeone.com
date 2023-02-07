@@ -77,7 +77,7 @@ watch(props, (newProps, oldProps) => {
       .match-type(v-if="isTeam") {{matchType}}
       .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
       
-      
+
     .title
       h3 {{model.match.name}}
       .subtitle
@@ -101,7 +101,7 @@ watch(props, (newProps, oldProps) => {
         .map-text {{model.match.map}}
 
     .progress(v-if="model.expandState==='Expanded'")
-      ProgressGraph(:match="model.match" :height="125" :width="475")
+      ProgressGraph(:match="model.match" :height="150" :width="475")
 
 
 </template>

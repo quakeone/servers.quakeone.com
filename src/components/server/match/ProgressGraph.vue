@@ -27,15 +27,37 @@ svg.match-progress(v-if="domainX != null"
         :x="x(domainX[1])" 
         :y="y(0)"
         ) {{ matchLength }}
-    path.svg-match__line(v-for="playerProgress in sortedProgression"
-      :d="progressLine(playerProgress)" 
-      :stroke="playerColors[playerProgress.pantColor]")
 
-    g(v-for="playerProgress in sortedProgression" transform="translate(5, -2)")
-      text.svg-match__name-text(
-        :x="x(new Date(lastPoint(playerProgress).timestamp))" 
-        :y="y(lastPoint(playerProgress).frags)"
-        :fill="playerColors[playerProgress.pantColor]") {{ lastPoint(playerProgress).frags }} -  {{playerProgress.name}}
+    g(v-for="playerProgress in sortedProgression")        
+      path.svg-match__overlay_line(:id="'overlay-' + playerProgress.playerMatchId"
+        :d="progressLine(playerProgress)"
+        :player-id="playerProgress.playerMatchId"
+        stroke-width="20"
+        stroke="#fff"
+        fill="none"
+        @mouseover="highlightOn"
+        @mouseleave="highlightOff"
+        stroke-opacity="0")
+      path.svg-match__line(
+        :class=`{
+          highlight: model.playerIdHighlight === playerProgress.playerMatchId,
+          lowlight: model.playerIdHighlight !== 0 && model.playerIdHighlight !== playerProgress.playerMatchId,
+        }`
+        :d="progressLine(playerProgress)" 
+        :stroke="playerColors[playerProgress.pantColor]")
+
+      g(transform="translate(5, -2)")
+        text.svg-match__name-text(
+          :class=`{
+            highlight: model.playerIdHighlight === playerProgress.playerMatchId,
+            lowlight: model.playerIdHighlight !== 0 && model.playerIdHighlight !== playerProgress.playerMatchId,
+          }`
+          :player-id="playerProgress.playerMatchId"
+          @mouseover="highlightOn"
+          @mouseleave="highlightOff"
+          :x="x(new Date(lastPoint(playerProgress).timestamp))" 
+          :y="y(lastPoint(playerProgress).frags)"
+          :fill="playerColors[playerProgress.pantColor]") {{ lastPoint(playerProgress).frags }} -  {{playerProgress.name}}
 
 
 </template>
@@ -59,11 +81,13 @@ const props = defineProps<{
 const model = reactive<{
   padding: number, 
   progressAreaHeight: number,
-  matchLengthSeconds: number
+  matchLengthSeconds: number,
+  playerIdHighlight: number
 }>({
   padding: 10,
   progressAreaHeight: 20,
-  matchLengthSeconds: 0
+  matchLengthSeconds: 0,
+  playerIdHighlight: 0
 })
 
 const maxPlayerTime = computed(() => {
@@ -189,6 +213,17 @@ watch(props, (newProps, oldProps) => {
     model.matchLengthSeconds = differenceInSeconds(currentMaxTime.value, new Date(props.match.matchStart))
   }
 })
+
+const highlightOn = (d) => {
+  console.log('on')
+  const overlayPath = d.currentTarget as HTMLElement
+  const id  = parseInt(overlayPath.getAttribute('player-id') || '0')
+  model.playerIdHighlight = id
+}
+const highlightOff = (d) => {
+  console.log('off')
+  model.playerIdHighlight = 0
+}
 </script>
 
 <style lang="scss">
@@ -197,11 +232,25 @@ $background: $grey-2;
   margin: 25px;
   &__line {
     fill: none;
-    stroke-width: 1px;
+    stroke-width: 2px;
+    transition: all .4s;
+    &.lowlight {
+      opacity: .2;
+    }
+    &.highlight {
+      stroke-width: 4px;
+    }
   }
   &__name-text {
+    transition: all .4s;
     font-size: 12px;
     font-weight: bold;;
+    &.lowlight {
+      opacity: .2;
+    }
+    &.highlight {
+    font-size: 14px;
+    }
   }
   &__timeline-progress {
     fill: $tan;
