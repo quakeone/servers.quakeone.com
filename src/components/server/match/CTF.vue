@@ -33,8 +33,8 @@ const mvp = computed(() => topPlayers.value[0])
 <template lang="pug">
 .tdm-match
   .header
-    .match-type {{matchType}} 
-    .match-size {{teamSize}}x{{teamSize}}
+    .match-type  {{matchType}}&nbsp;
+    .match-size  {{teamSize}}v{{teamSize}}
   PlayersTooltip(:players="props.match.players") 
     .player-list
     
@@ -71,10 +71,11 @@ const mvp = computed(() => topPlayers.value[0])
 }
 .header {
   display: flex;
-  border-bottom: 1px solid $grey-2;
+  margin-top: .5rem;
+  font-weight: bold;
 }
 .player-list {
-  margin-top: 1rem;
+  // margin-top: .5rem;
 }
 .play-time {
   border-left: 1px solid $grey-2;

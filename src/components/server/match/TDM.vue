@@ -22,9 +22,6 @@ const observers = computed(() => props.match.teams.observers)
 
 <template lang="pug">
 .tdm-match
-  .header
-    .match-type {{matchType}} 
-    .match-size {{teamSize}}x{{teamSize}}
   PlayersTooltip(:players="props.match.players") 
     .player-list
     

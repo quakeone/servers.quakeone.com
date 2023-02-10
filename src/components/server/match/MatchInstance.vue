@@ -40,7 +40,7 @@ const matchTimeAgo = computed(() => formatDistanceStrict(startDate.value, new Da
 }))
 const matchDuration = computed(() => differenceInSeconds(new Date(model.match.matchEnd), new Date(model.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
-const matchDay = computed(() => format(startDate.value, "dd"))
+const matchDay = computed(() => format(startDate.value, "d"))
 const isTeam = computed(() => 'matchType' in model.match)
 const detail = computed(() => {
   if (isTeam.value) {
@@ -49,7 +49,16 @@ const detail = computed(() => {
   return FFA
 })
 const teamSize = computed(() => isTeam.value ? model.match.teams.size : '')
+
 const matchType = computed(() => isTeam.value ? model.match.matchType : '')
+const title = computed(() => isTeam.value ? 
+  model.match.teams.teams.reduce<string>((aggr, team) => {
+  if (aggr) {
+    aggr += ' vs '
+  }
+  return aggr += team.name
+},'') : '')
+
 const loadShowMore = () =>{
   model.expandState = 'Loading'
   return getMatchDetail(model.match.serverMatchId)
@@ -76,10 +85,9 @@ watch(props, (newProps, oldProps) => {
       .date-month {{matchMonth}}
       .match-type(v-if="isTeam") {{matchType}}
       .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
-      
 
     .title
-      h3 {{model.match.name}}
+      h3(v-if="isTeam") {{title}}
       .subtitle
         span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
         span.vert-divide  | 
@@ -149,11 +157,21 @@ watch(props, (newProps, oldProps) => {
 
 .match {
   display: grid;
-  
+  .match-size, .match-type {
+
+  }
   grid-template-areas: 
     "big-date title"
     "detail detail";
   grid-template-columns: 3rem auto;
+
+  &.expanded {
+      grid-template-areas: 
+        "big-date title map"
+        "detail detail map"
+        "progress progress progress";
+      grid-template-columns: 3rem auto 200px;
+    }
   @media only screen and (min-width: $tablet-breakpoint)  {
     .match-type {
       margin-top: .5rem;
@@ -189,9 +207,11 @@ watch(props, (newProps, oldProps) => {
   }
 }
 .date { 
+  
   font-weight: bold;
   .date-day {
     font-size: 2rem;
+    line-height: 1;
   }
   padding: 0 .5rem;
   border-right: 1px solid $grey-2;
