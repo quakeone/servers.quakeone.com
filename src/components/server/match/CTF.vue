@@ -31,28 +31,39 @@ const mvp = computed(() => topPlayers.value[0])
 </script>
 
 <template lang="pug">
-.tdm-match
+
+.ctf-match
   .header
-    .match-type  {{matchType}}&nbsp;
-    .match-size  {{teamSize}}v{{teamSize}}
+    .list-body
+      .row
+        .col.match-type-col
+          span.match-type  {{matchType}}&nbsp;
+          span.match-size  {{teamSize}}v{{teamSize}}
+        .col
+        .col Match MVP
+  
   PlayersTooltip(:players="props.match.players") 
     .player-list
-    
       .list-body
         .row(style="line-height: 1;" v-for="(team, idx) in teams")
+          .col.star
+            FontAwesome(v-if="idx === 0" :icon="['fas', 'star']" )
           .col(style="text-align:right;")
             img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
-          .col.name(style="padding-left: 1rem; text-align: left")
+          .col.name(style="padding-right: 1rem; padding-left: 1rem; text-align: left")
             img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
 
-          .col.mvp(v-if="idx === 0") 
-            FontAwesome(:icon="['fas', 'trophy']")
+          .col.mvp.icon-content(v-if="idx === 0")
+            .icon
+              FontAwesome(:icon="['fas', 'trophy']")
             img(:src="charWriter.write(12, mvp.nameRaw)" style="display:inline;")
           .col.mvp(v-else)
+
       template(v-if="props.expanded")
         .divider
         .list-body(v-for="(team, idx) in teams")
           .row(v-for="player in team.players")
+            .col 
             .col(style="text-align:right;")
               img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
             .col.name(style="padding-left: 1rem; text-align: left")
@@ -65,14 +76,20 @@ const mvp = computed(() => topPlayers.value[0])
 </template>
 
 <style lang="scss" scoped>
+.icon-content {
+  display: flex;
+  .icon{
+    text-align: center;
+    width: 3rem;
+  }
+}
 .divider {
   margin: .5rem 0;
   border-top: 1px solid $grey-2;
+  text-align: center;
 }
 .header {
-  display: flex;
   margin-top: .5rem;
-  font-weight: bold;
 }
 .player-list {
   // margin-top: .5rem;
@@ -94,24 +111,31 @@ const mvp = computed(() => topPlayers.value[0])
   display: grid;
   .row {
     display: contents;
+    .col.star {
+      text-align: center;
+    }
     .col.name {
       overflow: hidden;
     }
-    .col.mvp {
-      padding-left: 2rem;
-      img {
-        padding-left: .4rem;
+  }
+  grid-template-columns: 2rem 4rem 9rem  auto ;
+}
+.header{
+  .list-body {
+    grid-template-columns: 6rem 9rem auto ;
+    .col {
+      span {
+        display: inline;
+      }
+      
+      @media only screen and (min-width: $tablet-breakpoint)  {
+        span {
+          
+        display: none;
+        }
       }
     }
   }
-  grid-template-columns: min-content min-content  auto ;
 }
 
-@media only screen and (min-width: $tablet-breakpoint)  {
-  .header {
-    div {
-      display: none;
-    }
-  }
-}
 </style>

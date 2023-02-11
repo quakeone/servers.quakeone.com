@@ -8,13 +8,14 @@ import 'tippy.js/dist/tippy.css' // optional for styling
 import 'flag-icons/css/flag-icons.min.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClone } from '@fortawesome/free-regular-svg-icons'
-import {faMapMarkerAlt, faExclamationCircle, faChevronLeft, faRobot, faCrown } from '@fortawesome/free-solid-svg-icons'
+import {faStar, faMapMarkerAlt, faExclamationCircle, faChevronLeft, faRobot, faCrown } from '@fortawesome/free-solid-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faSync,faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { createWriter } from '@/helpers/charmap'
 import type { Writer } from '@/helpers/charmap'
 
+library.add(faStar)
 library.add(faSync)
 library.add(faClone)
 library.add(faMapMarkerAlt)
