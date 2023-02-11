@@ -49,7 +49,7 @@ const sortedMatches = computed(() => (props.matches ? [...props.matches.results]
 
 .match-container {
   margin: 1rem 0;
-  padding-top: 1rem;
+  padding-top: .3rem;
   border-top: 1px solid $grey-2;
 }
 </style>

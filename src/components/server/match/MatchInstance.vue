@@ -40,7 +40,7 @@ const matchTimeAgo = computed(() => formatDistanceStrict(startDate.value, new Da
 }))
 const matchDuration = computed(() => differenceInSeconds(new Date(model.match.matchEnd), new Date(model.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
-const matchDay = computed(() => format(startDate.value, "dd"))
+const matchDay = computed(() => format(startDate.value, "d"))
 const isTeam = computed(() => 'matchType' in model.match)
 const detail = computed(() => {
   if (isTeam.value) {
@@ -49,7 +49,16 @@ const detail = computed(() => {
   return FFA
 })
 const teamSize = computed(() => isTeam.value ? model.match.teams.size : '')
+
 const matchType = computed(() => isTeam.value ? model.match.matchType : '')
+const title = computed(() => isTeam.value ? 
+  model.match.teams.teams.reduce<string>((aggr, team) => {
+  if (aggr) {
+    aggr += ' vs '
+  }
+  return aggr += team.name
+},'') : '')
+
 const loadShowMore = () =>{
   model.expandState = 'Loading'
   return getMatchDetail(model.match.serverMatchId)
@@ -76,10 +85,9 @@ watch(props, (newProps, oldProps) => {
       .date-month {{matchMonth}}
       .match-type(v-if="isTeam") {{matchType}}
       .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
-      
 
     .title
-      h3 {{model.match.name}}
+      h3(v-if="isTeam") {{title}}
       .subtitle
         span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
         span.vert-divide  | 
@@ -90,23 +98,36 @@ watch(props, (newProps, oldProps) => {
         span.bright  {{model.match.map}}
     .detail
       component(:is="detail" :match="model.match" :expanded="model.expandState==='Expanded'")
-      .buttons
-        Loading.loading(v-if="model.expandState === 'Loading'")
-        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") Show More  
-        a(v-else @click="emits('requestCollapse')") Hide  
 
     .graphics
       MapImage(:map="model.match.map")
         .stuff
         .map-text {{model.match.map}}
-
     .progress(v-if="model.expandState==='Expanded'")
       ProgressGraph(:match="model.match" :height="150" :width="475")
+  .expand-toggle
+
+    Loading.loading(v-if="model.expandState === 'Loading'")
+    a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") Show More  
+    a(v-else @click="emits('requestCollapse')") Hide  
+
 
 
 </template>
 
 <style lang="scss" scoped>
+.expand-toggle {
+  font-size: .8rem;
+  .loading {
+    height:1rem;
+  }
+}
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .stuff {
   overflow: hidden;
   position: relative;
@@ -149,20 +170,52 @@ watch(props, (newProps, oldProps) => {
 
 .match {
   display: grid;
-  
+  align-items: flex-start;
+  grid-template-rows: 3rem auto;
+  h3 {
+    margin:0;
+  }
+
+  .progress {
+    width: 475px;
+    margin-left: 2rem;
+  }
   grid-template-areas: 
     "big-date title"
     "detail detail";
   grid-template-columns: 3rem auto;
+
+  &.expanded {
+
+    grid-template-areas: 
+      "big-date title"
+      "detail detail"
+      "progress progress";
+    grid-template-columns: 3rem auto;
+
+    @media screen and (min-width: $phone-breakpoint) {
+      .graphics {
+        display: block;
+      }
+
+      grid-template-areas: 
+        "big-date title map"
+        "detail detail map"
+        "progress progress progress";
+      grid-template-columns: 3rem auto 150px;
+    }
+  }
+
   @media only screen and (min-width: $tablet-breakpoint)  {
     .match-type {
       margin-top: .5rem;
     }
-    .graphics {
-      display: block;
-    }
     .progress {
       width: 475px;
+      margin: 0;
+    }
+    .graphics {
+      display: block;
     }
     .detail {
       padding: 0 1rem;
@@ -184,14 +237,13 @@ watch(props, (newProps, oldProps) => {
       grid-template-columns: 3rem auto 475px;
     }
   }
-  .loading {
-    height:1.5rem;
-  }
 }
 .date { 
+  
   font-weight: bold;
   .date-day {
     font-size: 2rem;
+    line-height: 1;
   }
   padding: 0 .5rem;
   border-right: 1px solid $grey-2;

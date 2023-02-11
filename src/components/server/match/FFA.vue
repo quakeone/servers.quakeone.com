@@ -34,7 +34,8 @@ const playTime = (player: MatchPlayer) => {
 .ffa-match
   .player-list
     .list-head
-      .ch.title Top Three
+      .ch.title(v-if="props.expanded") Players
+      .ch.title(v-else) Top Three
       .ch Time
     .list-body
       .row(style="line-height: 1;" v-for="player in players")
@@ -51,7 +52,7 @@ const playTime = (player: MatchPlayer) => {
           span.bright {{playTime(player)}} 
           span  mins
 
-  .remaining(v-if="props.match.players.length > 3")
+  .remaining(v-if="props.match.players.length > 3 && !props.expanded")
     PlayersTooltip(:players="props.match.players") {{props.match.players.length - 3}} more
 </template>
 
