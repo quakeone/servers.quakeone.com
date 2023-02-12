@@ -15,5 +15,5 @@ const map: Record<string, ModInfo> = {
   'practice': {abbv: 'PR', full: 'Practice'}
 }
 export const getModInfo = (mod: string, mode?: string): ModInfo => {
-  return (mode && map[mode]) || map[mod.toLowerCase()] || {abbv: mod, full: mod}
+  return (mode && map[mode]) || map[mod && mod.toLowerCase()] || {abbv: mod, full: mod}
 }
