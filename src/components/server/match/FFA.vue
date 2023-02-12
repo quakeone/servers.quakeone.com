@@ -58,7 +58,7 @@ const playTime = (player: MatchPlayer) => {
 
 <style lang="scss" scoped>
 .player-list {
-  margin-top: 1rem;
+  margin-top: .5rem;
 }
 .play-time {
   border-left: 1px solid $grey-2;
@@ -86,6 +86,6 @@ const playTime = (player: MatchPlayer) => {
       padding-left: .4rem;
     }
   }
-  grid-template-columns: min-content min-content auto 5rem;
+  grid-template-columns: max-content max-content auto 5rem;
 }
 </style>

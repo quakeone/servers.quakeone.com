@@ -1,5 +1,7 @@
 <template lang="pug">
 .match-list
+  .match-pager
+    Pager(:currentPage="props.pageNum" :pageCount="matchPages" @newPage="emits('newPage', $event)")
   .match-container(v-for="match in sortedMatches")
     MatchInstance(
       :key="match.serverMatchId"
@@ -48,8 +50,7 @@ const sortedMatches = computed(() => (props.matches ? [...props.matches.results]
 <style lang="scss">
 
 .match-container {
-  margin: 1rem 0;
-  padding-top: .3rem;
+  padding: .5rem 0;
   border-top: 1px solid $grey-2;
 }
 </style>

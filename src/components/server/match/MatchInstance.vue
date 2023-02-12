@@ -11,6 +11,7 @@ import type { TeamMatch } from '@/model/TeamMatch'
 import {getMatchDetail} from '@/services/serversApi'
 import ProgressGraph from './ProgressGraph.vue'
 import Loading from '@/components/Loading.vue'
+import {getModInfo} from '@/helpers/mod'
 
 type ExpandState = 'NotExpanded' | 'Loading' | 'Expanded'
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
@@ -49,15 +50,20 @@ const detail = computed(() => {
   return FFA
 })
 const teamSize = computed(() => isTeam.value ? model.match.teams.size : '')
-
 const matchType = computed(() => isTeam.value ? model.match.matchType : '')
-const title = computed(() => isTeam.value ? 
-  model.match.teams.teams.reduce<string>((aggr, team) => {
-  if (aggr) {
-    aggr += ' vs '
+const title = computed(() => {
+  if(isTeam.value) {
+    return model.match.teams.teams.reduce<string>((aggr, team) => {
+      if (aggr) {
+        aggr += ' vs '
+      }
+      return aggr += team.name
+    },'')
+  } else {
+    const modInfo = getModInfo(model.match.mod, model.match.mode)
+    return modInfo.full
   }
-  return aggr += team.name
-},'') : '')
+})
 
 const loadShowMore = () =>{
   model.expandState = 'Loading'
@@ -86,8 +92,13 @@ watch(props, (newProps, oldProps) => {
       .match-type(v-if="isTeam") {{matchType}}
       .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
 
+      .toggle-expand
+        Loading.loading(v-if="model.expandState === 'Loading'")
+        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") More
+        a(v-else @click="emits('requestCollapse')") Less  
+
     .title
-      h3(v-if="isTeam") {{title}}
+      h3 {{title}}
       .subtitle
         span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
         span.vert-divide  | 
@@ -105,13 +116,6 @@ watch(props, (newProps, oldProps) => {
         .map-text {{model.match.map}}
     .progress(v-if="model.expandState==='Expanded'")
       ProgressGraph(:match="model.match" :height="150" :width="475")
-  .expand-toggle
-
-    Loading.loading(v-if="model.expandState === 'Loading'")
-    a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") Show More  
-    a(v-else @click="emits('requestCollapse')") Hide  
-
-
 
 </template>
 
@@ -120,12 +124,6 @@ watch(props, (newProps, oldProps) => {
   font-size: .8rem;
   .loading {
     height:1rem;
-  }
-}
-a {
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
   }
 }
 .stuff {
@@ -146,7 +144,7 @@ a {
 }
 .title {
   grid-area: title;
-  padding: 0 1rem;
+  padding: 0 .5rem;
 }
 .detail {
   grid-area: detail;
@@ -172,13 +170,14 @@ a {
   display: grid;
   align-items: flex-start;
   grid-template-rows: 3rem auto;
+  flex-wrap: wrap;
   h3 {
     margin:0;
   }
 
   .progress {
-    width: 475px;
-    margin-left: 2rem;
+    grid-area: progress;
+    width: 100%;
   }
   grid-template-areas: 
     "big-date title"
@@ -192,35 +191,38 @@ a {
       "detail detail"
       "progress progress";
     grid-template-columns: 3rem auto;
-
-    @media screen and (min-width: $phone-breakpoint) {
-      .graphics {
-        display: block;
-      }
-
-      grid-template-areas: 
-        "big-date title map"
-        "detail detail map"
-        "progress progress progress";
-      grid-template-columns: 3rem auto 150px;
-    }
   }
 
-  @media only screen and (min-width: $tablet-breakpoint)  {
+  @media only screen and (min-width: $phone-breakpoint)  {
     .match-type {
       margin-top: .5rem;
     }
     .progress {
       width: 475px;
       margin: 0;
-    }
-    .graphics {
-      display: block;
-    }
+    } 
     .detail {
-      padding: 0 1rem;
+      padding: 0 .5rem;
     }
     .match-type, .match-size {
+      display: block;
+    }
+  
+    grid-template-areas: 
+      "big-date title"
+      "big-date detail";
+    grid-template-columns: 3rem autox;
+
+    &.expanded {
+      grid-template-areas: 
+        "big-date title"
+        "big-date detail"
+        "big-date progress";
+      grid-template-columns: 3rem auto;
+    }
+  }
+  @media only screen and (min-width: $tablet-breakpoint)  {
+    .graphics {
       display: block;
     }
   
@@ -242,10 +244,17 @@ a {
   
   font-weight: bold;
   .date-day {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    @media only screen and (min-width: $phone-breakpoint)  {
+      font-size: 2rem;
+    }
     line-height: 1;
   }
   padding: 0 .5rem;
   border-right: 1px solid $grey-2;
+  .toggle-expand {
+    font-size: .7rem;
+    font-weight: normal;
+  }
 }
 </style>

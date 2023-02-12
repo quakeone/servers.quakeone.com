@@ -40,59 +40,86 @@ const mvp = computed(() => topPlayers.value[0])
           span.match-type  {{matchType}}&nbsp;
           span.match-size  {{teamSize}}v{{teamSize}}
         .col
-        .col Match MVP
-  
-  PlayersTooltip(:players="props.match.players") 
-    .player-list
-      .list-body
-        .row(style="line-height: 1;" v-for="(team, idx) in teams")
-          .col.star
-            FontAwesome(v-if="idx === 0" :icon="['fas', 'star']" )
-          .col(style="text-align:right;")
-            img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
-          .col.name(style="padding-right: 1rem; padding-left: 1rem; text-align: left")
-            img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
 
-          .col.mvp.icon-content(v-if="idx === 0")
-            .icon
-              FontAwesome(:icon="['fas', 'trophy']")
-            img(:src="charWriter.write(12, mvp.nameRaw)" style="display:inline;")
-          .col.mvp(v-else)
+  .player-list
+    .list-body.teams
+      .row(style="line-height: 1;" v-for="(team, idx) in teams")
+        .col.icon
+          FontAwesome(v-if="idx === 0" :icon="['fas', 'star']" )
+        .col(style="text-align:right;")
+          img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
+        .col.name
+          img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
 
-      template(v-if="props.expanded")
-        .divider
-        .list-body(v-for="(team, idx) in teams")
-          .row(v-for="player in team.players")
-            .col 
+    .list-body.mvp(v-if="!props.expanded")
+      .row
+        .col.icon
+          FontAwesome(:icon="['fas', 'trophy']")
+        .col(style="text-align:right;")
+          img(:src="charWriter.writeScore(14, mvp.frags, mvp.shirtColor, mvp.pantColor)" style="display:inline;")
+        .col.name
+          img(:src="charWriter.write(12, mvp.nameRaw)" style="display:inline;")
+
+    template(v-if="props.expanded")
+      .list-body.players
+        template(v-for="(team, tidx) in teams")
+          .row(v-for="(player, pidx) in team.players")
+            .col.icon
+              FontAwesome(v-if="tidx === 0 && pidx === 0" :icon="['fas', 'trophy']")
             .col(style="text-align:right;")
               img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
             .col.name(style="padding-left: 1rem; text-align: left")
               img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
-            .col 
-            
+        .row.observers(v-for="(player, pidx) in observers")
+          .col.icon
+          .col(style="text-align:right;") obs
+          .col.name(style="padding-left: 1rem; text-align: left")
+            img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
+
+
 
   .remaining(v-if="observers.length > 3") {{observers.length}} observers
 
 </template>
 
 <style lang="scss" scoped>
-.icon-content {
-  display: flex;
-  .icon{
-    text-align: center;
-    width: 3rem;
+.mvp {
+  grid-area: mvp;
+}
+.teams {
+  grid-area: teams;
+  margin-bottom: .5rem;
+}
+.players {
+  grid-area: players;
+  .observers {
+    padding-top: .5rem;
   }
 }
+
 .divider {
   margin: .5rem 0;
   border-top: 1px solid $grey-2;
   text-align: center;
 }
+
 .header {
   margin-top: .5rem;
 }
 .player-list {
-  // margin-top: .5rem;
+  display: grid;
+  align-items: flex-start;
+  grid-template-columns: auto;
+  grid-template-areas: 
+    "teams"
+    "mvp"
+    "players";
+  @media only screen and (min-width: $phone-breakpoint)  {
+  grid-template-columns: max-content auto;
+  grid-template-areas: 
+    "teams mvp"
+    "players players";
+  }
 }
 .play-time {
   border-left: 1px solid $grey-2;
@@ -111,14 +138,17 @@ const mvp = computed(() => topPlayers.value[0])
   display: grid;
   .row {
     display: contents;
-    .col.star {
+    .col.icon {
       text-align: center;
     }
     .col.name {
       overflow: hidden;
+      padding-right: 1rem; 
+      padding-left: 1rem; 
+      text-align: left;
     }
   }
-  grid-template-columns: 2rem 4rem 9rem  auto ;
+  grid-template-columns: 2rem 4rem auto;
 }
 .header{
   .list-body {
@@ -128,10 +158,9 @@ const mvp = computed(() => topPlayers.value[0])
         display: inline;
       }
       
-      @media only screen and (min-width: $tablet-breakpoint)  {
+      @media only screen and (min-width: $phone-breakpoint)  {
         span {
-          
-        display: none;
+          display: none;
         }
       }
     }

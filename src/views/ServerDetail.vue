@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeUnmount, ref, defineProps, computed} from 'vue'
+import {onBeforeUnmount, ref, watch, defineProps, computed} from 'vue'
 import type {ServerDetail} from '@/model/ServerDetail'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'
@@ -67,15 +67,28 @@ import MatchList from '@/components/server/match/MatchList.vue'
 import type { PagedResult } from '@/model/PagedResult'
 import ClientDownload from '@/components/ClientDownload.vue'
 
+type Props = {
+  serverId: number,
+  matchPage: number
+}
 const route = useRoute()
 
 const router = useRouter()
 
-const props = defineProps<{
-  serverId: number,
-  matchPage: number
-}>()
-
+const props = defineProps<Props>()
+watch(() => props.matchPage, (val, old) => {
+  if (old && old !== val) {
+    // dynamic paging
+    getServerMatches(props.serverId, val)
+      .then(matches => ({
+        totalResults: matches.totalResults,
+        results: matches.results.map(parseApiMatch)
+      }))
+      .then(result => {
+        matches.value = result
+      })
+  }
+})
 const details = ref<ServerDetail>({})
 const matches = ref<PagedResult<MatchModel>>({})
 
@@ -84,7 +97,6 @@ const sortedMatches = computed(() => [...matches.value.results].sort((b, a) =>
   new Date(a.matchStart).getTime() - new Date(b.matchStart).getTime()))
 
 const newMatchPage = (pageNum: number) => {
-  getServerMatches(props.serverId, pageNum).then(_matches=> matches.value = _matches)
   router.push({
     ...route,
     query: {
