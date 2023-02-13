@@ -4,6 +4,7 @@ import About from '../views/About.vue'
 import Layout from '../views/Layout.vue'
 import RecentMatches from '../views/RecentMatches.vue'
 import ServerDetail from '../views/ServerDetail.vue'
+import Match from '../views/Match.vue'
 
 const routes: Array<RouteRecordRaw> = [{
   path: '/',
@@ -31,6 +32,14 @@ const routes: Array<RouteRecordRaw> = [{
       serverId: parseInt(r.params.serverId as string || '-1')
     }),
     component: ServerDetail
+  },
+  {
+    path: '/match/:matchId',
+    name: 'match',
+    props: (r) => ({ 
+      matchId: parseInt(r.params.matchId as string || '-1')
+    }),
+    component: Match
   }]
 }]
 

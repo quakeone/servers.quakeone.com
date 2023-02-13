@@ -1,3 +1,45 @@
+
+
+<template lang="pug">
+.match-instance
+  .match(:class="{expanded: model.expandState==='Expanded'}")
+    .date
+      .date-day {{matchDay}}
+      .date-month {{matchMonth}}
+      .match-type(v-if="isTeam") {{matchType}}
+      .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
+
+      .toggle-expand
+        Loading.loading(v-if="model.expandState === 'Loading'")
+        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") More
+        a(v-else @click="emits('requestCollapse')") Less  
+
+    .title
+      h3 {{title}}
+        router-link(:to="'/match/' + model.match.serverMatchId") 
+          FontAwesome.link-icon(:icon="['fas', 'link']"
+            v-tippy content="Direct Link")
+
+      
+      .subtitle
+        span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
+        span.vert-divide  | 
+        span.bright  {{Math.ceil(matchDuration/60)}} 
+        span  minutes 
+        span.vert-divide  | 
+        span map: 
+        span.bright  {{model.match.map}}
+    .detail
+      component(:is="detail" :match="model.match" :expanded="model.expandState==='Expanded'")
+
+    .graphics
+      MapImage(:map="model.match.map")
+        .stuff
+        .map-text {{model.match.map}}
+    .progress(v-if="model.expandState==='Expanded'")
+      ProgressGraph(:match="model.match" :height="150" :width="475")
+
+</template>
 <script lang="ts" setup>
 import { differenceInSeconds, format, formatDistanceStrict } from 'date-fns'
 import {defineProps, computed, reactive, watch} from 'vue'
@@ -83,47 +125,21 @@ watch(props, (newProps, oldProps) => {
 }, {immediate: true})
 </script>
 
-<template lang="pug">
-.match-instance
-  .match(:class="{expanded: model.expandState==='Expanded'}")
-    .date
-      .date-day {{matchDay}}
-      .date-month {{matchMonth}}
-      .match-type(v-if="isTeam") {{matchType}}
-      .match-size(v-if="isTeam") {{teamSize}}x{{teamSize}}
-
-      .toggle-expand
-        Loading.loading(v-if="model.expandState === 'Loading'")
-        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") More
-        a(v-else @click="emits('requestCollapse')") Less  
-
-    .title
-      h3 {{title}}
-      .subtitle
-        span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
-        span.vert-divide  | 
-        span.bright  {{Math.ceil(matchDuration/60)}} 
-        span  minutes 
-        span.vert-divide  | 
-        span map: 
-        span.bright  {{model.match.map}}
-    .detail
-      component(:is="detail" :match="model.match" :expanded="model.expandState==='Expanded'")
-
-    .graphics
-      MapImage(:map="model.match.map")
-        .stuff
-        .map-text {{model.match.map}}
-    .progress(v-if="model.expandState==='Expanded'")
-      ProgressGraph(:match="model.match" :height="150" :width="475")
-
-</template>
-
 <style lang="scss" scoped>
 .expand-toggle {
   font-size: .8rem;
   .loading {
     height:1rem;
+  }
+}
+h3 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  a {
+    line-height: .2;
+    font-size: .8rem;
+    margin-left: 1rem;
   }
 }
 .stuff {
