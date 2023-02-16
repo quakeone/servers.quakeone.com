@@ -1,13 +1,13 @@
 <template lang="pug">
-.empty-row
+.empty-row(@click="rowClick")
   .game-type 
     .game-type-text
       GameType(
             size="Abbreviated"
             :gameId="props.serverStatus.gameId")
   .details
-    h3(:class="{'is-down': props.serverStatus.currentStatus !== 0}")
-      router-link(:to="'/server/' + props.serverStatus.serverId") {{props.serverStatus.hostname}}
+
+    h3(:class="{'is-down': props.serverStatus.currentStatus !== 0}") {{props.serverStatus.hostname}}
       FontAwesome(
         v-if="props.serverStatus.currentStatus !== 0" 
         :icon="['fas', 'exclamation-circle']"
@@ -40,7 +40,9 @@ import GameType from '../GameType.vue'
 import * as match from '@/helpers/match'
 import ModMode from '@/components/ModMode.vue'
 import Location from '@/components/Location.vue'
+import {useRouter} from 'vue-router'
 
+const router = useRouter();
 const serverStatusMap: Record<number, string> = {
   0: 'Running',
   1: 'Server is down',
@@ -54,11 +56,19 @@ const matchStatus = computed(() =>
   props.serverStatus.currentStatus !== 0 
   ? serverStatusMap[props.serverStatus.currentStatus]
   : match.status(props.serverStatus.lastMatchStart, props.serverStatus.lastMatchEnd));
+const rowClick = () => {
+  router.push('/server/' + props.serverStatus.serverId)
+}
 </script>
 
 <style lang="scss" scoped>
 .empty-row {
   display: grid;
+  padding: .5rem;
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($dark-grey, 3%);
+  }
   .vert-divide {
     margin: .1rem 0.5rem;
   }

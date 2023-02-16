@@ -1,7 +1,7 @@
 
 
 <template lang="pug">
-.match-instance
+.match-instance(@click="onClick")
   .match(:class="{expanded: model.expandState==='Expanded'}")
     .date
       .date-day {{matchDay}}
@@ -64,7 +64,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'requestExpand'): void,
+  (e: 'requestExpand', matchId: number): void,
   (e: 'requestCollapse'): void
 }>()
 
@@ -123,9 +123,24 @@ watch(props, (newProps, oldProps) => {
     model.expandState = 'NotExpanded'
   }
 }, {immediate: true})
+
+const onClick = () => {
+  if (model.expandState === 'Expanded') {
+    emits('requestCollapse')
+  } else {
+    emits('requestExpand', props.match.serverMatchId)
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+.match-instance {
+  padding: .5rem 0;
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($dark-grey, 3%);
+  }
+}
 .expand-toggle {
   font-size: .8rem;
   .loading {
@@ -269,8 +284,13 @@ h3 {
   padding: 0 .5rem;
   border-right: 1px solid $grey-2;
   .toggle-expand {
+    display: none;
+    margin-top: .5rem;
     font-size: .7rem;
     font-weight: normal;
+    @media only screen and (min-width: $phone-breakpoint)  {
+      display: block;
+    }
   }
 }
 </style>

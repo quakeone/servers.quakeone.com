@@ -1,6 +1,6 @@
 <template lang="pug">
 .connection {{connectionString}}
-  FontAwesome.copy-icon(@click="onCopy" :icon="['far', 'clone']"
+  FontAwesome.copy-icon(@click.prevent.stop="onCopy" :icon="['far', 'clone']"
   v-tippy='{ trigger : "click"}' content="Copied to clipboard")
   
 </template>

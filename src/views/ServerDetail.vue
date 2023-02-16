@@ -21,6 +21,7 @@
       .status
         MatchStatus(:server="details.status")
       .server-rules
+        h3 Rules
         Rules(:rules="details.status.serverSettings")
       .map-image
         template(v-if="'teams' in details.status")
@@ -35,6 +36,10 @@
             :playerList="details.status.players")
             .map-lower-right
               .map-text {{details.status.map}}
+      .map-stats
+        h3 Map Popularity
+        MapStats(:mapStats="details.mapStats" :height="150" :width="475")
+        
       .progress(v-if="details.match")
         ProgressGraph(:match="details.match" :height="150" :width="475")
       .matches
@@ -66,6 +71,7 @@ import ModMode from '@/components/ModMode.vue'
 import MatchList from '@/components/server/match/MatchList.vue'
 import type { PagedResult } from '@/model/PagedResult'
 import ClientDownload from '@/components/ClientDownload.vue'
+import MapStats from '@/components/server/MapStats.vue'
 
 type Props = {
   serverId: number,
@@ -193,6 +199,10 @@ update()
     .matches{
       grid-area: matches;
     }
+    .map-stats {
+      grid-area:mapstats;
+      padding-top: 1rem;
+    }
     .map-image {
       grid-area: map;
       position: relative;
@@ -220,6 +230,7 @@ update()
       "status"
       "map"
       "progress"
+      "mapstats"
       "rules"
       "matches";
     @media screen and (min-width: $phone-breakpoint) {
@@ -230,6 +241,7 @@ update()
         "map status"
         "map progress"
         "map rules"
+        "mapstats rules"
         "matches matches";
       .server-rules, .status, .progress {
         margin-left: 1rem;

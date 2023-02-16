@@ -9,7 +9,7 @@
       .suffix {{matchTime.duration}}
   .content
     component(:is="subStatus" :server="props.server")
-    
+  
 </template>
 
 <script lang="ts" setup>
@@ -39,7 +39,7 @@ const subStatus = computed(() => {
 <style lang="scss" scoped>
 .header h3 {
   border-bottom: 1px solid $grey-2;
-  padding-bottom: 1rem;
+  padding-bottom: .5rem;
 }
 
 .current-status {

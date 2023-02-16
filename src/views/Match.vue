@@ -47,7 +47,6 @@
             .map-text {{model.match.map}}
         .progress
           ProgressGraph(:match="model.match" :height="150" :width="475")
-
   </template>
   
 <script lang="ts" setup>

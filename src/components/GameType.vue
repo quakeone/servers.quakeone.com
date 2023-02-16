@@ -1,6 +1,6 @@
 <template lang="pug">
 template(v-if="props.size == 'Abbreviated'")
-  .game-type(
+  .game-type-abbv(
     v-tippy 
     :content="gameType") {{gameTypeAbbrv}}
 template(v-else)

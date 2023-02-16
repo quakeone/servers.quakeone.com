@@ -42,7 +42,7 @@ export const parseApiMatch = (apiMatch: ApiMatch) : (Match | TeamMatch) => {
       matchType: 'TDM',
       teams
     } 
-  } else if (match.mode == 'ctf' || match.mod == 'CRCTF') {
+  } else if (match.mode == 'ctf' || match.mod == 'CRCTF' || match.mod == 'CTF') {
     return {
       ...match,
       matchType: 'CTF',

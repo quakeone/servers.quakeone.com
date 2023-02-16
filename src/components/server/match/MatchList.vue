@@ -50,7 +50,6 @@ const sortedMatches = computed(() => (props.matches ? [...props.matches.results]
 <style lang="scss">
 
 .match-container {
-  padding: .5rem 0;
   border-top: 1px solid $grey-2;
 }
 </style>

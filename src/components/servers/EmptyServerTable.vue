@@ -42,7 +42,6 @@ export default defineComponent({
 .empty-server-table {
   .row-container {
     border-top: 1px solid $grey-2;
-    padding: .5rem 0;
     // &.is-down {
     //   &:nth-child(even) {
     //     background-color: rgba(104, 24, 24, .4);

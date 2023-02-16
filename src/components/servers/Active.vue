@@ -8,12 +8,13 @@
         size="Abbreviated"
         :gameId="serverStatus.gameId")
   .game-image
-    MapWithPlayerList(
-      :map="serverStatus.map", 
-      :playerList="serverStatus.players")
-      .map-lower-right
-        .map-players {{playerCount}}
-        .map-text {{serverStatus.map}}
+    router-link(:to="'/server/' + serverStatus.serverId")
+      MapWithPlayerList(
+        :map="serverStatus.map", 
+        :playerList="serverStatus.players")
+        .map-lower-right
+          .map-players {{playerCount}}
+          .map-text {{serverStatus.map}}
   .details
     div
       ModMode(:mod="serverStatus.mod" :mode="serverStatus.mode")

@@ -32,7 +32,7 @@ const mvp = computed(() => topPlayers.value[0])
 
 <template lang="pug">
 
-.tdm-match
+.tdm-match(:class="{expanded: props.expanded}")
   .header
     .list-body
       .row
@@ -48,6 +48,7 @@ const mvp = computed(() => topPlayers.value[0])
           FontAwesome(v-if="idx === 0" :icon="['fas', 'star']" )
         .col(style="text-align:right;")
           img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
+        .col
         .col.name
           img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
 
@@ -57,12 +58,14 @@ const mvp = computed(() => topPlayers.value[0])
           FontAwesome(:icon="['fas', 'trophy']")
         .col(style="text-align:right;")
           img(:src="charWriter.writeScore(14, mvp.frags, mvp.shirtColor, mvp.pantColor)" style="display:inline;")
+        .col.icon.player-type
+          FontAwesome(v-if="mvp.type === 2" :icon="['fas', 'robot']")
+          FontAwesome(v-if="mvp.type === 1" :icon="['fas', 'crown']")
         .col.name
           img(:src="charWriter.write(12, mvp.nameRaw)" style="display:inline;")
 
 
     template(v-if="props.expanded")
-      .divider
       .list-body.players
         template(v-for="(team, tidx) in teams")
           .row(v-for="(player, pidx) in team.players")
@@ -70,7 +73,10 @@ const mvp = computed(() => topPlayers.value[0])
               FontAwesome(v-if="tidx === 0 && pidx === 0" :icon="['fas', 'trophy']")
             .col(style="text-align:right;")
               img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
-            .col.name(style="padding-left: 1rem; text-align: left")
+            .col.icon.player-type
+              FontAwesome(v-if="player.type === 2" :icon="['fas', 'robot']")
+              FontAwesome(v-if="player.type === 1" :icon="['fas', 'crown']")
+            .col.name(style="text-align: left")
               img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
 
             
@@ -90,11 +96,11 @@ const mvp = computed(() => topPlayers.value[0])
 .players {
   grid-area: players;
 }
-
-.divider {
-  margin: .5rem 0;
-  border-top: 1px solid $grey-2;
-  text-align: center;
+.expanded {
+  .list-body.teams {
+    padding-bottom: .5rem;
+    border-bottom: 1px solid $grey-2
+  }
 }
 
 .header {
@@ -135,14 +141,22 @@ const mvp = computed(() => topPlayers.value[0])
     .col.icon {
       text-align: center;
     }
+    .col.player-type {
+      padding: 0 .3rem;
+      width: 8px;
+      font-size: 0.7rem;
+      color: #a19c97;
+      vertical-align: top;
+    }
     .col.name {
       overflow: hidden;
       padding-right: 1rem; 
-      padding-left: 1rem; 
+      padding-left: .5rem; 
       text-align: left;
     }
   }
-  grid-template-columns: 2rem 4rem auto;
+  
+  grid-template-columns: 2rem 4rem 14px auto;
 }
 .header{
   .list-body {

@@ -1,6 +1,5 @@
 <template lang="pug">
 .rules
-  h3 Rules
   .scrollable-wrapper
     table
       tbody
