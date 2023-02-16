@@ -12,6 +12,7 @@ const map: Record<string, ModInfo> = {
   'ra': {abbv: 'RA', full: 'Rocket Arena'},
   'rq': {abbv: 'RQ', full: 'Rune Quake'},
   'tf': {abbv: 'TF', full: 'Team Fortress'},
+  'dmm4': {abbv: 'DMM4', full: 'Deathmatch Mode 4'},
   'practice': {abbv: 'PR', full: 'Practice'}
 }
 
