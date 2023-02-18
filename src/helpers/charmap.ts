@@ -100,6 +100,7 @@ const writeScore = (canvas: HTMLCanvasElement, charmap: HTMLImageElement) => (
   }
   const width = 60;
 
+
   ctx.canvas.width = width;
   ctx.canvas.height = height;
 

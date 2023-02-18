@@ -2,31 +2,26 @@
 <template lang="pug">
 MapImage(:map="map")
   .table-backdrop
-    TeamScoreList.player-list(:teams="teams")
+    .team-listing
+      .player-list(v-for="team in teams.teams")
+        InlineScore(v-for="player in teams.teams" :playerOrTeam="team")
+      .observer-list
+        InlineScore(v-for="player in teams.observers" :playerOrTeam="player")
   slot
 </template>
 
-<script lang="ts">
-import { defineComponent , onMounted, ref, PropType, computed, watch} from 'vue'
-import PlayerScoreList from './PlayerScoreList.vue'
-import { Player } from '@/model/Player'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import type { Player } from '@/model/Player'
 import MapImage from './MapImage.vue'
-import TeamScoreList from './TeamScoreList.vue'
-import {Teams} from '@/model/Teams'
+import type {Teams} from '@/model/Teams'
+import InlineScore from './InlineScore.vue'
 
-export default defineComponent({
-  props: {
-    map: {
-      type: String,
-      required: true
-    },
-    teams: {
-      type: Object as PropType<Teams>,
-      required: true
-    }
-  },
-  components: { TeamScoreList, MapImage }
-})
+const props = defineProps<{
+  map: string,
+  playerList: Teams
+}>()
+
 </script>
 <style lang="scss" scoped>
 .table-backdrop {

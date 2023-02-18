@@ -8,6 +8,7 @@ import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import { matchTimeSeconds } from '@/helpers/player'
 import type { MatchPlayer } from '@/model/MatchPlayer'
 import { differenceInSeconds } from 'date-fns'
+import InlineScore from '../../InlineScore.vue'
 
 const props = defineProps<{
   match: Match,
@@ -38,16 +39,11 @@ const playTime = (player: MatchPlayer) => {
       .ch.title(v-else) Top Three
       .ch Time
     .list-body
-      .row(style="line-height: 1;" v-for="player in players")
+      .row(style="line-height: 1;" v-for="(player,idx) in players")
+        .col.icon
+          FontAwesome(v-if="idx === 0" :icon="['fas', 'trophy']" )
         .col(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
-        .col.type
-          span.player-type(v-if="player.type === 2") 
-            FontAwesome(:icon="['fas', 'robot']")
-          span.player-type(v-if="player.type === 1") 
-            FontAwesome(:icon="['fas', 'crown']")
-        .col.name
-          img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
+          InlineScore(:playerOrTeam="player")
         .col.play-time
           span.bright {{playTime(player)}} 
           span  mins
@@ -85,7 +81,10 @@ const playTime = (player: MatchPlayer) => {
     .col.type {
       padding-left: .4rem;
     }
+    .col.icon {
+      text-align: center;
+    }
   }
-  grid-template-columns: max-content max-content auto 5rem;
+  grid-template-columns: 2rem auto 5rem;
 }
 </style>

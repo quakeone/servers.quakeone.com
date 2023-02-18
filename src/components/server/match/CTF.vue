@@ -7,6 +7,7 @@ import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import {parseTeams} from  '@/helpers/teams'
 import type {TeamMatch} from '@/model/TeamMatch'
 import type {Teams} from '@/model/Teams'
+import InlineScore from '../../InlineScore.vue'
 
 const charWriter = inject<Writer>('charWriter')
 const props = defineProps<{
@@ -47,51 +48,37 @@ const mvp = computed(() => topPlayers.value[0])
       .row(style="line-height: 1;" v-for="(team, idx) in teams")
         .col.icon
           FontAwesome(v-if="idx === 0" :icon="['fas', 'star']" )
-        .col(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, team.totalFrags, team.color, team.color)" style="display:inline;")
-        .col.icon.player-type
-        .col.name
-          img(:src="charWriter.write(12, toBase64(team.name))" style="display:inline;")
-
+        .col
+          InlineScore(:playerOrTeam="team")
     .list-body.mvp(v-if="!props.expanded")
       .row
         .col.icon
           FontAwesome(:icon="['fas', 'trophy']")
         .col(style="text-align:right;")
-          img(:src="charWriter.writeScore(14, mvp.frags, mvp.shirtColor, mvp.pantColor)" style="display:inline;")
-        .col.icon.player-type
-          FontAwesome(v-if="mvp.type === 2" :icon="['fas', 'robot']")
-          FontAwesome(v-if="mvp.type === 1" :icon="['fas', 'crown']")
-        .col.name
-          img(:src="charWriter.write(12, mvp.nameRaw)" style="display:inline;")
+          InlineScore(:playerOrTeam="mvp")
 
     template(v-if="props.expanded")
-      .list-body.players
-        template(v-for="(team, tidx) in teams")
+      .players
+        .list-body.team-players(v-for="(team, tidx) in teams")
           .row(v-for="(player, pidx) in team.players")
             .col.icon
               FontAwesome(v-if="tidx === 0 && pidx === 0" :icon="['fas', 'trophy']")
             .col(style="text-align:right;")
-              img(:src="charWriter.writeScore(14, player.frags, player.shirtColor, player.pantColor)" style="display:inline;")
-            .col.icon.player-type
-              FontAwesome(v-if="player.type === 2" :icon="['fas', 'robot']")
-              FontAwesome(v-if="player.type === 1" :icon="['fas', 'crown']")
-            .col.name(style="text-align: left")
-              img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
-        .row.observers(v-for="(player, pidx) in observers")
-          .col.icon
-          .col(style="text-align:right;") obs
-          .col.icon.player-type
-            FontAwesome(v-if="player.type === 2" :icon="['fas', 'robot']")
-            FontAwesome(v-if="player.type === 1" :icon="['fas', 'crown']")
-          .col.name(style="text-align: left")
-            img(:src="charWriter.write(12, player.nameRaw)" style="display:inline;")
+              InlineScore(:playerOrTeam="player")
+        .list-body.observers
+          .row.observers(v-for="(player, pidx) in observers")
+            .col.icon
+            .col
+              InlineScore(:playerOrTeam="player")
 
   .remaining(v-if="observers.length > 3") {{observers.length}} observers
 
 </template>
 
 <style lang="scss" scoped>
+.team-players, .observers {
+  padding-top: .5rem;
+}
 .mvp {
   grid-area: mvp;
 }
@@ -101,9 +88,6 @@ const mvp = computed(() => topPlayers.value[0])
 }
 .players {
   grid-area: players;
-  .observers {
-    padding-top: .5rem;
-  }
 }
 
 .expanded {
@@ -172,7 +156,7 @@ const mvp = computed(() => topPlayers.value[0])
       text-align: left;
     }
   }
-  grid-template-columns: 2rem 4rem 14px auto;
+  grid-template-columns: 2rem 16rem;
 }
 .header{
   .list-body {

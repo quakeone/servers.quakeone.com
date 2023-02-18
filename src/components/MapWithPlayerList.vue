@@ -2,29 +2,23 @@
 <template lang="pug">
 MapImage(:map="map")
   .table-backdrop
-    PlayerScoreList.player-list(:players="playerList")
+    .player-list
+      InlineScore(v-for="player in sortedByScore" :playerOrTeam="player")
   slot
 </template>
 
-<script lang="ts">
-import { defineComponent , onMounted, ref, PropType, computed, watch} from 'vue'
-import PlayerScoreList from './PlayerScoreList.vue'
-import { Player } from '@/model/Player'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import type { Player } from '@/model/Player'
 import MapImage from './MapImage.vue'
+import InlineScore from './InlineScore.vue'
 
-export default defineComponent({
-  props: {
-    map: {
-      type: String,
-      required: true
-    },
-    playerList: {
-      type: Array as PropType<Player[]>,
-      required: true
-    }
-  },
-  components: { PlayerScoreList, MapImage }
-})
+const props = defineProps<{
+  map: string,
+  playerList: Player[]
+}>()
+const sortedByScore = computed(() => [...props.playerList].sort((a, b) => b.frags - a.frags))
+
 </script>
 <style lang="scss" scoped>
 .table-backdrop {
@@ -35,7 +29,7 @@ export default defineComponent({
   mask-image: linear-gradient(to bottom, black 80%, transparent 98%);
   padding-top: 68%;
   //width: 100%;
-  table {
+  .player-list {
     position: absolute;
     top: 0;
     margin: 1rem;

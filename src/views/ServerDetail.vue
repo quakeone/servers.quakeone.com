@@ -19,7 +19,7 @@
         ClientDownload(:gameId="details.status.gameId" :params="details.status.parameters")
     .content
       .status
-        MatchStatus(:server="details.status")
+        MatchStatus(:server="details.status" :match="details.match")
       .server-rules
         h3 Rules
         Rules(:rules="details.status.serverSettings")

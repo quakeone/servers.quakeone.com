@@ -15,9 +15,11 @@ import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import type {PlayerStatus} from '@/model/PlayerStatus'
 import * as matchHelper from '@/helpers/match'
 import {partition} from 'ramda'
+import type { Match } from '@/model/Match'
+import type { MatchPlayer } from '@/model/MatchPlayer'
 import type { ServerStatus } from '@/model/ServerStatus'
 
-const props = defineProps<{server: ServerStatus}>()
+const props = defineProps<{match: Match, server: ServerStatus}>()
 const players = computed(() => {
   const [observer, active] = partition((p: PlayerStatus) => 
     p.shirtColor === 0 && p.pantColor === 0 && p.frags === -99
@@ -25,3 +27,9 @@ const players = computed(() => {
   return {active, observer}
 })
 </script>
+
+<style lang="scss" scoped>
+.players {
+  width: 100%;
+}
+</style>
