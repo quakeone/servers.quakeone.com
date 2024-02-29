@@ -1,5 +1,16 @@
+<template lang="pug" scoped>
+.tab-container
+  ul.tab-list 
+    li(v-for="idx in showIndex" :class="{'active': idx===gameId }")
+      router-link(v-if="idx === ''" :to="{ name: 'servers'}" replace) {{ games[idx] }}
+      router-link(v-else :to="{ name: 'servers', query: { gameId: idx }}" replace) {{ games[idx] }}
+      ServerTypeIcon(v-if="idx !== ''" :type="{gameId: idx}" logoType="clean")
+    
+</template>
+
 <script lang="ts" setup>
 import {defineProps} from 'vue'
+import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
 
 const props = defineProps<{
   gameId: string
@@ -12,34 +23,30 @@ const games = {
   '2': 'Quake II',
   '3': 'Quake 3',
   '4': 'Quake IV',
-  '5': 'Quake Enhanced'
+  '5': 'Quake Enhanced',
 }
-const showIndex = ['', '0', '5']
+const showIndex = ['', '0', '5', '1']
+
 </script>
 
-<template lang="pug" scoped>
-.tab-container
-  ul.tab-list 
-    li(v-for="idx in showIndex" :class="{'active': idx===gameId }")
-      router-link(v-if="idx === ''" :to="{ name: 'servers'}" replace) {{ games[idx] }}
-      router-link(v-else :to="{ name: 'servers', query: { gameId: idx }}" replace) {{ games[idx] }}
-  
-</template>
 <style lang="scss" scoped>
 ul {
   padding: 0;
+  display: flex;
+  flex-direction: row
 }
 li {
   a {
     text-decoration: none;
     color: $grey-3;
-  }
-  display: inline-block;
+  };
+  gap: 10px;
+  display: flex;
   font-size: 16px;
-  height: 36px;
   line-height: 36px;
   text-align: center;
   margin-right: 1rem;
+  padding-bottom: .2rem;
   position: relative;
   transition: 0.25s background ease;
   cursor: pointer;

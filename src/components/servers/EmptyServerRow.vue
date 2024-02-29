@@ -4,6 +4,7 @@
     .game-type-text
       GameType(
             size="Abbreviated"
+            :serverParams="props.serverStatus.parameters"
             :gameId="props.serverStatus.gameId")
   .details
 

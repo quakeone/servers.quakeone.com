@@ -11,6 +11,7 @@
           GameType.bright(
             size="Full"
             :gameId="model.server.gameId"
+            :serverParams="props.server.parameters"
             )
           .mod
             ModMode(:mod="model.server.mod" :mode="model.server.mode")
@@ -137,7 +138,7 @@ onMounted(() =>{
     .then(match => {
       model.match = parseApiMatch(match)
       return getServerDetails(match.serverId)
-        .then(({ status } )=> {
+        .then(({ status }) => {
           model.server = status as ServerStatus
           model.state = 'Idle'
         })

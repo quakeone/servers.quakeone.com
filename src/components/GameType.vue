@@ -1,13 +1,13 @@
 <template lang="pug">
 template(v-if="props.size == 'Abbreviated'")
-  .game-type-abbv(
-    v-tippy 
-    :content="gameType") {{gameTypeAbbrv}}
+  .game-type-icon
+    ServerTypeIcon(:type="{gameId: props.gameId, parameters: props.serverParams}" logoType="withLabel")
 template(v-else)
   .game-type {{gameType}}
 </template>
 
 <script setup lang="ts">
+import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
 import {defineProps, computed} from 'vue'
 
 export type Size = 'Abbreviated' | 'Full'
@@ -18,6 +18,18 @@ const gameTypeMapAbbrv: Record<number, string> = {
   3: "Q3",
   4: "Q4",
   5: "QE"
+}
+
+const gameTypeImageMap: Record<number, string> = {
+  0: "netquake.png",
+  1: "quakeworld.png",
+  5: "quake-enhanced.png"
+}
+
+const hybridGameType = {
+  image: 'hybrid.png',
+  gameType: 'Hybrid Server',
+  abbrv: 'HY'
 }
 const gameTypeMap: Record<number, string> = {
   0: "Net Quake",
@@ -30,9 +42,17 @@ const gameTypeMap: Record<number, string> = {
 
 const props = defineProps<{
   gameId: number,
-  size: Size
+  size: Size,
+  serverParams: string
 }>()
 
-const gameTypeAbbrv = computed(() => gameTypeMapAbbrv[props.gameId] || 'N/A')
-const gameType = computed(() => gameTypeMap[props.gameId] || 'Unknown')
+
+const isFte = computed(() => {
+  try {
+  return props.serverParams && JSON.parse(props.serverParams).Engine === 'fte'
+  } catch {}
+})
+const gameTypeImage = computed(() => isFte.value ? hybridGameType.image : gameTypeImageMap[props.gameId])
+const gameTypeAbbrv = computed(() => isFte.value ? hybridGameType.abbrv : gameTypeMapAbbrv[props.gameId] || 'N/A')
+const gameType = computed(() => isFte.value ? hybridGameType.gameType : gameTypeMap[props.gameId] || 'Unknown')
 </script>

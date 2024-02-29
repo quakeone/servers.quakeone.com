@@ -10,6 +10,7 @@
           GameType.bright(
             size="Full"
             :gameId="details.status.gameId"
+            :serverParams="details.status.parameters"
             )
           .mod
             ModMode(:mod="details.status.mod" :mode="details.status.mode")

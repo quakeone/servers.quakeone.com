@@ -1,6 +1,14 @@
 import type { PlayerStatus } from './PlayerStatus'
 import type { ServerSetting } from './ServerSetting';
 
+export enum GameId {
+  NetQuake = 0,
+  QuakeWorld,
+  Quake2,
+  Quake3,
+  Quake4,
+  QuakeEnhanced
+}
 export interface ServerStatus {
   serverDataId: number;
   serverId: number;
@@ -10,7 +18,7 @@ export interface ServerStatus {
   hostname: string;
   address: string;
   port: number;
-  gameId: number;
+  gameId: GameId;
   country: string;
   locality: string;
   mod: string;
