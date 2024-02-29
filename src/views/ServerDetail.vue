@@ -7,6 +7,7 @@
       .summary
         h2 {{details.status.hostname}}
         .details
+          ServerTypeIcon(:type="{gameId: details.status.gameId, parameters: details.status.parameters }" logoType="clean")
           GameType.bright(
             size="Full"
             :gameId="details.status.gameId"
@@ -73,6 +74,7 @@ import MatchList from '@/components/server/match/MatchList.vue'
 import type { PagedResult } from '@/model/PagedResult'
 import ClientDownload from '@/components/ClientDownload.vue'
 import MapStats from '@/components/server/MapStats.vue'
+import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
 
 type Props = {
   serverId: number,
@@ -150,6 +152,8 @@ update()
       .details {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        gap: .5rem;
         padding-bottom: 1rem;
       }
       border-bottom: 1px solid $grey-2;

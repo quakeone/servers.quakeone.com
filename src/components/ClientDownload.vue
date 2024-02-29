@@ -26,14 +26,14 @@ const isFte = computed(() => {
 
 const links = computed(() => {
   const _links: GameLink[] = []
+  if (props.gameId === 1 || isFte.value){
+    _links.push({title:'nQuake', link: 'https://nquake.com/'})
+    _links.push({title:'ezQuake', link: 'https://ezquake.com/'})
+  }
   if (props.gameId === 0 || isFte.value) {
     _links.push({title: 'QSS-M', link: 'https://qssm.quakeone.com/'})
     _links.push({title: 'Qrack', link: 'https://www.quakeone.com/qrack'})
     _links.push({title: 'vkQuake', link: 'https://github.com/Novum/vkQuake/releases'})
-  }
-  if (props.gameId === 1){
-    _links.push({title:'nQuake', link: 'https://nquake.com/'})
-    _links.push({title:'ezQuake', link: 'https://ezquake.com/'})
   }
   if (props.gameId === 5){
     _links.push({title:'QE (Steam)', link: 'https://store.steampowered.com/app/2310/Quake/'})

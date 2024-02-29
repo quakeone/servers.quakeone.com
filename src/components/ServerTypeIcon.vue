@@ -1,5 +1,7 @@
 <template lang="pug">
-img(:src="`/${serverTypeImageMap[serverType][props.logoType]}`" :alt="serverTypeAltMap[serverType]")
+img(
+  :src="`/${serverTypeImageMap[serverType][props.logoType]}`" 
+  :alt="serverTypeAltMap[serverType]")
 </template>
     
 <script setup lang="ts">

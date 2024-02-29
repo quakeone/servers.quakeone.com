@@ -1,6 +1,8 @@
 <template lang="pug">
 template(v-if="props.size == 'Abbreviated'")
-  .game-type-icon
+  .game-type-icon(
+    v-tippy 
+    :content="gameType")
     ServerTypeIcon(:type="{gameId: props.gameId, parameters: props.serverParams}" logoType="withLabel")
 template(v-else)
   .game-type {{gameType}}
@@ -18,12 +20,6 @@ const gameTypeMapAbbrv: Record<number, string> = {
   3: "Q3",
   4: "Q4",
   5: "QE"
-}
-
-const gameTypeImageMap: Record<number, string> = {
-  0: "netquake.png",
-  1: "quakeworld.png",
-  5: "quake-enhanced.png"
 }
 
 const hybridGameType = {
@@ -52,7 +48,6 @@ const isFte = computed(() => {
   return props.serverParams && JSON.parse(props.serverParams).Engine === 'fte'
   } catch {}
 })
-const gameTypeImage = computed(() => isFte.value ? hybridGameType.image : gameTypeImageMap[props.gameId])
 const gameTypeAbbrv = computed(() => isFte.value ? hybridGameType.abbrv : gameTypeMapAbbrv[props.gameId] || 'N/A')
 const gameType = computed(() => isFte.value ? hybridGameType.gameType : gameTypeMap[props.gameId] || 'Unknown')
 </script>
