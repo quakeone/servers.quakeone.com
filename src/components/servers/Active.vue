@@ -6,7 +6,8 @@
     h3 
       GameType(
         size="Abbreviated"
-        :gameId="serverStatus.gameId")
+        :gameId="serverStatus.gameId"
+        :serverParams="serverStatus.parameters")
   .game-image
     router-link(:to="'/server/' + serverStatus.serverId")
       MapWithPlayerList(

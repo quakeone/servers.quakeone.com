@@ -8,10 +8,11 @@
       .summary
         h2 {{model.server.hostname}}
         .details
+          ServerTypeIcon(:type="{gameId: model.server.gameId, parameters: model.server.parameters }" logoType="clean")
           GameType.bright(
             size="Full"
             :gameId="model.server.gameId"
-            :serverParams="props.server.parameters"
+            :serverParams="model.server.parameters"
             )
           .mod
             ModMode(:mod="model.server.mod" :mode="model.server.mode")
@@ -32,7 +33,7 @@
         .title
           h3 {{title}}
           .subtitle
-            span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
+            span.bright(v-tippy :content="fullMatchDate")  {{matchTime}}  
             span.vert-divide  | 
             span.bright  {{Math.ceil(matchDuration/60)}} 
             span  minutes 
@@ -79,8 +80,10 @@ import type {Match} from '@/model/Match'
 import type { TeamMatch } from '@/model/TeamMatch'
 import {getModInfo} from '@/helpers/mod'
 import type { ServerStatus } from '@/model/ServerStatus'
+import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
 
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
+const time = 'h:mmbb'
 
 type LoadingState =  'Loading' | 'Idle' | 'NotFound'
 type Props = {
@@ -106,6 +109,7 @@ const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
 const matchTimeAgo = computed(() => formatDistanceStrict(startDate.value, new Date(), {
   addSuffix: true
 }))
+const matchTime = computed(() => format(startDate.value, time))
 const matchDuration = computed(() => differenceInSeconds(new Date(model.match.matchEnd), new Date(model.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "d"))
@@ -155,6 +159,8 @@ onMounted(() =>{
     grid-area: summary;
     .details {
       display: flex;
+      align-items: center;
+      gap: .5rem;
       justify-content: space-between;
       padding-bottom: 1rem;
     }

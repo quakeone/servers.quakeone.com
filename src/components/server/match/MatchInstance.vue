@@ -22,7 +22,7 @@
 
       
       .subtitle
-        span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}  
+        span.bright(v-tippy :content="fullMatchDate")  {{matchTime}}  
         span.vert-divide  | 
         span.bright  {{Math.ceil(matchDuration/60)}} 
         span  minutes 
@@ -57,6 +57,7 @@ import {getModInfo} from '@/helpers/mod'
 
 type ExpandState = 'NotExpanded' | 'Loading' | 'Expanded'
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
+const time = 'h:mmbb'
 
 const props = defineProps<{
   match: (Match | TeamMatch),
@@ -81,6 +82,7 @@ const fullMatchDate = computed(() => format(startDate.value, fullDateTime))
 const matchTimeAgo = computed(() => formatDistanceStrict(startDate.value, new Date(), {
   addSuffix: true
 }))
+const matchTime = computed(() => format(startDate.value, time))
 const matchDuration = computed(() => differenceInSeconds(new Date(model.match.matchEnd), new Date(model.match.matchStart)))
 const matchMonth = computed(() => format(startDate.value, "LLL"))
 const matchDay = computed(() => format(startDate.value, "d"))
