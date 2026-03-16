@@ -22,7 +22,7 @@
 
       
       .subtitle
-        span.bright(v-tippy :content="fullMatchDate")  {{matchTime}}  
+        span.bright(v-tippy :content="fullMatchDate")  {{matchTimeAgo}}
         span.vert-divide  | 
         span.bright  {{Math.ceil(matchDuration/60)}} 
         span  minutes 

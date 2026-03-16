@@ -35,7 +35,7 @@ export default defineComponent({
 <style lang="scss">
 .active-server-grid {
   display: grid;
-  grid-gap: 1em;
+  grid-gap: 1rem;
   grid-template-columns: 1fr; 
 
   @media only screen and (min-width: $tablet-breakpoint)  {

@@ -39,7 +39,6 @@ h3 {
 h2 {
   font-family: roboto, sans-serif;
   font-style: normal;
-  font-weight: 200;
   text-transform: uppercase;
   font-weight: 400;
 }
@@ -61,10 +60,8 @@ a {
   cursor: pointer;
 }
 
-span {
-  .vert-divide {
-    margin: 0.5rem;
-  }
+.vert-divide {
+  margin: 0 0.5rem;
 }
 
 .empty-row {

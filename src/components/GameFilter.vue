@@ -42,15 +42,15 @@ li {
     color: $grey-3;
   };
   img {
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
     object-fit: contain;
   }
-  gap: 6px;
+  gap: .375rem;
   display: flex;
   align-items: center;
-  font-size: 16px;
-  line-height: 36px;
+  font-size: 1rem;
+  line-height: 2.25rem;
   text-align: center;
   margin-right: 1rem;
   padding-bottom: .2rem;
@@ -59,13 +59,13 @@ li {
   cursor: pointer;
   white-space: nowrap;
   @media only screen and (max-width: $phone-breakpoint) {
-    font-size: 13px;
-    line-height: 28px;
+    font-size: .8rem;
+    line-height: 1.75rem;
     margin-right: .5rem;
-    gap: 4px;
+    gap: .25rem;
     img {
-      width: 16px;
-      height: 16px;
+      width: 1rem;
+      height: 1rem;
     }
   }
   &::after {

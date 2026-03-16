@@ -70,9 +70,6 @@ const rowClick = () => {
     cursor: pointer;
     background-color: color.adjust($dark-grey, $lightness: 3%);
   }
-  .vert-divide {
-    margin: .1rem 0.5rem;
-  }
 
   .game-type {
     padding: .5rem 0;
