@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeUnmount, ref, watch, defineProps, computed} from 'vue'
+import {onBeforeUnmount, ref, watch, computed} from 'vue'
 import type {ServerDetail} from '@/model/ServerDetail'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'

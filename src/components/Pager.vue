@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {range} from 'ramda'
-import {computed, defineProps, defineEmits} from 'vue'
+import {computed} from 'vue'
 
 const PAGE_BETWEEN = 2
 

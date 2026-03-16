@@ -10,7 +10,7 @@ template(v-else)
 
 <script setup lang="ts">
 import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 
 export type Size = 'Abbreviated' | 'Full'
 const gameTypeMapAbbrv: Record<number, string> = {
@@ -39,7 +39,7 @@ const gameTypeMap: Record<number, string> = {
 const props = defineProps<{
   gameId: number,
   size: Size,
-  serverParams: string
+  serverParams: string | null
 }>()
 
 

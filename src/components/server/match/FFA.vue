@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {duration} from '@/helpers/date'
 import type {Match} from '@/model/Match'
-import {defineProps, computed, inject} from 'vue'
+import {computed, inject} from 'vue'
 import type { Writer } from '@/helpers/charmap'
 import type { Player } from '@/model/Player'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
@@ -11,7 +11,7 @@ import { differenceInSeconds } from 'date-fns'
 import InlineScore from '../../InlineScore.vue'
 
 const props = defineProps<{
-  match: Match,
+  match: Match | null,
   expanded: boolean
 }>()
 

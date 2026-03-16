@@ -7,7 +7,7 @@ img(
 <script setup lang="ts">
 export type LogoType = "clean" | "withLabel"
 import { ServerType, serverToServerType } from '@/model/ServerType'
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 
 const gameTypeMapAbbrv: Record<number, string> = {
   0: "NQ",

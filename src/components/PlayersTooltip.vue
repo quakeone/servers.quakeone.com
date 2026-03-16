@@ -5,7 +5,7 @@ span(v-tippy="{allowHTML: true}"
 </template>
 
 <script lang="ts" setup>
-import {watch, defineProps, inject, ref} from 'vue'
+import {watch, inject, ref} from 'vue'
 import type { PlayerStatus } from '@/model/PlayerStatus'
 import type { Writer } from '@/helpers/charmap'
 

@@ -5,7 +5,7 @@
   span.bright {{props.location || 'unknown'}}
 </template>
 <script lang="ts" setup>
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 const props = defineProps<{
   country: string,
   location: string

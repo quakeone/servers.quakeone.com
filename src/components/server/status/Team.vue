@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import type {PlayerStatus} from '@/model/PlayerStatus'
 import * as matchHelper from '@/helpers/match'
@@ -17,7 +17,7 @@ import type { ServerStatus } from '@/model/ServerStatus'
 import type {TeamMatch} from '@/model/TeamMatch'
 
 const indexes = ['one', 'two', 'three', 'four']
-const props = defineProps<{match  : TeamMatch}>()
+const props = defineProps<{match  : TeamMatch | null}>()
 const teams = computed(() => props.match.teams.teams)
 const size = computed(() => `${props.match.teams.size}v${props.match.teams.size}`)
 </script>

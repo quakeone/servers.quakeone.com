@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import type {PlayerStatus} from '@/model/PlayerStatus'
 import * as matchHelper from '@/helpers/match'
@@ -19,7 +19,7 @@ import type { Match } from '@/model/Match'
 import type { MatchPlayer } from '@/model/MatchPlayer'
 import type { ServerStatus } from '@/model/ServerStatus'
 
-const props = defineProps<{match: Match, server: ServerStatus}>()
+const props = defineProps<{match: Match | null, server: ServerStatus}>()
 const players = computed(() => {
   const [observer, active] = partition((p: PlayerStatus) => 
     p.shirtColor === 0 && p.pantColor === 0 && p.frags === -99

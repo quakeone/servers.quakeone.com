@@ -68,7 +68,7 @@ const rowClick = () => {
   padding: .5rem 0;
   &:hover {
     cursor: pointer;
-    background-color: lighten($dark-grey, 3%);
+    background-color: color.adjust($dark-grey, $lightness: 3%);
   }
   .vert-divide {
     margin: .1rem 0.5rem;
@@ -101,7 +101,7 @@ const rowClick = () => {
       a {
         color: $light-brown;
       }
-      .fa-exclamation-circle {
+      .fa-circle-exclamation {
         color: $error;
         margin-left: 1rem;
       }

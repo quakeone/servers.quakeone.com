@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables" as *;
 
 // Default variable overrides
 $body-bg: $dark-grey;

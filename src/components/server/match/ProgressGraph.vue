@@ -215,13 +215,11 @@ watch(props, (newProps, oldProps) => {
 })
 
 const highlightOn = (d) => {
-  console.log('on')
   const overlayPath = d.currentTarget as HTMLElement
   const id  = parseInt(overlayPath.getAttribute('player-id') || '0')
   model.playerIdHighlight = id
 }
 const highlightOff = (d) => {
-  console.log('off')
   model.playerIdHighlight = 0
 }
 </script>

@@ -16,7 +16,7 @@
 import FFA from './FFA.vue'
 import Down from './Down.vue'
 import Team from './Team.vue'
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 import * as matchHelper from '@/helpers/match'
 import type { ServerStatus } from '@/model/ServerStatus'
 import type { TeamMatch } from '@/model/TeamMatch'
@@ -24,7 +24,7 @@ import type { Match } from '@/model/Match'
 
 const props = defineProps<{
   server: ServerStatus,
-  match: Match | TeamMatch
+  match: Match | TeamMatch | null
 }>()
 const matchStatus = computed(() => {
   return matchHelper.status(props.server.lastMatchStart, props.server.lastMatchEnd)

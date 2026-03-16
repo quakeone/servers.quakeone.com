@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import {dateToUtc, duration} from '@/helpers/date'
 
-import {defineProps, computed} from 'vue'
+import {computed} from 'vue'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
 import type {ServerStatus} from '@/model/ServerStatus'
 import type {PlayerStatus} from '@/model/PlayerStatus'

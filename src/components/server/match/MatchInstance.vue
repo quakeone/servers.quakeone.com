@@ -42,7 +42,7 @@
 </template>
 <script lang="ts" setup>
 import { differenceInSeconds, format, formatDistanceStrict } from 'date-fns'
-import {defineProps, computed, reactive, watch} from 'vue'
+import {computed, reactive, watch} from 'vue'
 import type {Match} from '@/model/Match'
 import MapImage from '../../MapImage.vue'
 import TDM from './TDM.vue'
@@ -140,7 +140,7 @@ const onClick = () => {
   padding: .5rem 0;
   &:hover {
     cursor: pointer;
-    background-color: lighten($dark-grey, 3%);
+    background-color: color.adjust($dark-grey, $lightness: 3%);
   }
 }
 .expand-toggle {

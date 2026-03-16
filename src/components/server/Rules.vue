@@ -40,7 +40,7 @@ const toggleText = computed(() => model.showMore ? 'Less' : 'More')
 .rules {
   &:hover {
     cursor: pointer;
-    background-color: lighten($dark-grey, 3%);
+    background-color: color.adjust($dark-grey, $lightness: 3%);
   }
   table {
     width: 100%;

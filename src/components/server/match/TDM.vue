@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {duration} from '@/helpers/date'
-import {defineProps, computed, inject} from 'vue'
+import {computed, inject} from 'vue'
 import type { Writer } from '@/helpers/charmap'
 import type { Player } from '@/model/Player'
 import PlayersTooltip from '@/components/PlayersTooltip.vue'
@@ -11,7 +11,7 @@ import InlineScore from '../../InlineScore.vue'
 
 const charWriter = inject<Writer>('charWriter')
 const props = defineProps<{
-  match: TeamMatch,
+  match: TeamMatch | null,
   expanded: boolean
 }>()
 

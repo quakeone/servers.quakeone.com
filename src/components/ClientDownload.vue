@@ -15,7 +15,7 @@ type GameLink = {
 }
 const props = defineProps<{
   gameId: number,
-  params: string
+  params: string | null
   }>()
 
 const isFte = computed(() => {

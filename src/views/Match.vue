@@ -52,7 +52,7 @@
   </template>
   
 <script lang="ts" setup>
-import {onMounted, ref, reactive, defineProps, computed} from 'vue'
+import {onMounted, ref, reactive, computed} from 'vue'
 import { differenceInSeconds, format, formatDistanceStrict } from 'date-fns'
 import TDM from '@/components/server/match/TDM.vue'
 import CTF from '@/components/server/match/CTF.vue'

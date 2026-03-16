@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-import {defineProps} from 'vue'
 import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
 
 const props = defineProps<{
