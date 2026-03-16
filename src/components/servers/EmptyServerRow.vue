@@ -65,7 +65,7 @@ const rowClick = () => {
 <style lang="scss" scoped>
 .empty-row {
   display: grid;
-  padding: .5rem;
+  padding: .5rem 0;
   &:hover {
     cursor: pointer;
     background-color: lighten($dark-grey, 3%);
@@ -78,10 +78,13 @@ const rowClick = () => {
     padding: .5rem 0;
     grid-area: gametype;
     font-weight: bold;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    border-left: solid 1px $grey-2;
     .game-type-text {
-      text-align: right;
-      border-left: solid 1px $grey-2;
-      width: 100%;
+      text-align: center;
+      padding: 0 .25rem;
     }
   }
   .details {
@@ -122,9 +125,9 @@ const rowClick = () => {
     }
   }
 
-  grid-template-areas: 
+  grid-template-areas:
     "details gametype";
-  grid-template-columns: auto 2rem;
+  grid-template-columns: auto 3.5rem;
   
   @media only screen and (min-width: $phone-breakpoint)  {
     .map-image {
@@ -136,12 +139,12 @@ const rowClick = () => {
     
     .game-type {
       border-right: 1px $grey-2 solid;
+      border-left: 0;
       .game-type-text {
         text-align: left;
-        border: 0;
       }
     }
-    grid-template-columns: 2rem auto 150px;
+    grid-template-columns: 3rem auto 150px;
     grid-template-areas: 
       "gametype details map";
   }

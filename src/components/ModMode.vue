@@ -10,7 +10,7 @@ template(v-else)
 import {computed} from 'vue'
 import { getModInfo } from '@/helpers/mod';
 const modInfo = computed(() => getModInfo(props.mod, props.mode));
-const props = defineProps<{mod: string, mode?: string}>();
+const props = defineProps<{mod: string | null, mode?: string | null}>();
 
 </script>
 <style lang="scss">

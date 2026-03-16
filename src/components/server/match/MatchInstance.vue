@@ -11,8 +11,8 @@
 
       .toggle-expand
         Loading.loading(v-if="model.expandState === 'Loading'")
-        a(v-else-if="model.expandState === 'NotExpanded'" @click="emits('requestExpand', props.match.serverMatchId)") More
-        a(v-else @click="emits('requestCollapse')") Less  
+        a(v-else-if="model.expandState === 'NotExpanded'" @click.stop="emits('requestExpand', props.match.serverMatchId)") More
+        a(v-else @click.stop="emits('requestCollapse')") Less
 
     .title
       h3 {{title}}

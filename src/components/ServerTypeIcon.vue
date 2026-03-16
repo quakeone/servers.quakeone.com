@@ -1,6 +1,6 @@
 <template lang="pug">
 img(
-  :src="`/${serverTypeImageMap[serverType][props.logoType]}`" 
+  :src="`/${serverTypeImageMap[serverType][props.logoType]}`"
   :alt="serverTypeAltMap[serverType]")
 </template>
     

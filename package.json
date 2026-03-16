@@ -19,7 +19,7 @@
     "pug": "^3.0.2",
     "vue": "^3.2.45",
     "vue-router": "^4.0.0-0",
-    "vue-tippy": "^6.0.0-alpha.43",
+    "vue-tippy": "^6.7.1",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

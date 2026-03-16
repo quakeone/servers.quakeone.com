@@ -33,15 +33,23 @@ const showIndex = ['', '0', '5', '1']
 ul {
   padding: 0;
   display: flex;
-  flex-direction: row
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: .25rem;
 }
 li {
   a {
     text-decoration: none;
     color: $grey-3;
   };
-  gap: 10px;
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+  gap: 6px;
   display: flex;
+  align-items: center;
   font-size: 16px;
   line-height: 36px;
   text-align: center;
@@ -50,6 +58,17 @@ li {
   position: relative;
   transition: 0.25s background ease;
   cursor: pointer;
+  white-space: nowrap;
+  @media only screen and (max-width: $phone-breakpoint) {
+    font-size: 13px;
+    line-height: 28px;
+    margin-right: .5rem;
+    gap: 4px;
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  }
   &::after {
     content: "";
     height: 2px;

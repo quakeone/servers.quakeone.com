@@ -91,6 +91,10 @@ export default defineComponent({
     align-items: center;
     display: flex;
     justify-content: space-between;
+    gap: .5rem;
+    @media only screen and (max-width: $phone-breakpoint) {
+      flex-wrap: wrap;
+    }
   }
   .links {
     font-size: .9rem;
