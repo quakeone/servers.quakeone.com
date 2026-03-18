@@ -62,3 +62,7 @@ jobs:
 
       - name: Upload artifacts to S3 bucket
         run: aws s3 sync artifacts s3://${{ env.ARTIFACTS_BUCKET }} --region ${{ env.ARTIFACTS_BUCKET_REGION }} --delete
+
+      - name: Set cache headers on index.html
+        run: aws s3 cp s3://${{ env.ARTIFACTS_BUCKET }}/index.html s3://${{ env.ARTIFACTS_BUCKET }}/index.html --region ${{ env.ARTIFACTS_BUCKET_REGION }} --metadata-directive REPLACE --cache-control "max-age=3600"
+
