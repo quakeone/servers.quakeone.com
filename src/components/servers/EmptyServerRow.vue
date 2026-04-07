@@ -13,19 +13,19 @@
         v-if="props.serverStatus.currentStatus !== 0" 
         :icon="['fas', 'exclamation-circle']"
         v-tippy :content="serverStatusMap[props.serverStatus.currentStatus]")
-    ServerAddressInline.bright(:address="props.serverStatus.address" :port="props.serverStatus.port")
-    div  
-    .mid(v-if="props.serverStatus.mod")
-      ModMode(:mod="props.serverStatus.mod" :mode="props.serverStatus.mode")
+    .address-line
+      ServerAddressInline.bright(:address="props.serverStatus.address" :port="props.serverStatus.port")
       span.vert-divide |
       Location(:location="props.serverStatus.locality", :country="props.serverStatus.country")
-    .bottom
-      span map  
+    .mid
+      ModMode(v-if="props.serverStatus.mod" :mod="props.serverStatus.mod" :mode="props.serverStatus.mode")
+      span.vert-divide(v-if="props.serverStatus.mod") |
+      span map
       span.bright {{props.serverStatus.map}}
       span.vert-divide |
-      span players 
+      span players
       span.bright {{props.serverStatus.players.length}}/{{props.serverStatus.maxPlayers}}
-      span.vert-divide |
+    .bottom
       span {{matchStatus}}
   .map-image
     MapImage(:map="props.serverStatus.map")
@@ -36,7 +36,7 @@
 import MapImage from '../MapImage.vue'
 import type { ServerStatus } from '@/model/ServerStatus'
 import ServerAddressInline from '../ServerAddressInline.vue'
-import {defineComponent, computed} from 'vue'
+import {computed} from 'vue'
 import GameType from '../GameType.vue'
 import * as match from '@/helpers/match'
 import ModMode from '@/components/ModMode.vue'
@@ -87,12 +87,23 @@ const rowClick = () => {
   .details {
     padding: .5rem 0;
     grid-area: details;
+    min-width: 0;
+    h3 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .address-line {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      min-width: 0;
+      overflow: hidden;
+    }
     .mid {
       display: flex;
       align-items: center;
-    }
-    .map-icon {
-      margin-right: .5rem;
+      gap: .25rem;
     }
     .is-down {
       a {
@@ -115,7 +126,6 @@ const rowClick = () => {
     .map-text {
       padding: 4px;
       text-shadow: 2px 2px rgba(0,0,0,.9);
-      //background-color: rgba(0,0,0,.4);
       position: absolute;
       bottom: 10px;
       right: 10px;

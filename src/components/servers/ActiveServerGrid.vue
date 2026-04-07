@@ -6,16 +6,6 @@
     :serverStatus="activeServer")
 </template>
 
-<!-- <script lang="ts" setup>
-import Active from './Active.vue'
-import {defineProps} from 'vue'
-import { ServerStatus } from "@/model/ServerStatus";
-
-defineProps<{
-  servers: ServerStatus[]
-}>()
-</script> -->
-
 <script lang="ts">
 import {defineComponent, PropType} from 'vue'
 import { ServerStatus } from "@/model/ServerStatus";
@@ -41,8 +31,5 @@ export default defineComponent({
   @media only screen and (min-width: $tablet-breakpoint)  {
     grid-template-columns: 1fr 1fr;
   }
-    // @media only screen and (min-width: $large-breakpoint)  {
-    //   grid-template-columns: 1fr 1fr 1fr; 
-    // }
 }
 </style>

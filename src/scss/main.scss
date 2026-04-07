@@ -2,10 +2,12 @@
 
 body {
   color: $grey-3;
-  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
   background-color: $dark-grey;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+  font-family: Avenir, Helvetica, Arial, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
   margin: auto;
   padding: 0;
   
@@ -22,11 +24,13 @@ body {
 
 h4 {
   color: $whitish;
+  line-height: 1.2;
   margin: .5rem 0;
 }
 
 h3 {
   color: $whitish;
+  line-height: 1.2;
   margin: 0 0 .5rem 0;
   a {
     text-decoration: none;
@@ -37,10 +41,11 @@ h3 {
 }
 
 h2 {
-  font-family: roboto, sans-serif;
-  font-style: normal;
   text-transform: uppercase;
   font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: .05em;
+  color: $tan;
 }
 
 .bright {
@@ -62,6 +67,19 @@ a {
 
 .vert-divide {
   margin: 0 0.5rem;
+  color: $light-brown;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+  svg { width: 60px; }
+}
+
+.error-container {
+  padding: 2rem 0;
+  text-align: center;
 }
 
 .empty-row {

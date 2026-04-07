@@ -2,9 +2,9 @@
 .match-status
   .header
     h3 Server Status
-  .current-status
+  .current-status(:class="{'is-active-match': isMatchActive}")
     .status-string {{matchStatus}}
-    .status-time 
+    .status-time
       .time {{matchTime.time}}
       .suffix {{matchTime.duration}}
   .content
@@ -29,6 +29,7 @@ const props = defineProps<{
 const matchStatus = computed(() => {
   return matchHelper.status(props.server.lastMatchStart, props.server.lastMatchEnd)
 })
+const isMatchActive = computed(() => !!matchTime.value.time)
 const matchTime = computed(() => {
   const [time, duration] = matchHelper.time(props.server.lastMatchStart, props.server.lastMatchEnd).split(' ')
   return {time, duration}
@@ -54,6 +55,8 @@ const subStatus = computed(() => {
 .current-status {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: .75rem 0 .5rem;
   .status-string {
     font-size: 1.2rem;
   }
@@ -65,7 +68,14 @@ const subStatus = computed(() => {
       font-size: 1.5rem;
     }
     .suffix {
-
+      font-size: .75rem;
+      color: $grey-3;
+    }
+  }
+  &.is-active-match {
+    .status-string, .time {
+      color: $match-active;
+      font-weight: bold;
     }
   }
 }

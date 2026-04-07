@@ -17,20 +17,19 @@
           .map-players {{playerCount}}
           .map-text {{serverStatus.map}}
   .details
-    div
+    .connection-info
+      ServerAddress(:address="serverStatus.address" :port="serverStatus.port")
+      Location(:location="serverStatus.locality", :country="serverStatus.country")
+    .server-state
       ModMode(:mod="serverStatus.mod" :mode="serverStatus.mode")
-    .divider  
-    ServerAddress(:address="serverStatus.address" :port="serverStatus.port")
-    .divider
-    Location(:location="serverStatus.locality", :country="serverStatus.country")
-    div(v-if="serverStatus.currentStatus === 0")
-      span Map: 
-      span.bright {{serverStatus.map}}
-    div.players(v-if="serverStatus.currentStatus === 0")
-      span Players: 
-      PlayersTooltip.bright(:players="serverStatus.players") {{playerCount}} 
-    div(v-else) {{serverStatusString}}
-    div.match-status {{matchStatus}} {{matchTime}}
+      div(v-if="serverStatus.currentStatus === 0")
+        span Map:
+        span.bright {{serverStatus.map}}
+      div.players(v-if="serverStatus.currentStatus === 0")
+        span Players:
+        PlayersTooltip.bright(:players="serverStatus.players") {{playerCount}}
+      div(v-else) {{serverStatusString}}
+    div.match-status(:class="{'match-in-progress': matchInProgress}") {{matchStatus}} {{matchTime}}
 
 </template>
 
@@ -75,6 +74,7 @@ export default defineComponent({
     return {
       matchTime,
       matchStatus,
+      matchInProgress: computed(() => !!matchTime.value),
       serverStatusString,
       playerCount: computed(() => `${props.serverStatus.players.length}/${props.serverStatus.maxPlayers}`),
       players: computed(() => [...props.serverStatus.players].sort((a, b) => b.frags - a.frags))
@@ -91,16 +91,18 @@ export default defineComponent({
   .title {
     margin-top: 1rem;
     grid-area: title;
-    display: flex; 
+    display: flex;
     justify-content: space-between;
+    min-width: 0;
     h3, h2 {
-      // padding-top: rem;
       padding: 0;
       margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .game-type {
       padding-left: 1rem;
-      // padding-bottom: .5rem;
       border-left: 1px solid $grey-2;
     }
   }
@@ -116,7 +118,6 @@ export default defineComponent({
     color: $grey-3;
     font-weight:  700;
     text-shadow: 2px 2px rgba(0,0,0,.9);
-    //background-color: rgba(0,0,0,.4);
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -135,18 +136,20 @@ export default defineComponent({
   }
 
   .details {
-    .divider {
-      margin: .5rem 0;
+    .connection-info {
+      padding-bottom: .5rem;
+    }
+    .server-state {
+      padding: .5rem 0;
       border-top: 1px solid $grey-2;
     }
-    .title {
-      margin-bottom: 1.5rem;
-    }
-    .map-icon {
-      margin-right: .5rem;
-    }
     .match-status {
-      margin-top: .4rem;
+      padding-top: .5rem;
+      border-top: 1px solid $grey-2;
+      &.match-in-progress {
+        color: $match-active;
+        font-weight: bold;
+      }
     }
   }
 }

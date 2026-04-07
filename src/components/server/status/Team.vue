@@ -25,7 +25,7 @@ const size = computed(() => `${props.match.teams.size}v${props.match.teams.size}
 .status-team {
   width: 20rem;
   .match-type {
-    text-align: center;;
+    text-align: center;
   }
   .teams {
     display: grid;
@@ -45,13 +45,13 @@ const size = computed(() => `${props.match.teams.size}v${props.match.teams.size}
     }
     .team__name {  
       padding: .5rem;
-      text-align: center;;
+      text-align: center;
       border-bottom: 1px solid $grey-2;
       color: $whitish;
     }
     .team__score {  
       padding: .5rem;
-      text-align: center;;
+      text-align: center;
       font-size: 2rem;
     }
     grid-template-areas: 

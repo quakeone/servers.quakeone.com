@@ -1,8 +1,14 @@
 <template lang="pug">
 .server-detail
-  BackButton(@back="router.push('/')") 
+  BackButton(@back="router.push('/')")
     | Back to Servers List
-  template(v-if="details.status")
+  .loading-container(v-if="loading === 'LOADING'")
+    Loading
+  .error-container(v-else-if="loading === 'ERROR'")
+    h3 Unable to load server details
+    h4
+      a(@click.prevent="retry") Try again
+  template(v-else-if="details.status")
     .header
       .summary
         h2 {{details.status.hostname}}
@@ -50,12 +56,11 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeUnmount, ref, watch, computed} from 'vue'
+import {onBeforeUnmount, ref, watch, computed, type Ref} from 'vue'
 import type {ServerDetail} from '@/model/ServerDetail'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'
 import GameType from '@/components/GameType.vue'
-import ModType from '@/components/ModType.vue'
 import BackButton from '@/components/BackButton.vue'
 import MapWithPlayerList from '@/components/MapWithPlayerList.vue'
 import MatchStatus from '@/components/server/status/MatchStatus.vue'
@@ -73,8 +78,10 @@ import ModMode from '@/components/ModMode.vue'
 import MatchList from '@/components/server/match/MatchList.vue'
 import type { PagedResult } from '@/model/PagedResult'
 import ClientDownload from '@/components/ClientDownload.vue'
+import Loading from '@/components/Loading.vue'
 import MapStats from '@/components/server/MapStats.vue'
 import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
+import type {LoadingState} from '@/model/LoadingState'
 
 type Props = {
   serverId: number,
@@ -98,6 +105,7 @@ watch(() => props.matchPage, (val, old) => {
       })
   }
 })
+const loading: Ref<LoadingState> = ref('LOADING')
 const details = ref<ServerDetail>({})
 const matches = ref<PagedResult<MatchModel>>({})
 
@@ -115,7 +123,7 @@ const newMatchPage = (pageNum: number) => {
   })
 }
 
-const update = () => 
+const update = () =>
   Promise.all([
     getServerDetails(props.serverId)
       .then(({ match, mapStats, status} )=> ({
@@ -132,10 +140,31 @@ const update = () =>
   .then(([_details, _matches]: [_details: ServerDetail, _matches: PagedResult<MatchMode | TeamMatchModel>]) => {
     details.value = _details
     matches.value = _matches
+    loading.value = 'IDLE'
+  })
+  .catch(() => {
+    if (loading.value !== 'IDLE') loading.value = 'ERROR'
   })
 
-var id = setInterval(update, 5000)
-onBeforeUnmount(() => clearInterval(id))
+const retry = () => {
+  loading.value = 'LOADING'
+  update()
+}
+
+let id = setInterval(update, 5000)
+const onVisibilityChange = () => {
+  if (document.hidden) {
+    clearInterval(id)
+  } else {
+    update()
+    id = setInterval(update, 5000)
+  }
+}
+document.addEventListener('visibilitychange', onVisibilityChange)
+onBeforeUnmount(() => {
+  clearInterval(id)
+  document.removeEventListener('visibilitychange', onVisibilityChange)
+})
 update()
 
 </script>
@@ -194,44 +223,39 @@ update()
   
   .content {
     display: grid;
+    gap: 1rem 0;
+    margin-top: 1rem;
     .progress {
       grid-area: progress;
     }
     .status {
       grid-area: status;
-      padding-top: 1rem;
     }
-    .matches{
+    .matches {
       grid-area: matches;
+      margin-top: 1rem;
     }
     .map-stats {
-      grid-area:mapstats;
-      padding-top: 1rem;
+      grid-area: mapstats;
     }
     .map-image {
       grid-area: map;
       position: relative;
-      padding-top: 1rem;
     }
     .server-rules {
       grid-area: rules;
-      padding-top: 1rem;
     }
     .map-lower-right {
       text-align: right;
       padding: 4px;
       color: $grey-3;
-      font-weight:  700;
+      font-weight: 700;
       text-shadow: 2px 2px rgba(0,0,0,.9);
-      //background-color: rgba(0,0,0,.4);
       position: absolute;
       bottom: 10px;
       right: 10px;
     }
     grid-template-areas:
-      "header"
-      "summary"
-      "connection"
       "status"
       "map"
       "progress"
@@ -240,16 +264,15 @@ update()
       "matches";
     @media screen and (min-width: $phone-breakpoint) {
       grid-template-columns: 50% 50%;
+      gap: 1rem;
       grid-template-areas:
-        "header header"
-        "summary connection"
         "map status"
         "map progress"
         "map rules"
         "mapstats rules"
         "matches matches";
       .server-rules, .status, .progress {
-        margin-left: 1rem;
+        margin-left: .5rem;
       }
     }
   }

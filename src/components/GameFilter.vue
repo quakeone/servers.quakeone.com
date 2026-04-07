@@ -93,13 +93,4 @@ li {
     opacity: 1;
   }
 }
-.line {
-  position: absolute;
-  height: 2px;
-  background: #1E88E5;
-  width: 25%;
-  top: 34px;
-  left: 0;
-  transition: 0.25s ease;
-}
 </style>

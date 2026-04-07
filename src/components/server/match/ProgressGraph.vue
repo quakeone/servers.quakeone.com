@@ -242,7 +242,7 @@ $background: $grey-2;
   &__name-text {
     transition: all .4s;
     font-size: 12px;
-    font-weight: bold;;
+    font-weight: bold;
     &.lowlight {
       opacity: .2;
     }

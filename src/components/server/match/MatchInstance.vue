@@ -116,6 +116,9 @@ const loadShowMore = () =>{
       model.match = parseApiMatch(match)
       model.expandState = 'Expanded'
     })
+    .catch(() => {
+      model.expandState = 'NotExpanded'
+    })
 }
 watch(props, (newProps, oldProps) => {
   if (newProps.expanded) {
@@ -191,7 +194,6 @@ h3 {
     .map-text {
       padding: 4px;
       text-shadow: 2px 2px rgba(0,0,0,.9);
-      //background-color: rgba(0,0,0,.4);
       position: absolute;
       bottom: 10px;
       right: 10px;
@@ -244,7 +246,7 @@ h3 {
     grid-template-areas: 
       "big-date title"
       "big-date detail";
-    grid-template-columns: 3rem autox;
+    grid-template-columns: 3rem auto;
 
     &.expanded {
       grid-template-areas: 
@@ -273,15 +275,24 @@ h3 {
     }
   }
 }
-.date { 
-  
+.date {
   font-weight: bold;
   .date-day {
     font-size: 1.5rem;
-    @media only screen and (min-width: $phone-breakpoint)  {
+    @media only screen and (min-width: $phone-breakpoint) {
       font-size: 2rem;
     }
     line-height: 1;
+  }
+  .date-month {
+    font-size: .75rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .match-type, .match-size {
+    font-size: .75rem;
+    font-weight: normal;
   }
   padding: 0 .5rem;
   border-right: 1px solid $grey-2;
@@ -290,7 +301,7 @@ h3 {
     margin-top: .5rem;
     font-size: .7rem;
     font-weight: normal;
-    @media only screen and (min-width: $phone-breakpoint)  {
+    @media only screen and (min-width: $phone-breakpoint) {
       display: block;
     }
   }

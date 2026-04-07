@@ -1,7 +1,7 @@
 <template lang="pug">
 .layout
   router-view
-  Footer 
+  Footer
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

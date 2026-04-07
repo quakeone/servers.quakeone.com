@@ -48,7 +48,9 @@ const sortedMatches = computed(() => (props.matches ? [...props.matches.results]
 
 </script>
 <style lang="scss">
-
+.match-pager {
+  padding: .5rem 0;
+}
 .match-container {
   border-top: 1px solid $grey-2;
 }

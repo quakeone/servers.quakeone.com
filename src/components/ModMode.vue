@@ -15,6 +15,6 @@ const props = defineProps<{mod: string | null, mode?: string | null}>();
 </script>
 <style lang="scss">
 .mod-small {
-  font-size: 0.8rem;
+  font-size: .8rem;
 }
 </style>

@@ -2,38 +2,69 @@
 .home
   .match-list.grid-area-matches
     h2.border-divider RECENT MATCHES
-    .matches-row.border-divider(v-for="match in matches" :key="match.matchId")
-      MatchRow(:match="match")
+    .loading-container(v-if="loading === 'LOADING'")
+      Loading
+    .error-container(v-else-if="loading === 'ERROR'")
+      h3 Unable to load recent matches
+      h4
+        a(@click.prevent="retry") Try again
+    template(v-else-if="matches.length === 0")
+      h4 No recent matches found
+    template(v-else)
+      .matches-row.border-divider(v-for="match in matches" :key="match.matchId")
+        MatchRow(:match="match")
 
 
 </template>
 
 <script lang="ts">
 import { getRecentMatches } from '../services/serversApi'
-import { defineComponent, Ref, ref, onBeforeUnmount, computed } from 'vue'
-import {ServerStatus} from '@/model/ServerStatus'
+import { defineComponent, Ref, ref, onBeforeUnmount } from 'vue'
 import MatchRow from '@/components/matches/Match.vue'
+import Loading from '@/components/Loading.vue'
 import { Match } from '@/model/Match'
-
-const lastActiveTime = (server: ServerStatus) => new Date(server.lastMatchStart).getTime()
+import type { LoadingState } from '@/model/LoadingState'
 
 export default defineComponent({
-  name: 'Home',
+  name: 'RecentMatches',
   components: {
-    MatchRow
+    MatchRow,
+    Loading
   },
   setup() {
+    const loading = ref<LoadingState>('LOADING')
     const matches = ref<Match[]>([])
     const update = () => getRecentMatches().then(_matches => {
       matches.value = _matches
+      loading.value = 'IDLE'
+    }).catch(() => {
+      if (loading.value !== 'IDLE') loading.value = 'ERROR'
     })
+    const retry = () => {
+      loading.value = 'LOADING'
+      update()
+    }
 
-    var id = setInterval(update, 5000)
-    onBeforeUnmount(() => clearInterval(id))
+    let id = setInterval(update, 5000)
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        clearInterval(id)
+      } else {
+        update()
+        id = setInterval(update, 5000)
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    onBeforeUnmount(() => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    })
     update()
 
     return {
-      matches
+      matches,
+      loading,
+      retry
     }
   }
 });

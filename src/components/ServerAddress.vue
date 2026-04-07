@@ -6,10 +6,9 @@
       FontAwesome.copy-icon(@click="onCopy" :icon="['far', 'clone']"
         v-tippy='{ trigger : "click"}' content="Copied to clipboard")
     
-  .port 
+  .port
     span port:
     span.bright {{port}}
-  .copy-text(@click="onCopy" v-tippy='{ trigger : "click"}' content="Copied to clipboard") copy to clipboard
 </template>
 
 <script lang="ts">
@@ -109,12 +108,6 @@ export default defineComponent({
 .copy-icon {
   font-size: .7rem;
   margin-left: .4rem;
-  cursor: pointer;
-}
-.copy-text{
-  text-align: center;
-  font-size: .8rem;
-  font-style: italic;
   cursor: pointer;
 }
 </style>

@@ -145,8 +145,8 @@ const mvp = computed(() => topPlayers.value[0])
     .col.player-type {
       padding: 0 .3rem;
       width: 8px;
-      font-size: 0.7rem;
-      color: #a19c97;
+      font-size: .7rem;
+      color: $whitish;
       vertical-align: top;
     }
     .col.name {

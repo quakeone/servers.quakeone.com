@@ -32,11 +32,6 @@ const toggleText = computed(() => model.showMore ? 'Less' : 'More')
 </script>
 
 <style scoped lang="scss">
-// .scrollable-wrapper {
-//   max-height: 200px;
-//   overflow-y: auto;
-//   scrollbar-color: green;
-// }
 .rules {
   &:hover {
     cursor: pointer;

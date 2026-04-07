@@ -51,7 +51,7 @@
     a(href="https://discord.quakeone.com/")  https://discord.quakeone.com/
   p Quake:Enhanced Community
     a(href="https://discord.gg/HWes2p9gXG")  https://discord.gg/HWes2p9gXG
-  H4 For site specific questions
+  h4 For site specific questions
   p efess (joe) at 
     a(href="mailto:efessel@gmail.com") efessel@gmail.com
 </template>
@@ -65,8 +65,8 @@ import GameType from '@/components/GameType.vue'
   margin: 1rem;
   li {
     display: flex;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
   }
   h4 {
     margin-top: 2rem;

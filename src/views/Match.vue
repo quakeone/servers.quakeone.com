@@ -1,8 +1,14 @@
 <template lang="pug">
 .server-detail
-  BackButton(@back="router.push('/')") 
+  BackButton(@back="router.push('/')")
     | Back to Servers List
-  template(v-if="model.match")
+  .loading-container(v-if="model.state === 'Loading'")
+    Loading
+  .error-container(v-else-if="model.state === 'Error'")
+    h3 Unable to load match details
+    h4
+      a(@click.prevent="retry") Try again
+  template(v-else-if="model.match")
   
     .header
       .summary
@@ -61,7 +67,6 @@ import MapImage from '@/components/MapImage.vue'
 import ServerAddress from '@/components/ServerAddress.vue'
 import Location from '@/components/Location.vue'
 import GameType from '@/components/GameType.vue'
-import ModType from '@/components/ModType.vue'
 import BackButton from '@/components/BackButton.vue'
 import MapWithPlayerList from '@/components/MapWithPlayerList.vue'
 import MatchStatus from '@/components/server/status/MatchStatus.vue'
@@ -81,11 +86,12 @@ import type { TeamMatch } from '@/model/TeamMatch'
 import {getModInfo} from '@/helpers/mod'
 import type { ServerStatus } from '@/model/ServerStatus'
 import ServerTypeIcon from '@/components/ServerTypeIcon.vue'
+import Loading from '@/components/Loading.vue'
 
 const fullDateTime = 'LLL dd, yyyy h:mmbb'
 const time = 'h:mmbb'
 
-type LoadingState =  'Loading' | 'Idle' | 'NotFound'
+type LoadingState = 'Loading' | 'Idle' | 'NotFound' | 'Error'
 type Props = {
   matchId: number
 }
@@ -136,7 +142,7 @@ const title = computed(() => {
   }
 })
 
-onMounted(() =>{
+const loadMatch = () => {
   model.state = 'Loading'
   return getMatchDetail(props.matchId)
     .then(match => {
@@ -147,12 +153,16 @@ onMounted(() =>{
           model.state = 'Idle'
         })
     })
-    
-})
+    .catch(() => {
+      model.state = 'Error'
+    })
+}
+const retry = () => loadMatch()
+
+onMounted(loadMatch)
 </script>
 
 <style lang="scss" scoped>
-
 .header {
   display: grid;
   .summary {
@@ -174,13 +184,11 @@ onMounted(() =>{
     border-bottom: 1px solid $grey-2;
   }
   grid-template-areas:
-    "header"
     "summary"
     "connection";
   @media screen and (min-width: $phone-breakpoint) {
     grid-template-columns: 70% 30%;
     grid-template-areas:
-      "header header"
       "summary connection";
     .summary {
       display: flex;
@@ -238,6 +246,9 @@ onMounted(() =>{
   }
 }
 
+.content {
+  margin-top: 1.5rem;
+}
 .match {
   display: grid;
   align-items: flex-start;
@@ -292,21 +303,26 @@ onMounted(() =>{
     grid-template-columns: 3rem auto 475px;
   }
 }
-.date { 
-  
+.date {
   font-weight: bold;
   .date-day {
     font-size: 1.5rem;
-    @media only screen and (min-width: $phone-breakpoint)  {
+    @media only screen and (min-width: $phone-breakpoint) {
       font-size: 2rem;
     }
     line-height: 1;
   }
-  padding: 0 .5rem;
-  border-right: 1px solid $grey-2;
-  .toggle-expand {
-    font-size: .7rem;
+  .date-month {
+    font-size: .75rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .match-type, .match-size {
+    font-size: .75rem;
     font-weight: normal;
   }
+  padding: 0 .5rem;
+  border-right: 1px solid $grey-2;
 }
 </style>

@@ -23,17 +23,6 @@ export default defineComponent({
       type: Array as PropType<ServerStatus[]>,
       default:() => []
     }
-  },
-  computed: {
-
-    sortedServers(): ServerStatus[] {
-      return [...this.servers].sort((a:ServerStatus, b: ServerStatus) => 
-        a.currentStatus === b.currentStatus
-          ? a.currentStatus === b.currentStatus 
-            ? 0 
-            :  a.currentStatus > b.currentStatus ? -1 : 1
-          :a.currentStatus < b.currentStatus ? -1 : 0)
-    }
   }
 })
 </script>
@@ -42,46 +31,9 @@ export default defineComponent({
 .empty-server-table {
   .row-container {
     border-top: 1px solid $grey-2;
-    // &.is-down {
-    //   &:nth-child(even) {
-    //     background-color: rgba(104, 24, 24, .4);
-    //   }
-    //   &:nth-child(odd) {
-    //     background-color: rgba(104, 24, 24, .2);
-    //   }
-    // }
-    // &:nth-child(even) {
-    //   background-color: #2d2b29;
-    // }
-    // &:nth-child(odd) {
-    //   background-color: #363330;
-    // }
-  }
-}
-table {
-  border-collapse: collapse;
-}
-td {
-  border-left: 1px $grey-2 solid;
-}
-th {
-  text-align: left;
-  color: $whitish;
-}
-.cell-row {
-  display: flex;
-  justify-content: space-between;
-}
-.text-end {
-  text-align: right;
-}
-.table {
-  .is-down {
-    &:nth-child(even) {
-      --bs-table-accent-bg: rgba(104, 24, 24, .4);
-    }
-    &:nth-child(odd) {
-      --bs-table-accent-bg: rgba(104, 24, 24, .2);
+    border-left: 3px solid transparent;
+    &.is-down {
+      border-left-color: $error;
     }
   }
 }

@@ -1,33 +1,41 @@
 <template lang="pug">
 .servers
   .header
-    .tabs 
+    .tabs
       GameFilter(:gameId="gameId")
     .links
       p.text-small
         a(href="/about") About
-  .active(v-if="loading === 'IDLE'")
-    template(v-if="servers.active.length === 0")
-      h3 There are currently no active players
-      h4 Join a server or find a player on discord ( 
-        a(href="https://discord.quakeone.com/" title='Net Quake Community Discord') NQ
-        |  | 
-        a(href="https://discord.gg/HWes2p9gXG" title="Quake:Enhanced Community Discord") QE
-        |  )
-    template(v-else)
-      ActiveServerGrid.section(:servers="servers.active")
-  .empty(v-if="loading === 'IDLE'")
-    EmptyServerTable.section(:servers="servers.empty")
+  .loading-container(v-if="loading === 'LOADING'")
+    Loading
+  .error-container(v-else-if="loading === 'ERROR'")
+    h3 Unable to reach the server list
+    h4
+      a(@click.prevent="retry") Try again
+  template(v-else)
+    .active
+      template(v-if="servers.active.length === 0")
+        h3 There are currently no active players
+        h4 Join a server or find a player on discord (
+          a(href="https://discord.quakeone.com/" title='Net Quake Community Discord') NQ
+          |  |
+          a(href="https://discord.gg/HWes2p9gXG" title="Quake:Enhanced Community Discord") QE
+          |  )
+      template(v-else)
+        ActiveServerGrid.section(:servers="servers.active")
+    .empty
+      EmptyServerTable(:servers="servers.empty")
 
 </template>
 
 <script lang="ts">
 import GameFilter from '@/components/GameFilter.vue'
+import Loading from '@/components/Loading.vue'
 import {LoadingState} from '@/model/LoadingState'
 import { getStatus } from '../services/serversApi'
 import { defineComponent, Ref, ref, onBeforeUnmount, computed } from 'vue'
 import {ServerStatus} from '@/model/ServerStatus'
-import {partition, sort, filter, pipe} from 'ramda'
+import {partition, sort, filter} from 'ramda'
 import ActiveServerGrid from '@/components/servers/ActiveServerGrid.vue'
 import EmptyServerTable from '@/components/servers/EmptyServerTable.vue'
 import {isIdlePlayer, isFteServer} from '@/helpers/server'
@@ -44,7 +52,8 @@ export default defineComponent({
   components: {
     ActiveServerGrid,
     EmptyServerTable,
-    GameFilter
+    GameFilter,
+    Loading
   },
   props: {
     gameId: {
@@ -58,28 +67,47 @@ export default defineComponent({
     const update = () => getStatus().then(servers => {
       serverStatuses.value = servers
       loading.value = 'IDLE'
+    }).catch(() => {
+      if (loading.value !== 'IDLE') loading.value = 'ERROR'
     })
-    
+    const retry = () => {
+      loading.value = 'LOADING'
+      update()
+    }
+
     const servers = computed(() => {
-      const filtered = filter((s:ServerStatus) => 
+      const filtered = filter((s:ServerStatus) =>
           props.gameId === '' || isFteServer(s) || s.gameId.toString() === props.gameId)(serverStatuses.value)
 
       const [active, empty] = partition((server: ServerStatus) => {
         return server.currentStatus === 0 && server.players.filter(p => !isIdlePlayer(p)).length > 0
       }, filtered)
       return {
-        active: sortActive(active), 
+        active: sortActive(active),
         empty: sortEmpty(empty)
       }
     })
 
-    var id = setInterval(update, 5000)
-    onBeforeUnmount(() => clearInterval(id))
+    let id = setInterval(update, 5000)
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        clearInterval(id)
+      } else {
+        update()
+        id = setInterval(update, 5000)
+      }
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    onBeforeUnmount(() => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    })
     update()
 
     return {
       servers,
-      loading
+      loading,
+      retry
     }
   }
 });
@@ -92,6 +120,7 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     gap: .5rem;
+    margin-bottom: .5rem;
     @media only screen and (max-width: $phone-breakpoint) {
       flex-wrap: wrap;
     }
@@ -99,18 +128,12 @@ export default defineComponent({
   .links {
     font-size: .9rem;
   }
-  .section {
-    margin-top: 1rem;
+  .empty {
+    margin-top: 2.5rem;
   }
 
   h2 {
     padding: .5rem 0;
-  }
-  .active-row {
-    padding: 1rem 0;
-  }
-  .border-divider {
-    border-bottom: 1px solid $grey-2;
   }
 }
 </style>

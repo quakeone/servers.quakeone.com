@@ -50,12 +50,7 @@ const props = defineProps<{
   height: number
 }>()
 
-const dataSet = computed(() => {
-  // if (props.mapStats.length >= 15) {
-  //   return props.mapStats.slice(0,15)
-  // }
-  return props.mapStats
-})
+const dataSet = computed(() => props.mapStats)
 const svg = ref<HTMLOrSVGElement | null>(null)
 const updateAxis = (_svg: HTMLOrSVGElement) => {
   const d3svg = d3.select(_svg)
@@ -71,10 +66,6 @@ const updateAxis = (_svg: HTMLOrSVGElement) => {
         .attr("dx", "-.2em")
         .attr("dy", ".70em")
         .attr("transform", "rotate(-45)" );
-  // d3svg.append('g')
-  //   .attr("transform", `translate(${axisPadding},0)`) 
-  //   .attr('class', 'axis axis--y')
-  //   .call(d3.axisLeft(scaleY.value))
 }
 watch(svg, () => {
   if (svg.value) {
@@ -121,33 +112,6 @@ const round = (n: number) => {
   }
   return Math.round(n)
 }
-
-// const onMouseOUt = () => {
-//   model
-// }
-// function onMouseOver(item, e){
-
-// var tooltipDiv = d3.select("#myTooltip"); 
-
-// tooltipDiv.transition()        
-//    .duration(200)      
-//    .style("opacity", 1);    
-
-// tooltipDiv.html( "your Content")
-//    .style("left", (parseFloat(widthScale(d))) + "px") 
-//    .style("cursor", "pointer")
-//    .style("top", function(d){
-//        return d3.event.pageY - this.offsetHeight - 17  + "px"
-//     })
-//     .style("color", "#333333");        
-// }
-
-// function onMouseOut(d){
-//   var tooltipDiv = d3.select("#myTooltip"); 
-//   tooltipDiv.transition()        
-//         .duration(500)      
-//         .style("opacity", 0);  
-// }
 </script>
 
 <style lang="scss">
